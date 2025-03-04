@@ -1,4 +1,5 @@
 import config from './load-config'
+import path from 'path';
 
 const port = config.PORT
 
@@ -17,7 +18,7 @@ const swaggerOptions = {
             },
         ],
     },
-    apis: ['../../doc/*.yml'],
+    apis: [path.resolve(__dirname, '../../docs/*.yml')],
 };
 
 export default swaggerOptions;
