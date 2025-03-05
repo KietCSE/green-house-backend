@@ -1,6 +1,6 @@
 import { IUserRepository } from "../../domain/repositories/user-repository"
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient({ log: ["query"] })
+import prisma from "../../config/prisma-config"
+
 
 export class AuthenticationRepository implements IUserRepository {
     public save() {

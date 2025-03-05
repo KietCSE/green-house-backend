@@ -14,7 +14,83 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  name     String
+  password String
+}
+
+model Notification {
+  id                  Int               @id @default(autoincrement())
+  date                DateTime          @default(now())
+  value               Int
+  monitor             MonitoringSubject @relation(fields: [monitoringSubjectId], references: [id])
+  monitoringSubjectId Int
+}
+
+model MonitoringSubject {
+  id           Int            @id @default(autoincrement())
+  name         String
+  upperbound   Int
+  lowerbound   Int
+  Data         Data[]
+  Notification Notification[]
+}
+
+model Data {
+  id                  Int               @id @default(autoincrement())
+  value               String
+  date                DateTime          @default(now())
+  monitoringSubjectId Int
+  subject             MonitoringSubject @relation(fields: [monitoringSubjectId], references: [id])
+}
+
+model Device {
+  id            String          @id //DEV-001, DEV-002
+  name          String          @unique
+  description   String
+  power         Float //0.1, 0.65, 0.7
+  status        Boolean //true is on, false is off
+  DeviceHistory DeviceHistory[]
+  Configuration Configuration[]
+}
+
+model DeviceHistory {
+  id       Int      @id @default(autoincrement())
+  info     String //auto or scheduler?
+  date     DateTime @default(now())
+  device   Device   @relation(fields: [deviceId], references: [id])
+  deviceId String
+}
+
+model Configuration {
+  id               Int               @id @default(autoincrement())
+  name             String
+  description      String
+  action           Boolean // true is turn on, false is turn off 
+  device           Device            @relation(fields: [deviceId], references: [id])
+  deviceId         String
+  schedulerConfig  SchedulerConfig? // Quan hệ one-to-one với SchedulerConfig
+  automationConfig AutomationConfig? // Quan hệ one-to-one với AutomationConfig
+}
+
+model SchedulerConfig {
+  id            Int           @id // id = configuration Id 
+  start         String // time end 
+  end           String // time start
+  repitation    String? // t3, t2, weekly, daily or null ?
+  configuration Configuration @relation(fields: [id], references: [id]) // Quan hệ ngược
+}
+
+model AutomationConfig {
+  id            Int           @id // id = configuration Id 
+  Condition     Condition[]
+  configuration Configuration @relation(fields: [id], references: [id]) // Quan hệ ngược
+}
+
+model Condition {
+  id                 Int              @id @default(autoincrement())
+  condition          String // >50, <60
+  automation         AutomationConfig @relation(fields: [automationConfigId], references: [id])
+  automationConfigId Int
 }

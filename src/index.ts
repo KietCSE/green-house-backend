@@ -4,8 +4,10 @@ import config from './config/load-config';
 import swaggerOptions from './config/swagger'
 import swaggerUi from 'swagger-ui-express'
 import swaggerJsDoc from 'swagger-jsdoc'
+import { connectDB } from './config/prisma-config';
 
 const app = express();
+connectDB()
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

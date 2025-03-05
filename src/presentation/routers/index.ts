@@ -7,5 +7,6 @@ const router: Router = Router()
 
 router.use('/user', authenticationRouter)
 
+
 export default router
 
