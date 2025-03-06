@@ -5,9 +5,12 @@ export class AuthenticationController {
 
     constructor(private authenticationUseCase: AuthenticationUseCase) { }
 
-    public doSomething(req: Request, res: Response) {
-        this.authenticationUseCase.doSomething()
-        return res.status(200).json({ message: "success" })
+    public async authenticate(req: Request, res: Response) {
+        await this.authenticationUseCase.authenticateUser(req, res)
+    }
+
+    public async register(req: Request, res: Response) {
+        await this.authenticationUseCase.registerUser(req, res)
     }
 }
 
