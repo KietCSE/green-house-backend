@@ -5,6 +5,7 @@ import swaggerOptions from './config/swagger'
 import swaggerUi from 'swagger-ui-express'
 import swaggerJsDoc from 'swagger-jsdoc'
 import { connectDB } from './config/prisma-config';
+import { errorHandler } from './presentation/middleware/exception';
 
 const app = express();
 connectDB()
@@ -19,6 +20,10 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
 
 // Main router
 app.use('/api', CentralizedRouter);
+
+
+
+app.use(errorHandler)
 
 // const port = Number(process.env.PORT) || 3000;
 const port = config.PORT;

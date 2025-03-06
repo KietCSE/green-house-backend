@@ -1,5 +1,6 @@
 import { AuthenticationRepository } from '../../infrastructure/repositories/prisma-auth-repository'
 import { Request, Response } from 'express'
+import bcrypt from 'bcrypt';
 
 export class AuthenticationUseCase {
 
@@ -11,12 +12,15 @@ export class AuthenticationUseCase {
         const user = await this.authenticationRepository.findByName(username)
         console.log(user)
         if (user) {
-            if (user.password === password) {
+            const isValidPassword = await bcrypt.compare(password, user.password)
+
+            if (isValidPassword) {
                 return res.status(200).json({ status: true, message: "Login successfully" })
             }
             else return res.status(401).json({ status: false, message: "Invalid password" })
         }
         else return res.status(404).json({ status: false, message: "User not found" })
+
     }
 
     public async registerUser(req: Request, res: Response) {
@@ -24,7 +28,8 @@ export class AuthenticationUseCase {
         const user = await this.authenticationRepository.findByName(username)
         if (user) return res.status(409).json({ status: false, message: "User already exists" })
         else {
-            const newUser = await this.authenticationRepository.createUser(username, password, email)
+            const encodePassword = await bcrypt.hash(password, 10)
+            const newUser = await this.authenticationRepository.createUser(username, encodePassword, email)
             return res.status(200).json({ status: true, message: "User created successfully" })
         }
     }
