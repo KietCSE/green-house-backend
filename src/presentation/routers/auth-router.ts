@@ -10,7 +10,9 @@ router.post("/login",
     (req: Request, res: Response, next: NextFunction) => { authenticationController.authenticate(req, res, next) })
 
 
-router.post("/register", (req: Request, res: Response) => { authenticationController.register(req, res) })
+router.post("/register",
+    validationAuth, validateRequest,
+    (req: Request, res: Response, next: NextFunction) => { authenticationController.register(req, res, next) })
 
 
 

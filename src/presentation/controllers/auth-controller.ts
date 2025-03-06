@@ -14,8 +14,13 @@ export class AuthenticationController {
         }
     }
 
-    public async register(req: Request, res: Response) {
-        await this.authenticationUseCase.registerUser(req, res)
+    public async register(req: Request, res: Response, next: NextFunction) {
+        try {
+            await this.authenticationUseCase.registerUser(req, res)
+        }
+        catch (error) {
+            next(error)
+        }
     }
 }
 
