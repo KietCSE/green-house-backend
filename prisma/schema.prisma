@@ -55,11 +55,16 @@ model Device {
   Configuration Configuration[]
 }
 
+enum DeviceHistoryInfo {
+  Auto
+  Scheduler
+}
+
 model DeviceHistory {
-  id       Int      @id @default(autoincrement())
-  info     String //auto or scheduler?
-  date     DateTime @default(now())
-  device   Device   @relation(fields: [deviceId], references: [id])
+  id       Int               @id @default(autoincrement())
+  info     DeviceHistoryInfo //Auto or Scheduler?
+  date     DateTime          @default(now())
+  device   Device            @relation(fields: [deviceId], references: [id])
   deviceId String
 }
 

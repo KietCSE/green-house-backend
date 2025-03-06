@@ -1,0 +1,59 @@
+INSERT INTO "MonitoringSubject" ("name", "upperbound", "lowerbound") VALUES
+('Temperature', 100, 0),
+('Humidity', 80, 20),
+('Air Quality', 500, 0),
+('Light Intensity', 1000, 0);
+
+INSERT INTO "Data" ("value", "date", "monitoringSubjectId") VALUES
+('75', '2023-10-01T10:00:00Z', 1),
+('50', '2023-10-01T10:05:00Z', 2),
+('300', '2023-10-01T10:10:00Z', 3),
+('800', '2023-10-01T10:15:00Z', 4);
+
+
+INSERT INTO "Notification" ("date", "value", "monitoringSubjectId") VALUES
+('2023-10-01T10:00:00Z', 90, 1),
+('2023-10-01T10:05:00Z', 85, 2),
+('2023-10-01T10:10:00Z', 550, 3),
+('2023-10-01T10:15:00Z', 1200, 4);
+
+
+INSERT INTO "Device" ("id", "name", "description", "power", "status") VALUES
+('DEV-001', 'Thermostat', 'Controls temperature', 0.7, true),
+('DEV-002', 'Humidifier', 'Controls humidity', 0.5, false),
+('DEV-003', 'Air Purifier', 'Improves air quality', 0.8, true),
+('DEV-004', 'Smart Light', 'Controls lighting', 0.6, true);
+
+
+INSERT INTO "DeviceHistory" ("info", "date", "deviceId") VALUES
+('Auto', '2023-10-01T10:00:00Z', 'DEV-001'),
+('Scheduler', '2023-10-01T10:05:00Z', 'DEV-002'),
+('Auto', '2023-10-01T10:10:00Z', 'DEV-003'),
+('Scheduler', '2023-10-01T10:15:00Z', 'DEV-004');
+
+
+INSERT INTO "Configuration" ("name", "description", "action", "deviceId") VALUES
+('Config 1', 'Turn on thermostat at 10:00', true, 'DEV-001'),
+('Config 2', 'Turn off humidifier at 10:05', false, 'DEV-002'),
+('Config 3', 'Turn on air purifier at 10:10', true, 'DEV-003'),
+('Config 4', 'Turn off smart light at 10:15', false, 'DEV-004');
+
+
+INSERT INTO "AutomationConfig" ("id") VALUES
+(1),
+(2),
+(3),
+(4);
+
+
+INSERT INTO "Condition" ("condition", "automationConfigId") VALUES
+('>50', 1),
+('<60', 2),
+('>100', 3),
+('<500', 4);
+
+INSERT INTO "SchedulerConfig" ("id", "start", "end", "repitation") VALUES
+(1, '10:00', '12:00', 'daily'),
+(2, '10:05', '12:05', 'weekly'),
+(3, '10:10', '12:10', 'daily'),
+(4, '10:15', '12:15', 'weekly');
