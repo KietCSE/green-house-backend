@@ -13,7 +13,7 @@ export class DataRepository implements IDataRepository {
                 upperbound: true,
                 lowerbound: true,
                 Data: {
-                    take: 10, // Chỉ lấy 10 dòng đầu
+                    take: 20, // Chỉ lấy 10 dòng đầu
                     select: {
                         value: true,
                         date: true
