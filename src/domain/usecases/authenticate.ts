@@ -2,10 +2,11 @@ import { AuthenticationRepository } from '../../infrastructure/repositories/pris
 import { Request, Response } from 'express'
 import ResponseEnity from '../../presentation/dtos/responseEntity'
 import bcrypt from 'bcrypt';
+import { IUserRepository } from '../repositories/user-repository'
 
 export class AuthenticationUseCase {
 
-    constructor(private authenticationRepository: AuthenticationRepository) { }
+    constructor(private authenticationRepository: IUserRepository) { }
 
     public async authenticateUser(req: Request, res: Response) {
         const { username, password, email } = req.body
@@ -28,7 +29,7 @@ export class AuthenticationUseCase {
 
     }
 
-   public async registerUser(req: Request, res: Response) {
+    public async registerUser(req: Request, res: Response) {
         const { username, password, email } = req.body
         const user = await this.authenticationRepository.findByName(username)
         if (user) return res.status(409).json({ status: false, message: "User already exists" })

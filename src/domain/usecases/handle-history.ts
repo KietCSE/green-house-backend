@@ -1,8 +1,8 @@
 import { } from '@prisma/client'
-import { HistoryRepository } from '../../infrastructure/repositories/prisma-history-repository'
+import { IHistoryRepository } from "../../domain/repositories/history-repository";
 
 export class HandleHistoryUseCase {
-    constructor(private historyRepository: HistoryRepository) { }
+    constructor(private historyRepository: IHistoryRepository) { }
 
     public async loadHistoryDevice(page: number, pageSize: number): Promise<any | null> {
         const data = await this.historyRepository.findAllHistory(page, pageSize)

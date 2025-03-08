@@ -10,4 +10,8 @@ router.get('/all', (req: Request, res: Response, next: NextFunction) => { monito
 
 
 
+
 export default router
+
+
+
