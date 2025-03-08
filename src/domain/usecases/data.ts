@@ -5,6 +5,7 @@ export class GetDataUseCase {
     constructor(private dataRepository: DataRepository) { }
 
     public async getDataBySubject(subject: string, pageSize: number, page: number): Promise<MonitoringSubject | null> {
-        return this.dataRepository.findDataBySubject(subject, pageSize, page)
+        const data = await this.dataRepository.findDataBySubject(subject, pageSize, page)
+        return data
     }
 }
