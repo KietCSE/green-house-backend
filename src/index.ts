@@ -6,6 +6,7 @@ import swaggerUi from 'swagger-ui-express'
 import swaggerJsDoc from 'swagger-jsdoc'
 import { connectDB } from './config/prisma-config';
 import { errorHandler } from './presentation/middleware/exception';
+import listEndpoints from "express-list-endpoints";
 
 const app = express();
 connectDB()
@@ -30,4 +31,7 @@ const port = config.PORT;
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
+
+    // Liệt kê các API đã đăng ký
+    console.table(listEndpoints(app));
 });
