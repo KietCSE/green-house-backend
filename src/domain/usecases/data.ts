@@ -4,7 +4,7 @@ import { MonitoringSubject } from '@prisma/client'
 export class GetDataUseCase {
     constructor(private dataRepository: DataRepository) { }
 
-    public async getDataBySubject(subject: string): Promise<MonitoringSubject | null> {
-        return this.dataRepository.findDataBySubject(subject)
+    public async getDataBySubject(subject: string, pageSize: number, page: number): Promise<MonitoringSubject | null> {
+        return this.dataRepository.findDataBySubject(subject, pageSize, page)
     }
 }

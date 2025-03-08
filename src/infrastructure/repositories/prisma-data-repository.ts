@@ -4,16 +4,18 @@ import prisma from '../../config/prisma-config'
 
 
 export class DataRepository implements IDataRepository {
-    public async findDataBySubject(subject: string): Promise<MonitoringSubject | null> {
+    public async findDataBySubject(subject: string, pageSize: number, page: number): Promise<MonitoringSubject | null> {
         const data = prisma.monitoringSubject.findFirst({
             where: { name: subject },
             select: {
                 id: true,
                 name: true,
+                description: true,
                 upperbound: true,
                 lowerbound: true,
                 Data: {
-                    take: 20, // Chỉ lấy 10 dòng đầu
+                    skip: (page - 1) * pageSize,
+                    take: pageSize, // Chỉ lấy 10 dòng đầu
                     select: {
                         value: true,
                         date: true
@@ -25,6 +27,7 @@ export class DataRepository implements IDataRepository {
         })
         return data
     }
+
 }
 
 

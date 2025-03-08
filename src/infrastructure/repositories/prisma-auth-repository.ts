@@ -12,7 +12,7 @@ export class AuthenticationRepository implements IUserRepository {
         const newUser = await prisma.user.create({ data: { name, password, email } })
         return newUser
     }
-
+    
 }
 
 

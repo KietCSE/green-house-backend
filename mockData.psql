@@ -1,8 +1,8 @@
-INSERT INTO "MonitoringSubject" ("name", "upperbound", "lowerbound") VALUES
-('Temperature', 100, 0),
-('Humidity', 80, 20),
-('Air Quality', 500, 0),
-('Light Intensity', 1000, 0);
+INSERT INTO "MonitoringSubject" ("name", "upperbound", "lowerbound", "description") VALUES
+('Temperature', 100, 0, 'Measures the ambient temperature in degrees Celsius'),
+('Humidity', 80, 20, 'Monitors the relative humidity percentage in the air'),
+('Air Quality', 500, 0, 'Indicates air pollution levels based on particulate concentration'),
+('Light Intensity', 1000, 0, 'Tracks the intensity of light in lumens for plant growth');
 
 INSERT INTO "Data" ("value", "date", "monitoringSubjectId") VALUES
 ('75', '2023-10-01T10:00:00Z', 1),
@@ -18,11 +18,12 @@ INSERT INTO "Notification" ("date", "value", "monitoringSubjectId") VALUES
 ('2023-10-01T10:15:00Z', 1200, 4);
 
 
-INSERT INTO "Device" ("id", "name", "description", "power", "status") VALUES
-('DEV-001', 'Thermostat', 'Controls temperature', 0.7, true),
-('DEV-002', 'Humidifier', 'Controls humidity', 0.5, false),
-('DEV-003', 'Air Purifier', 'Improves air quality', 0.8, true),
-('DEV-004', 'Smart Light', 'Controls lighting', 0.6, true);
+INSERT INTO "Device" ("id", "name", "description", "power", "status", "feed") VALUES
+('DEV-001', 'Thermostat', 'Controls temperature', 0.7, true, 'a'),
+('DEV-002', 'Humidifier', 'Controls humidity', 0.5, false, 'a'),
+('DEV-003', 'Air Purifier', 'Improves air quality', 0.8, true, 'a'),
+('DEV-004', 'Smart Light', 'Controls lighting', 0.6, true, 'a');
+
 
 
 INSERT INTO "DeviceHistory" ("info", "date", "deviceId") VALUES
@@ -76,3 +77,4 @@ INSERT INTO "Data" (id, value, date, "monitoringSubjectId") VALUES
 (18, 45,  '2023-10-01 11:25:00', 2),
 (19, 280, '2023-10-01 11:30:00', 3),
 (20, 750, '2023-10-01 11:35:00', 4);
+

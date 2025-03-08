@@ -9,6 +9,10 @@ export class MonitorRepository implements IMonitorRepository {
         return monitor
     }
 
+    public async findAllSubject(): Promise<MonitoringSubject[] | null> {
+        const data = await prisma.monitoringSubject.findMany()
+        return data
+    }
 }
 
 
