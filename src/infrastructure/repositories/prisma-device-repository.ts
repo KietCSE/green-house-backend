@@ -10,6 +10,10 @@ export class DeviceRepository implements IDeviceRepository {
                     { id: subject },   // Tìm theo ID
                     { name: subject }  // Tìm theo tên
                 ]
+            },
+            include: {
+                Configuration: true,
+                DeviceHistory: true
             }
         })
         return device
