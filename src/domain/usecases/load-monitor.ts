@@ -9,4 +9,9 @@ export class LoadMonitorUseCase {
         const monitorList = await this.monitorRepository.findAllSubject()
         return monitorList
     }
+
+    public async loadAllSubjectName(): Promise<string[] | null> {
+        const listName = await this.monitorRepository.loadAllSubjectName()
+        return listName
+    }
 }

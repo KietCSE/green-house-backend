@@ -13,6 +13,12 @@ export class MonitorRepository implements IMonitorRepository {
         const data = await prisma.monitoringSubject.findMany()
         return data
     }
+
+    public async loadAllSubjectName(): Promise<string[] | null> {
+        const listName = await prisma.monitoringSubject.findMany({ select: { name: true } })
+        const stringName = listName.map((item) => item.name)
+        return stringName
+    }
 }
 
 

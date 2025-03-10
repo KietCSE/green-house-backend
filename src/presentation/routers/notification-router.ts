@@ -9,8 +9,6 @@ const notificationController = createNotificationController();
 router.get('/all', (req: Request, res: Response, next: NextFunction) => { notificationController.getAllNotification(req, res, next) })
 
 
-
-
 export default router
 
 

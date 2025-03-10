@@ -32,7 +32,9 @@ export class AuthenticationUseCase {
     public async registerUser(req: Request, res: Response) {
         const { username, password, email } = req.body
         const user = await this.authenticationRepository.findByName(username)
+        const userEmail = await this.authenticationRepository.findByEmail(email)
         if (user) return res.status(409).json({ status: false, message: "User already exists" })
+        else if (userEmail) return res.status(409).json({ status: false, message: "Email already exists" })
         else {
             const encodePassword = await bcrypt.hash(password, 10)
             const newUser = await this.authenticationRepository.createUser(username, encodePassword, email)

@@ -14,4 +14,14 @@ export class MonitorController {
             next(error)
         }
     }
+
+    public async getAllSubjectName(req: Request, res: Response, next: NextFunction) {
+        try {
+            const listName = await this.loadMonitorUseCase.loadAllSubjectName()
+            return res.status(200).json({ status: true, data: listName })
+        }
+        catch (error) {
+            next(error)
+        }
+    }
 }

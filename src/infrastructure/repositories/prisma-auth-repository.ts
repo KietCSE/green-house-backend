@@ -12,7 +12,12 @@ export class AuthenticationRepository implements IUserRepository {
         const newUser = await prisma.user.create({ data: { name, password, email } })
         return newUser
     }
-    
+
+    public async findByEmail(email: string): Promise<User | null> {
+        const createdEmail = await prisma.user.findFirst({ where: { email: email } })
+        return createdEmail
+    }
+
 }
 
 

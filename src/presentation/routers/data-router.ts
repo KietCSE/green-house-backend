@@ -15,7 +15,7 @@ router.get('/visualize',
     LoadDataValidation, validateRequest,
     (req: Request, res: Response, next: NextFunction) => { dataController.getDataBySubject(req, res, next) })
 
-router.get('/history',
+router.get('/device/history',
     LoadHistoryDeviceValidation, validateRequest,
     (req: Request, res: Response, next: NextFunction) => { HistoryDeviceController.getAllHistoryDevice(req, res, next) })
 
