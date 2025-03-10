@@ -10,6 +10,7 @@ import { connectDB } from './config/prisma-config';
 import { errorHandler } from './presentation/middleware/exception';
 import { SocketManager } from './adafruit/socket';
 
+import listEndpoints from "express-list-endpoints";
 
 const app = express();
 const server = http.createServer(app);
@@ -35,9 +36,9 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
 // Main router
 app.use('/api', CentralizedRouter);
 
-app.get('/test', (req, res) => {
-    SocketManager.broadcaseData("tuankietpro")
-})
+// app.get('/test', (req, res) => {
+//     SocketManager.broadcaseData("tuankietpro")
+// })
 
 
 app.use(errorHandler)
@@ -47,4 +48,7 @@ const port = config.PORT;
 
 server.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
+
+    // Liệt kê các API đã đăng ký
+    // console.table(listEndpoints(app));
 });
