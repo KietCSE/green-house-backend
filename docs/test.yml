@@ -27,4 +27,247 @@ paths:
                     name:
                       type: string
                       example: John Doe
-    
+
+  /device/{subject}:
+    get:
+      summary: Get device info
+      description: Retrieve information about a specific device (Id or name)
+      parameters:
+        - name: subject
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Id or name
+      responses:
+        '200':
+          description: Device found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: "device123"
+                      name:
+                        type: string
+                        example: "Temperature Sensor"
+                      feed:
+                        type: string
+                        example: "feed123"
+                      description:
+                        type: string
+                        example: "Measures room temperature"
+                      power: 
+                        type: number
+                        example: 100
+                      status: 
+                        type: boolean
+                        example: true 
+        '404':
+          description: Device not found
+        '500':
+          description: Internal server error
+  /device:
+    post:
+        summary: Create a new device
+        description: Add a new device to the system
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "device123"
+                  name:
+                    type: string
+                    example: "Temperature Sensor"
+                  feed:
+                    type: string
+                    example: "feed123"
+                  description:
+                    type: string
+                    example: "Measures room temperature"
+        responses:
+          '200':
+            description: Device created successfully
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: boolean
+                      example: true
+                    message:
+                      type: string
+                      example: "Device created successfully"
+          '409':
+            description: Device's Id (or name) already exists
+          '500':
+            description: Internal server error
+
+  /device/config/{subject}:
+    get:
+      summary: Get configuration by subject
+      description: Retrieve a configuration using its subject identifier
+      parameters:
+        - name: subject
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The subject identifier of the configuration
+      responses:
+        '200':
+          description: Configuration found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: "config123"
+                      name:
+                        type: string
+                        example: "Room Temperature Control"
+                      description:
+                        type: string
+                        example: "Config for temperature automation"
+                      deviceId:
+                        type: string
+                        example: "device123"
+        '404':
+          description: Configuration not found
+        '500':
+          description: Internal server error
+
+  /device/config:
+    post:
+      summary: Create a new configuration
+      description: Add a new configuration to the system
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Room Temperature Control"
+                description:
+                  type: string
+                  example: "Config for temperature automation"
+                deviceId:
+                  type: string
+                  example: "device123"
+      responses:
+        '200':
+          description: Configuration created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Config created successfully"
+        '409':
+          description: Device has been configured before
+        '500':
+          description: Internal server error
+
+  /device/config/scheduler:
+    post:
+      summary: Create a scheduler configuration
+      description: Add a new scheduler config to a configuration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                configId:
+                  type: string
+                  example: "config123"
+                start:
+                  type: string
+                  format: date-time
+                  example: "2024-03-10T10:00:00Z"
+                end:
+                  type: string
+                  format: date-time
+                  example: "2024-03-10T12:00:00Z"
+                repetition:
+                  type: string
+                  example: "daily"
+      responses:
+        '200':
+          description: Scheduler configuration created successfully
+        '500':
+          description: Internal server error
+
+  /device/config/automation:
+    post:
+      summary: Create an automation configuration
+      description: Add an automation setting to a configuration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                configId:
+                  type: string
+                  example: "config123"
+      responses:
+        '200':
+          description: Automation configuration created successfully
+        '500':
+          description: Internal server error
+
+  /device/config/automation/condition:
+    post:
+      summary: Create an automation condition
+      description: Add a condition to an automation configuration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                configId:
+                  type: string
+                  example: "config123"
+                condition:
+                  type: string
+                  example: "temperature > 25"
+      responses:
+        '200':
+          description: Condition created successfully
+        '500':
+          description: Internal server error

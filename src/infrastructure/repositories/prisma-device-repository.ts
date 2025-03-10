@@ -12,8 +12,8 @@ export class DeviceRepository implements IDeviceRepository {
                 ]
             },
             include: {
-                Configuration: true,
-                DeviceHistory: true
+                Configuration: false,
+                DeviceHistory: false
             }
         })
         return device
