@@ -9,7 +9,7 @@ import swaggerJsDoc from 'swagger-jsdoc'
 import { connectDB } from './config/prisma-config';
 import { errorHandler } from './presentation/middleware/exception';
 import { SocketManager } from './adafruit/socket';
-
+import cors from "cors"
 import listEndpoints from "express-list-endpoints";
 
 const app = express();
@@ -20,6 +20,14 @@ const io = new Server(server, {
         methods: ["GET", "POST"]
     }
 });
+
+app.use(cors({
+    origin: '*', // Cho phép tất cả các nguồn
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'], // Cho phép tất cả các phương thức
+    allowedHeaders: ['*'], // Cho phép tất cả các headers
+}));
+
+
 const socketManager = new SocketManager(io);
 socketManager.setupEventListener();
 
