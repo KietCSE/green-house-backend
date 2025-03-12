@@ -3,7 +3,6 @@ import { Request, Response, NextFunction } from "express";
 
 // Chỉ chứa ValidationChain[]
 export const validationAuth: ValidationChain[] = [
-    body("email").normalizeEmail().isEmail().withMessage("Email is not valid"),
     body("username")
         .isString().withMessage("Username is not valid")
         .notEmpty().withMessage("Username is required"),
