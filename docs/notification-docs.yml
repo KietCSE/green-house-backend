@@ -1,0 +1,63 @@
+openapi: 3.0.0
+info:
+  title: Notification API
+  description: API for retrieving monitoring notifications
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api
+tags:
+  - name: notification
+    description: Endpoints related users's notifications
+paths:
+  /notification/all:
+    get:
+      tags:
+        - notification
+      summary: Get all notifications
+      description: Retrieve all monitoring notifications along with their associated monitor details.
+      responses:
+        "200":
+          description: A list of notifications
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        date:
+                          type: string
+                          format: date-time
+                          example: "2023-10-01T10:00:00.000Z"
+                        value:
+                          type: number
+                          example: 90
+                        monitoringSubjectId:
+                          type: integer
+                          example: 1
+                        monitor:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              example: 1
+                            name:
+                              type: string
+                              example: "Temperature"
+                            description:
+                              type: string
+                              example: "Measures the ambient temperature in degrees Celsius"
+                            upperbound:
+                              type: number
+                              example: 100
+                            lowerbound:
+                              type: number
+                              example: 0
+        "500":
+          description: Server error

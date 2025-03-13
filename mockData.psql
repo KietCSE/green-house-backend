@@ -1,0 +1,80 @@
+INSERT INTO "MonitoringSubject" ("name", "upperbound", "lowerbound", "description") VALUES
+('Temperature', 100, 0, 'Measures the ambient temperature in degrees Celsius'),
+('Humidity', 80, 20, 'Monitors the relative humidity percentage in the air'),
+('Air Quality', 500, 0, 'Indicates air pollution levels based on particulate concentration'),
+('Light Intensity', 1000, 0, 'Tracks the intensity of light in lumens for plant growth');
+
+INSERT INTO "Data" ("value", "date", "monitoringSubjectId") VALUES
+('75', '2023-10-01T10:00:00Z', 1),
+('50', '2023-10-01T10:05:00Z', 2),
+('300', '2023-10-01T10:10:00Z', 3),
+('800', '2023-10-01T10:15:00Z', 4);
+
+
+INSERT INTO "Notification" ("date", "value", "monitoringSubjectId") VALUES
+('2023-10-01T10:00:00Z', 90, 1),
+('2023-10-01T10:05:00Z', 85, 2),
+('2023-10-01T10:10:00Z', 550, 3),
+('2023-10-01T10:15:00Z', 1200, 4);
+
+
+INSERT INTO "Device" ("id", "name", "description", "power", "status", "feed") VALUES
+('DEV-001', 'Thermostat', 'Controls temperature', 0.7, true, 'a'),
+('DEV-002', 'Humidifier', 'Controls humidity', 0.5, false, 'a'),
+('DEV-003', 'Air Purifier', 'Improves air quality', 0.8, true, 'a'),
+('DEV-004', 'Smart Light', 'Controls lighting', 0.6, true, 'a');
+
+
+
+INSERT INTO "DeviceHistory" ("info", "date", "deviceId") VALUES
+('Auto', '2023-10-01T10:00:00Z', 'DEV-001'),
+('Scheduler', '2023-10-01T10:05:00Z', 'DEV-002'),
+('Auto', '2023-10-01T10:10:00Z', 'DEV-003'),
+('Scheduler', '2023-10-01T10:15:00Z', 'DEV-004');
+
+
+INSERT INTO "Configuration" ("name", "description", "action", "deviceId") VALUES
+('Config 1', 'Turn on thermostat at 10:00', true, 'DEV-001'),
+('Config 2', 'Turn off humidifier at 10:05', false, 'DEV-002'),
+('Config 3', 'Turn on air purifier at 10:10', true, 'DEV-003'),
+('Config 4', 'Turn off smart light at 10:15', false, 'DEV-004');
+
+
+INSERT INTO "AutomationConfig" ("id") VALUES
+(1),
+(2),
+(3),
+(4);
+
+
+INSERT INTO "Condition" ("condition", "automationConfigId") VALUES
+('>50', 1),
+('<60', 2),
+('>100', 3),
+('<500', 4);
+
+INSERT INTO "SchedulerConfig" ("id", "start", "end", "repitation") VALUES
+(1, '10:00', '12:00', 'daily'),
+(2, '10:05', '12:05', 'weekly'),
+(3, '10:10', '12:10', 'daily'),
+(4, '10:15', '12:15', 'weekly');
+
+
+INSERT INTO "Data" (id, value, date, "monitoringSubjectId") VALUES
+(5, 95,  '2023-10-01 10:20:00', 1),
+(6, 60,  '2023-10-01 10:25:00', 2),
+(7, 200, '2023-10-01 10:30:00', 3),
+(8, 700, '2023-10-01 10:35:00', 4),
+(9, 80,  '2023-10-01 10:40:00', 1),
+(10, 55, '2023-10-01 10:45:00', 2),
+(11, 400, '2023-10-01 10:50:00', 3),
+(12, 900, '2023-10-01 10:55:00', 4),
+(13, 78,  '2023-10-01 11:00:00', 1),
+(14, 65,  '2023-10-01 11:05:00', 2),
+(15, 350, '2023-10-01 11:10:00', 3),
+(16, 850, '2023-10-01 11:15:00', 4),
+(17, 82,  '2023-10-01 11:20:00', 1),
+(18, 45,  '2023-10-01 11:25:00', 2),
+(19, 280, '2023-10-01 11:30:00', 3),
+(20, 750, '2023-10-01 11:35:00', 4);
+

@@ -31,6 +31,7 @@ model Notification {
 model MonitoringSubject {
   id           Int            @id @default(autoincrement())
   name         String
+  description  String
   upperbound   Int
   lowerbound   Int
   Data         Data[]
@@ -48,6 +49,7 @@ model Data {
 model Device {
   id            String          @id //DEV-001, DEV-002
   name          String          @unique
+  feed          String
   description   String
   power         Float //0.1, 0.65, 0.7
   status        Boolean //true is on, false is off
@@ -55,11 +57,16 @@ model Device {
   Configuration Configuration[]
 }
 
+enum DeviceHistoryInfo {
+  Auto
+  Scheduler
+}
+
 model DeviceHistory {
-  id       Int      @id @default(autoincrement())
-  info     String //auto or scheduler?
-  date     DateTime @default(now())
-  device   Device   @relation(fields: [deviceId], references: [id])
+  id       Int               @id @default(autoincrement())
+  info     DeviceHistoryInfo //Auto or Scheduler?
+  date     DateTime          @default(now())
+  device   Device            @relation(fields: [deviceId], references: [id])
   deviceId String
 }
 
