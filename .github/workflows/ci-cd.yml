@@ -23,6 +23,9 @@ jobs:
                 username: ${{ secrets.DOCKERHUB_USERNAME }}
                 password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+            - name: generate prisma
+              run: npx prisma generate
+
             - name: build docker image 
               run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/green . 
             
@@ -49,5 +52,6 @@ jobs:
                   sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/green
                   echo "PULL IMAGE SUCCESSFULLY"
                   sudo docker run -dp 80:80 ${{ secrets.DOCKERHUB_USERNAME }}/green
+                  echo "RUN CONTAINER SUCCESSFULLY"
                 EOF
               
