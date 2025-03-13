@@ -6,11 +6,11 @@ export class MqttRepository implements IMqttRepository {
 
     public async publish(feed: string, message: string) {
         this.client.publish(feed, message, (err) => {
-        if (err) {
-            console.error("Publish Error:", err);
-        } else {
-            console.log(`Sent to ${feed}: ${message}`);
-        }
+            if (err) {
+                console.error("Publish Error:", err);
+            } else {
+                console.log(`Sent to ${feed}: ${message}`);
+            }
         });
     }
 
@@ -21,26 +21,18 @@ export class MqttRepository implements IMqttRepository {
         }
 
         this.client.subscribe(feed, (err) => {
-        if (err) {
-            console.error(`Subscription Error: ${feed}`, err);
-        } else {
-            console.log(`Subscribed to ${feed}`);
-        }
+            if (err) {
+                console.error(`Subscription Error: ${feed}`, err);
+            } else {
+                console.log(`Subscribed to ${feed}`);
+            }
         });
 
         this.client.on("message", (topic, message) => {
-        console.log(`Received message from ${topic}: ${message.toString()}`);
-        if (topic === feed) {
-            callback(message.toString());
-            // Unsubscribe ngay sau khi nhận được dữ liệu
-            this.client.unsubscribe(topic, (err) => {
-                if (err) {
-                    console.error(`Failed to unsubscribe from ${topic}`, err);
-                } else {
-                    console.log(`Unsubscribed from ${topic}`);
-                }
-            });
-        }
+            console.log(`Received message from ${topic}: ${message.toString()}`);
+            if (topic === feed) {
+                callback(message.toString());  // handle data
+            }
         });
     }
 }
