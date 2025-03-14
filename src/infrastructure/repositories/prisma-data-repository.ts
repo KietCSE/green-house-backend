@@ -31,6 +31,7 @@ export class DataRepository implements IDataRepository {
 
     public async saveData(data: MonitoringSubject): Promise<MonitoringSubject | null> {
         const newData = await prisma.monitoringSubject.create({ data })
+
         return newData
     }
 }
