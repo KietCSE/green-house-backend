@@ -7,6 +7,13 @@ export class NotifyUseCase {
         const notifications = await this.notificationRepository.findAllNotification()
         return notifications
     }
+
+    // public async saveNotification(value: number, monitoringSubjectId: number): Promise<boolean | null> {
+    //     const notification = await this.notificationRepository.saveNotification(value, monitoringSubjectId)
+    //     return notification
+    // }
+
+
 }
 
 

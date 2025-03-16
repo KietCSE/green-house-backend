@@ -17,12 +17,18 @@ export class NotificationRepository implements INotificationRepository {
         }
     }
 
-    public async saveNotification(value: number, monitoringSubjectId: number): Promise<boolean> {
+    public async saveNotification(value: number, subject: string): Promise<boolean> {
         try {
+            const monitoringSubject = await prisma.monitoringSubject.findFirst({ where: { name: subject } })
+
+            if (monitoringSubject === null) {
+                throw Error("Can not find the monitor")
+            }
+
             const data = await prisma.notification.create({
                 data: {
                     value,
-                    monitoringSubjectId
+                    monitoringSubjectId: monitoringSubject.id
                 }
             })
             return true
@@ -30,6 +36,6 @@ export class NotificationRepository implements INotificationRepository {
         catch (error) {
             throw Error("Can not save notification")
         }
-
     }
+
 }

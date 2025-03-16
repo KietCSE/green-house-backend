@@ -5,4 +5,4 @@
 
 */
 -- AlterTable
-ALTER TABLE "Device" ADD COLUMN     "feed" TEXT NOT NULL;
+-- ALTER TABLE "Device" ADD COLUMN     "feed" TEXT NOT NULL;

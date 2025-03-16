@@ -4,6 +4,9 @@ export interface IMonitorRepository {
     findDataBySubject(subject: string): Promise<MonitoringSubject | null>
     findAllSubject(): Promise<MonitoringSubject[] | null>
     loadAllSubjectName(): Promise<string[] | null>
+    checkMonitor(subject: string, data: number): Promise<boolean>
+    updateWarningStatus(subject: string, status: boolean): Promise<boolean>
+    setAlertInformation(subject: string, alertDes: string, alertupperbound: number, alertlowerbound: number): Promise<boolean>
 }
 
 

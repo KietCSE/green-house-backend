@@ -28,8 +28,8 @@ app.use(cors({
 }));
 
 
-const socketManager = new SocketManager(io);
-socketManager.setupEventListener();
+// const socketManager = new SocketManager(io);
+// socketManager.setupEventListener();
 
 connectDB()
 

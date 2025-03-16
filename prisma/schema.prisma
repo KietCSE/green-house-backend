@@ -29,13 +29,18 @@ model Notification {
 }
 
 model MonitoringSubject {
-  id           Int            @id @default(autoincrement())
-  name         String
-  description  String
-  upperbound   Int
-  lowerbound   Int
-  Data         Data[]
-  Notification Notification[]
+  id              Int            @id @default(autoincrement())
+  name            String
+  description     String
+  upperbound      Int
+  lowerbound      Int
+  warning         Boolean
+  alertDes        String
+  alertupperbound Int
+  alertlowerbound Int
+  email           Boolean
+  Data            Data[]
+  Notification    Notification[]
 }
 
 model Data {

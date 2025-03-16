@@ -60,3 +60,91 @@ paths:
                     example: ["Temperature", "Humidity", "Air Quality", "Light Intensity"]
         "500":
           description: Internal server error
+  
+  /api/monitor/alert:
+    post:
+      summary: Cập nhật ngưỡng cảnh báo cho một MonitoringSubject
+      description: Thiết lập hoặc cập nhật thông tin cảnh báo cho một đối tượng giám sát.
+      tags:
+        - monitor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - subject
+                - alertupperbound
+                - alertlowerbound
+                - alertDes
+              properties:
+                subject:
+                  type: string
+                  example: "Temperature"
+                  description: Tên của đối tượng giám sát.
+                alertDes:
+                  type: string
+                  example: "Nhiệt độ vượt ngưỡng an toàn"
+                  description: Mô tả cảnh báo.
+                alertupperbound:
+                  type: integer
+                  example: 100
+                  description: Giới hạn trên của cảnh báo.
+                alertlowerbound:
+                  type: integer
+                  example: 0
+                  description: Giới hạn dưới của cảnh báo.
+        responses:
+        "200":
+          description: Cập nhật cảnh báo thành công.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Set alert information successfully"
+
+  /api/monitor/alert/status:
+    patch:
+      summary: Cập nhật trạng thái cảnh báo cho một MonitoringSubject
+      description: Bật hoặc tắt cảnh báo cho một đối tượng giám sát.
+      tags:
+        - monitor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - subject
+                - status
+              properties:
+                subject:
+                  type: string
+                  example: "Temperature"
+                  description: Tên của đối tượng giám sát.
+                status:
+                  type: boolean
+                  example: true
+                  description: Trạng thái cảnh báo (`true` để bật, `false` để tắt).
+      responses:
+        "200":
+          description: Cập nhật trạng thái cảnh báo thành công.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Update warning status successfully"

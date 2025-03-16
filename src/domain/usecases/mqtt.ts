@@ -3,10 +3,21 @@ import { MqttRepository } from "../../infrastructure/repositories/adafruit-mqtt-
 import config from '../../config/load-config';
 import { Socket } from "socket.io";
 import { SocketManager } from "../../adafruit/socket";
+import { Data } from "@prisma/client";
+import { DataRepository } from "../../infrastructure/repositories/prisma-data-repository";
+import { IDataRepository } from "../../domain/repositories/data-repository"
+import { IMonitorRepository } from "../../domain/repositories/monitor-repository"
+import { INotificationRepository } from "../../domain/repositories/notification-repository"
 
 
 export class MqttUseCase {
-    constructor(private mqttRepository: MqttRepository) { }
+
+    constructor(
+        private mqttRepository: MqttRepository,
+        private dataRepository: IDataRepository,
+        private monitorRepository: IMonitorRepository,
+        private notificationRepository: INotificationRepository
+    ) { }
 
     public async sendMessage(req: Request, res: Response) {
         const { feed, message } = req.body;
@@ -33,10 +44,19 @@ export class MqttUseCase {
             }
             const feed_name = `${config.AIO_USERNAME}/feeds/${feed}`;
 
-            this.mqttRepository.subscribe(feed_name, (message) => {
+            this.mqttRepository.subscribe(feed_name, async (message) => {
                 console.log(message)
-                SocketManager.getInstance().broadcaseData(message)
-                // store data to prisma 
+
+                // this.dataRepository.saveData(message, feed_name)  // feed_name = name of subject 
+
+                // let isWarning = await this.monitorRepository.checkMonitor(feed_name, Number(message))
+                // if (isWarning) {
+                //     this.notificationRepository.saveNotification(Number(message), feed_name)
+                //    // gui mail 
+                // }
+                // SocketManager.getInstance().broadcaseData(message)
+
+                // check dieu kien cua thiet bi 
             });
 
             res.status(200).json({ status: true, message: "Subscribe successfully" })

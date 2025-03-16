@@ -13,6 +13,11 @@ export class DataRepository implements IDataRepository {
                 description: true,
                 upperbound: true,
                 lowerbound: true,
+                warning: true,
+                alertDes: true,
+                alertupperbound: true,
+                alertlowerbound: true,
+                email: true,
                 Data: {
                     skip: (page - 1) * pageSize,
                     take: pageSize, // Chỉ lấy 10 dòng đầu
@@ -29,10 +34,23 @@ export class DataRepository implements IDataRepository {
     }
 
 
-    public async saveData(data: MonitoringSubject): Promise<MonitoringSubject | null> {
-        const newData = await prisma.monitoringSubject.create({ data })
+    public async saveData(data: string, subject: string): Promise<void> {
+        try {
+            const monitoringSubject = await prisma.monitoringSubject.findFirst({ where: { name: subject } })
+            if (!monitoringSubject) {
+                throw Error("Can not find monitor")
+            }
+            const newData = await prisma.data.create({
+                data: {
+                    value: data,
+                    monitoringSubjectId: monitoringSubject.id
+                }
+            })
 
-        return newData
+        }
+        catch (error) {
+            throw Error("Can not save data")
+        }
     }
 }
 

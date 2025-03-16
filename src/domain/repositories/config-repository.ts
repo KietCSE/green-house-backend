@@ -1,4 +1,4 @@
-import { Configuration , SchedulerConfig, AutomationConfig, Condition} from "@prisma/client";
+import { Configuration, SchedulerConfig, AutomationConfig, Condition } from "@prisma/client";
 
 export interface IConfigRepository {
     findConfigBySubject(subject: string): Promise<Configuration | null>;

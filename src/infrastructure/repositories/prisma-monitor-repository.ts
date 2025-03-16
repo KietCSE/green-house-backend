@@ -19,6 +19,57 @@ export class MonitorRepository implements IMonitorRepository {
         const stringName = listName.map((item) => item.name)
         return stringName
     }
+
+    public async checkMonitor(subject: string, data: number): Promise<boolean> {
+        try {
+            const monitor = await prisma.monitoringSubject.findFirst({ where: { name: subject } })
+            if (!monitor) {
+                return false
+            }
+            if (data > monitor.alertupperbound || data < monitor.alertlowerbound) {
+                return true
+            }
+            return false
+        }
+        catch (error) {
+            throw Error("Can not check monitor")
+        }
+    }
+
+    public async updateWarningStatus(subject: string, status: boolean): Promise<boolean> {
+        try {
+            const monitor = await prisma.monitoringSubject.findFirst({ where: { name: subject } })
+            if (!monitor) {
+                throw Error("Can not find monitor")
+            }
+            await prisma.monitoringSubject.update({
+                where: { id: monitor.id },
+                data: { warning: status }
+            })
+            return true
+        }   
+        catch(error) {
+            throw Error("Can not update warning status")
+        }
+    }
+
+
+    public async setAlertInformation(subject: string, alertDes: string, alertupperbound: number, alertlowerbound: number): Promise<boolean> {
+        try {
+            const monitor = await prisma.monitoringSubject.findFirst({ where: { name: subject } })
+            if (!monitor) {
+                throw Error("Can not find monitor")
+            }
+            const data = await prisma.monitoringSubject.update({
+                where: { id: monitor.id },
+                data: { alertDes: alertDes, alertupperbound: alertupperbound, alertlowerbound: alertlowerbound }
+            })
+            return true
+        }
+        catch(error) {
+            throw Error("Can not set alert information")
+        } 
+    }
 }
 
 
