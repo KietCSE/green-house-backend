@@ -7,7 +7,7 @@ export class ConfigController {
 
     public async findConfigBySubject(req: Request, res: Response, next: NextFunction) {
         try {
-            const config = await this.configUsecase.findConfigBySubject(req.params.subject)
+            const config = await this.configUsecase.findAllConfigsBySubject(req.params.subject)
             return res.status(200).json({ status: true, data: config })
         }
         catch (error) {

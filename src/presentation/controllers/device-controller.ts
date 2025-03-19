@@ -13,6 +13,16 @@ export class DeviceController {
         catch (error) {
             next(error)
         }
+
+    }
+    public async getAllDevices(req: Request, res: Response, next: NextFunction) {
+        try {
+            const device = await this.deviceUsecase.getDeviceBySubject(req.params.subject)
+            return res.status(200).json({ status: true, data: device })
+        }
+        catch (error) {
+            next(error)
+        }
     }
 
     public async createDevice(req: Request, res: Response, next: NextFunction) {

@@ -4,13 +4,15 @@ import prisma from '../../config/prisma-config'
 import { connect } from "http2";
 
 export class ConfigRepository implements IConfigRepository {
-    public async findConfigBySubject(subject: string): Promise<Configuration | null> {
-        const config = await prisma.configuration.findFirst({ 
+    public async findAllConfigsBySubject(subject: string): Promise<Configuration[] | null> {
+        const config = await prisma.configuration.findMany({ 
             where: { 
                 deviceId : subject 
             },
             include: {
-                device: false
+                device: false,
+                schedulerConfig: true, 
+                automationConfig: true,
             }
         })
         return config

@@ -19,6 +19,16 @@ export class DeviceRepository implements IDeviceRepository {
         return device
     }
 
+    public async findAllDevices(): Promise<Device[] | []> {
+        const devices = await prisma.device.findMany({
+            include: {
+                Configuration: false,
+                DeviceHistory: false
+            }
+        })
+        return devices;
+    }
+
     public async createDevice(id: string, name: string, feed: string, description: string): Promise<Device> {
         const power = 0
         const status = false

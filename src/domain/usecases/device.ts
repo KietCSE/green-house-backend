@@ -10,6 +10,10 @@ export class DeviceUsecase {
         return this.deviceRepository.findDeviceBySubject(subject)
     }
 
+    public async getAllDevices(): Promise<Device[] | null> {
+        return this.deviceRepository.findAllDevices();
+    }
+
     public async createDevice(req: Request, res: Response) {
         const { id, name, feed, description} = req.body
         const deviceById = await this.deviceRepository.findDeviceBySubject(id)

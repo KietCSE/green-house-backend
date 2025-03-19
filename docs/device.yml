@@ -57,8 +57,52 @@ paths:
           description: Device not found
         '500':
           description: Internal server error
-
+  
   /device:
+    get:
+      tags:
+        - device
+      summary: Get all devices info
+      description: Retrieve information about all devices
+      responses:
+        '200':
+          description: Devices found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: "device123"
+                        name:
+                          type: string
+                          example: "Temperature Sensor"
+                        feed:
+                          type: string
+                          example: "feed123"
+                        description:
+                          type: string
+                          example: "Measures room temperature"
+                        power: 
+                          type: number
+                          example: 100
+                        status: 
+                          type: boolean
+                          example: true 
+        '404':
+          description: Devices not found
+        '500':
+          description: Internal server error
+
     post:
         tags:
           - device
@@ -105,19 +149,19 @@ paths:
   /device/config/{subject}:
     get:
       tags:
-          - device
-      summary: Get configuration by subject
-      description: Retrieve a configuration using its subject identifier
+        - device
+      summary: Get all configurations by subject (deviceId)
+      description: Retrieve all configurations associated with a specific device using its identifier.
       parameters:
         - name: subject
           in: path
           required: true
           schema:
             type: string
-          description: The subject identifier of the configuration
+          description: The device identifier.
       responses:
         '200':
-          description: Configuration found
+          description: Configurations found
           content:
             application/json:
               schema:
@@ -127,22 +171,62 @@ paths:
                     type: boolean
                     example: true
                   data:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                        example: "config123"
-                      name:
-                        type: string
-                        example: "Room Temperature Control"
-                      description:
-                        type: string
-                        example: "Config for temperature automation"
-                      deviceId:
-                        type: string
-                        example: "device123"
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        name:
+                          type: string
+                          example: "Room Temperature Control"
+                        description:
+                          type: string
+                          example: "Config for temperature automation"
+                        action:
+                          type: boolean
+                          example: true
+                        deviceId:
+                          type: string
+                          example: "device123"
+                        schedulerConfig:
+                          type: object
+                          nullable: true
+                          properties:
+                            id:
+                              type: integer
+                              example: 1
+                            start:
+                              type: string
+                              example: "08:00"
+                            end:
+                              type: string
+                              example: "18:00"
+                            repetition:
+                              type: string
+                              nullable: true
+                              example: "daily"
+                        automationConfig:
+                          type: object
+                          nullable: true
+                          properties:
+                            id:
+                              type: integer
+                              example: 2
+                            conditions:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: integer
+                                    example: 10
+                                  condition:
+                                    type: string
+                                    example: ">50"
         '404':
-          description: Configuration not found
+          description: Configurations not found
         '500':
           description: Internal server error
 
