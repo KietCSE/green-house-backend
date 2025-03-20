@@ -47,10 +47,13 @@ export class ConfigRepository implements IConfigRepository {
         return newAutomationConfig
     }
 
-    public async createCondition(condition: string, configId: number): Promise<Condition> {
+    public async createCondition(sensorId: string, condition: string, threshold: string, description: string, configId: number): Promise<Condition> {
         const newCondition = await prisma.condition.create({
             data: {
+                sensorId,
                 condition,
+                threshold,
+                description,
                 automation: { connect: { id: configId} }
             }
         })

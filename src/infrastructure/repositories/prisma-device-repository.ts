@@ -29,10 +29,10 @@ export class DeviceRepository implements IDeviceRepository {
         return devices;
     }
 
-    public async createDevice(id: string, name: string, feed: string, description: string): Promise<Device> {
+    public async createDevice(id: string, name: string, feed: string,  prefixMessage: string, description: string): Promise<Device> {
         const power = 0
         const status = false
-        const newDevice = await prisma.device.create({ data : {id, name, feed, description, power, status} })
+        const newDevice = await prisma.device.create({ data : {id, name, feed, prefixMessage, description, power, status} })
         return newDevice
     }
 }

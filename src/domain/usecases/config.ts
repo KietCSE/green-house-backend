@@ -30,8 +30,8 @@ export class ConfigUseCase {
     }
 
     public async createCondition(req: Request, res: Response) {
-        const { condition, configId } = req.body
-        const newCondition = await this.configRepository.createCondition(condition, configId)
+        const { sensorId, condition, threshold, description, configId } = req.body
+        const newCondition = await this.configRepository.createCondition(sensorId, condition, threshold, description, configId)
         return res.status(200).json({ status: true, message: "Condition config created successfully" })
     }
 }

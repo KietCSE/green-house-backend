@@ -124,6 +124,9 @@ paths:
                   feed:
                     type: string
                     example: "feed123"
+                  prefixMessage:
+                    type: string
+                    example: "led"
                   description:
                     type: string
                     example: "Measures room temperature"
@@ -342,9 +345,18 @@ paths:
                 configId:
                   type: string
                   example: "config123"
+                sensorId:
+                  type: string
+                  example: "DEV-001"
                 condition:
                   type: string
-                  example: "temperature > 25"
+                  example: ">"
+                threshold:
+                  type: string
+                  example: "25"
+                description:
+                  type: string
+                  example: "Device 001 exceeds threshold"
       responses:
         '200':
           description: Condition created successfully
