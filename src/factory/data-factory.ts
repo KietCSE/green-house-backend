@@ -1,5 +1,5 @@
 import { DataController } from "../presentation/controllers/data-controller";
-import { GetDataUseCase } from "../domain/usecases/data";
+import { GetDataUseCase } from "../domain/usecases/get-data";
 import { DataRepository } from "../infrastructure/repositories/prisma-data-repository";
 
 export const dataRepository = new DataRepository();

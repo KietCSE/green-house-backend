@@ -32,12 +32,13 @@ model MonitoringSubject {
   id              Int            @id @default(autoincrement())
   name            String
   description     String
+  unit            String
   upperbound      Int
   lowerbound      Int
   warning         Boolean
-  alertDes        String
-  alertupperbound Int
-  alertlowerbound Int
+  alertDes        String?
+  alertupperbound Int?
+  alertlowerbound Int?
   email           Boolean
   Data            Data[]
   Notification    Notification[]

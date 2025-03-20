@@ -19,5 +19,4 @@ router.get('/device/history',
     LoadHistoryDeviceValidation, validateRequest,
     (req: Request, res: Response, next: NextFunction) => { HistoryDeviceController.getAllHistoryDevice(req, res, next) })
 
-
 export default router

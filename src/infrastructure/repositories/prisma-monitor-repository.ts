@@ -26,7 +26,7 @@ export class MonitorRepository implements IMonitorRepository {
             if (!monitor) {
                 return false
             }
-            if (data > monitor.alertupperbound || data < monitor.alertlowerbound) {
+            if (monitor.alertupperbound && data > monitor.alertupperbound || monitor.alertlowerbound && data < monitor.alertlowerbound) {
                 return true
             }
             return false
@@ -47,8 +47,8 @@ export class MonitorRepository implements IMonitorRepository {
                 data: { warning: status }
             })
             return true
-        }   
-        catch(error) {
+        }
+        catch (error) {
             throw Error("Can not update warning status")
         }
     }
@@ -66,9 +66,43 @@ export class MonitorRepository implements IMonitorRepository {
             })
             return true
         }
-        catch(error) {
+        catch (error) {
             throw Error("Can not set alert information")
-        } 
+        }
+    }
+
+    public async addMonitorSubject(
+        name: string,
+        description: string,
+        unit: string,
+        upperbound: number,
+        lowerbound: number
+    ): Promise<boolean> {
+        try {
+            const isCreated = await prisma.monitoringSubject.findFirst({ where: { name } })
+            if (isCreated) throw Error(`Monitor subject with name "${name}" already exists.`);
+
+            const isSaved = await prisma.monitoringSubject.create({
+                data: {
+                    name,
+                    description,
+                    unit,
+                    lowerbound,
+                    upperbound,
+                    warning: false,
+                    email: false
+                }
+            })
+            return true
+        }
+        catch (error) {
+            console.error("Error saving monitor subject:", error);
+            if (error instanceof Error) {
+                throw new Error(error.message);
+            } else {
+                throw new Error("Can not save monitor subject");
+            }
+        }
     }
 }
 

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express"
-import { LoadMonitorUseCase } from '../../domain/usecases/load-monitor'
-import { AlertUseCase } from '../../domain/usecases/alert'
+import { LoadMonitorUseCase } from '../../domain/usecases/handle-monitor'
+import { AlertUseCase } from '../../domain/usecases/create-alert'
 
 export class MonitorController {
     constructor(
@@ -44,6 +44,17 @@ export class MonitorController {
             const { subject, status } = req.body
             await this.alertUseCase.updateAlertStatus(subject, status)
             return res.status(200).json({ status: true, message: "Update warning status successfully" })
+        }
+        catch (error) {
+            next(error)
+        }
+    }
+
+    public async addMonitorSubject(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { name, description, unit, upperbound, lowerbound } = req.body
+            await this.loadMonitorUseCase.addMonitorSubject(name, description, unit, upperbound, lowerbound)
+            return res.status(200).json({ status: true, message: "Create monitor subject successfully" })
         }
         catch (error) {
             next(error)

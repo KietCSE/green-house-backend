@@ -1,10 +1,10 @@
 INSERT INTO "MonitoringSubject" 
-("name", "upperbound", "lowerbound", "description", "warning", "alertDes", "alertupperbound", "alertlowerbound", "email") 
+("name", "upperbound", "lowerbound", "description", "warning", "alertDes", "alertupperbound", "alertlowerbound", "email", "unit") 
 VALUES
-('Temperature', 100, 0, 'Measures the ambient temperature in degrees Celsius', false, 'Temperature out of safe range', 90, 10, false),
-('Humidity', 80, 20, 'Monitors the relative humidity percentage in the air', false, 'Humidity level critical', 75, 25, false),
-('Air Quality', 500, 0, 'Indicates air pollution levels based on particulate concentration', true, 'Air quality is unhealthy', 300, 50, true),
-('Light Intensity', 1000, 0, 'Tracks the intensity of light in lumens for plant growth', false, 'Light level too high/low', 900, 100, false);
+('Temperature', 100, 0, 'Measures the ambient temperature in degrees Celsius', false, 'Temperature out of safe range', 90, 10, false, 'độ C'),
+('Soid Humidity', 80, 20, 'Monitors the relative humidity percentage in the air', false, 'Humidity level critical', 75, 25, false, '%'),
+('Air Humidity', 500, 0, 'Indicates air pollution levels based on particulate concentration', true, 'Air quality is unhealthy', 300, 50,false, '%RH'),
+('Light Intensity', 1000, 0, 'Tracks the intensity of light in lumens for plant growth', false, 'Light level too high/low', 900, 100, false, 'Lux');
 
 
 INSERT INTO "Data" ("value", "date", "monitoringSubjectId") VALUES
@@ -77,3 +77,16 @@ INSERT INTO "Data" (id, value, date, "monitoringSubjectId") VALUES
 (19, 280, '2023-10-01 11:30:00', 3),
 (20, 750, '2023-10-01 11:35:00', 4);
 
+
+
+INSERT INTO "Data" (id, value, date, "monitoringSubjectId") VALUES
+(21, 95,  '2023-08-01 10:20:00', 4),
+(22, 60,  '2023-02-01 10:25:00', 4),
+(23, 200, '2022-10-01 10:30:00', 4),
+(24, 700, '2021-10-01 10:35:00', 4),
+(25, 80,  '2025-02-01 10:40:00', 4),
+(26, 55, '2023-08-01 10:20:00', 2),
+(27, 400, '2023-02-01 10:25:00', 2),
+(28, 900, '2022-10-01 10:30:00', 2),
+(29, 78,  '2021-10-01 10:35:00', 2),
+(30, 65,  '2025-02-01 10:40:00', 2),

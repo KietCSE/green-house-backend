@@ -1,7 +1,7 @@
 import { MonitorController } from "../presentation/controllers/monitor-controller";
-import { LoadMonitorUseCase } from "../domain/usecases/load-monitor";
+import { LoadMonitorUseCase } from "../domain/usecases/handle-monitor";
 import { MonitorRepository } from "../infrastructure/repositories/prisma-monitor-repository";
-import { AlertUseCase } from "../domain/usecases/alert";
+import { AlertUseCase } from "../domain/usecases/create-alert";
 
 export const monitorRepository = new MonitorRepository();
 

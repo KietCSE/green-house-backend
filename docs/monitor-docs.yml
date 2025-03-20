@@ -63,7 +63,7 @@ paths:
   
   /api/monitor/alert:
     post:
-      summary: Cập nhật ngưỡng cảnh báo cho một MonitoringSubject
+      summary: Thêm mới 1 cảnh báo cho MonitoringSubject
       description: Thiết lập hoặc cập nhật thông tin cảnh báo cho một đối tượng giám sát.
       tags:
         - monitor

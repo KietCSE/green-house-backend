@@ -1,9 +1,10 @@
 import { IObserver } from "../repositories/observer";
 
 
-export class AlertData implements IObserver {
+export class PersistData implements IObserver {
+
     public async execute(data: number, feed: string): Promise<void> {
         return
     }
-}
 
+}

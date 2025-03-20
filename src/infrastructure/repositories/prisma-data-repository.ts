@@ -1,38 +1,8 @@
 import { IDataRepository } from "../../domain/repositories/data-repository"
-import { MonitoringSubject } from '@prisma/client'
 import prisma from '../../config/prisma-config'
 
 
 export class DataRepository implements IDataRepository {
-    public async findDataBySubject(subject: string, pageSize: number, page: number): Promise<MonitoringSubject | null> {
-        const data = prisma.monitoringSubject.findFirst({
-            where: { name: subject },
-            select: {
-                id: true,
-                name: true,
-                description: true,
-                upperbound: true,
-                lowerbound: true,
-                warning: true,
-                alertDes: true,
-                alertupperbound: true,
-                alertlowerbound: true,
-                email: true,
-                Data: {
-                    skip: (page - 1) * pageSize,
-                    take: pageSize, // Chỉ lấy 10 dòng đầu
-                    select: {
-                        value: true,
-                        date: true
-                    },
-                    orderBy: { date: "desc" } // Có thể sắp xếp theo `date` mới nhất
-
-                }
-            }
-        })
-        return data
-    }
-
 
     public async saveData(data: string, subject: string): Promise<void> {
         try {
@@ -50,6 +20,51 @@ export class DataRepository implements IDataRepository {
         }
         catch (error) {
             throw Error("Can not save data")
+        }
+    }
+
+    public async findDataByDateAndSubject(
+        subject: string,
+        pageSize: number,
+        page: number,
+        startDate?: Date,
+        endDate?: Date
+    ): Promise<any[]> {
+        try {
+
+            let data
+
+            if (!endDate || !startDate) {
+                data = await prisma.data.findMany({
+                    where: {
+                        subject: { name: subject }
+                    },
+                    skip: (page - 1) * pageSize,
+                    take: pageSize,
+                    orderBy: { date: "desc" }
+                })
+            }
+            else {
+                data = await prisma.data.findMany({
+                    where: {
+                        date: {
+                            gte: startDate,
+                            lte: endDate
+                        },
+                        subject: { name: subject }
+                    },
+                    skip: (page - 1) * pageSize,
+                    take: pageSize,
+                    orderBy: { date: "desc" }
+                })
+            }
+
+
+            return data
+        }
+        catch (error) {
+            console.log(error)
+            throw new Error("Can not load data by date")
         }
     }
 }

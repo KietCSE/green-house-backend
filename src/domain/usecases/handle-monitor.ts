@@ -1,5 +1,6 @@
 
-import { IMonitorRepository } from "../../domain/repositories/monitor-repository"
+import { promises } from "dns";
+import { IMonitorRepository } from "../repositories/monitor-repository"
 import { MonitoringSubject } from "@prisma/client";
 
 export class LoadMonitorUseCase {
@@ -13,5 +14,10 @@ export class LoadMonitorUseCase {
     public async loadAllSubjectName(): Promise<string[] | null> {
         const listName = await this.monitorRepository.loadAllSubjectName()
         return listName
+    }
+
+    public async addMonitorSubject(name: string, description: string, unit: string, upperbound: number, lowerbound: number): Promise<boolean> {
+        const isSaved = await this.monitorRepository.addMonitorSubject(name, description, unit, upperbound, lowerbound)
+        return isSaved
     }
 }
