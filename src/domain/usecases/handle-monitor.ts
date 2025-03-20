@@ -20,4 +20,4 @@ export class LoadMonitorUseCase {
         const isSaved = await this.monitorRepository.addMonitorSubject(name, description, unit, upperbound, lowerbound)
         return isSaved
     }
-}
+}     
