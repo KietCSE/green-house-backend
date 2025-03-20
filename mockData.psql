@@ -21,12 +21,11 @@ INSERT INTO "Notification" ("date", "value", "monitoringSubjectId") VALUES
 ('2023-10-01T10:15:00Z', 1200, 4);
 
 
-INSERT INTO "Device" ("id", "name", "description", "power", "status", "feed") VALUES
-('DEV-001', 'Thermostat', 'Controls temperature', 0.7, true, 'a'),
-('DEV-002', 'Humidifier', 'Controls humidity', 0.5, false, 'a'),
-('DEV-003', 'Air Purifier', 'Improves air quality', 0.8, true, 'a'),
-('DEV-004', 'Smart Light', 'Controls lighting', 0.6, true, 'a');
-
+INSERT INTO "Device" ("id", "name", "feed", "prefixMessage", "description", "power", "status") VALUES
+('DEV-001', 'Thermostat', 'tst-temp', 'hump', 'Controls temperature', 0.7, true),
+('DEV-002', 'Humidifier', 'tst-control', 'hump', 'Controls humidity', 0.5, false),
+('DEV-003', 'Air Purifier', 'tst-control', 'hump', 'Improves air quality', 0.8, true),
+('DEV-004', 'Smart Light', 'tst-control', 'led', 'Controls lighting', 0.6, true);
 
 
 INSERT INTO "DeviceHistory" ("info", "date", "deviceId") VALUES
@@ -49,12 +48,9 @@ INSERT INTO "AutomationConfig" ("id") VALUES
 (3),
 (4);
 
-
-INSERT INTO "Condition" ("condition", "automationConfigId") VALUES
-('>50', 1),
-('<60', 2),
-('>100', 3),
-('<500', 4);
+INSERT INTO "Condition" ("sensorId", "condition", "threshold", "description", "automationConfigId") VALUES
+('DEV-001', '>', '50', 'Device 001 exceeds threshold', 1),
+('DEV-002', '<', '60', 'Device 002 falls below threshold', 2);
 
 INSERT INTO "SchedulerConfig" ("id", "start", "end", "repitation") VALUES
 (1, '10:00', '12:00', 'daily'),

@@ -4,13 +4,15 @@ import prisma from '../../config/prisma-config'
 import { connect } from "http2";
 
 export class ConfigRepository implements IConfigRepository {
-    public async findConfigBySubject(subject: string): Promise<Configuration | null> {
-        const config = await prisma.configuration.findFirst({ 
+    public async findAllConfigsBySubject(subject: string): Promise<Configuration[] | null> {
+        const config = await prisma.configuration.findMany({ 
             where: { 
                 deviceId : subject 
             },
             include: {
-                device: false
+                device: false,
+                schedulerConfig: true, 
+                automationConfig: true,
             }
         })
         return config
@@ -45,10 +47,13 @@ export class ConfigRepository implements IConfigRepository {
         return newAutomationConfig
     }
 
-    public async createCondition(condition: string, configId: number): Promise<Condition> {
+    public async createCondition(sensorId: string, condition: string, threshold: string, description: string, configId: number): Promise<Condition> {
         const newCondition = await prisma.condition.create({
             data: {
+                sensorId,
                 condition,
+                threshold,
+                description,
                 automation: { connect: { id: configId} }
             }
         })

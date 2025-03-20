@@ -6,14 +6,12 @@ export class ConfigUseCase {
 
     constructor(private configRepository: ConfigRepository) { }
 
-    public async findConfigBySubject(subject: string): Promise<Configuration | null> {
-        return this.configRepository.findConfigBySubject(subject)
+    public async findAllConfigsBySubject(subject: string): Promise<Configuration[] | null> {
+        return this.configRepository.findAllConfigsBySubject(subject)
     }
 
     public async createConfig(req: Request, res: Response) {
         const { name, description, deviceId} = req.body
-        const config = await this.configRepository.findConfigBySubject(deviceId)
-        if (config) return res.status(409).json({ status: false, message: "Device has been configed before" })
 
         const newConfig= await this.configRepository.createConfig(name, description, deviceId)
         return res.status(200).json({ status: true, message: "Config created successfully" })
@@ -32,8 +30,8 @@ export class ConfigUseCase {
     }
 
     public async createCondition(req: Request, res: Response) {
-        const { condition, configId } = req.body
-        const newCondition = await this.configRepository.createCondition(condition, configId)
+        const { sensorId, condition, threshold, description, configId } = req.body
+        const newCondition = await this.configRepository.createCondition(sensorId, condition, threshold, description, configId)
         return res.status(200).json({ status: true, message: "Condition config created successfully" })
     }
 }
