@@ -1,6 +1,8 @@
 import mqtt from "mqtt";
 import config from '../config/load-config';
 
+// Singleton
+
 class MqttClient {
   private static instance: mqtt.MqttClient | null = null;
 

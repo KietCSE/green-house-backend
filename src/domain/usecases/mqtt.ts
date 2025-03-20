@@ -52,11 +52,11 @@ export class MqttUseCase {
                 // let isWarning = await this.monitorRepository.checkMonitor(feed_name, Number(message))
                 // if (isWarning) {
                 //     this.notificationRepository.saveNotification(Number(message), feed_name)
-                //    // gui mail 
                 // }
                 // SocketManager.getInstance().broadcaseData(message)
 
                 // check dieu kien cua thiet bi 
+                
             });
 
             res.status(200).json({ status: true, message: "Subscribe successfully" })
