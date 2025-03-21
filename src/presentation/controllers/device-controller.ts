@@ -17,7 +17,7 @@ export class DeviceController {
     }
     public async getAllDevices(req: Request, res: Response, next: NextFunction) {
         try {
-            const device = await this.deviceUsecase.getDeviceBySubject(req.params.subject)
+            const device = await this.deviceUsecase.getAllDevices()
             return res.status(200).json({ status: true, data: device })
         }
         catch (error) {
@@ -28,6 +28,15 @@ export class DeviceController {
     public async createDevice(req: Request, res: Response, next: NextFunction) {
         try {
             await this.deviceUsecase.createDevice(req, res)
+        }
+        catch (error) {
+            next(error)
+        }
+    }
+
+    public async turnDevice(req: Request, res: Response, next: NextFunction) {
+        try {
+            await this.deviceUsecase.turnDevice(req, res)
         }
         catch (error) {
             next(error)

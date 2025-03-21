@@ -8,4 +8,6 @@ export interface IConfigRepository {
 
     createCondition(sensorId: string, condition: string, threshold: string, description: string, configId: number): Promise<Condition>;
     createAutomationConfig(configId: number): Promise<AutomationConfig>;
+
+    turnConfig(subject: String, action: boolean): Promise<Configuration>
 }

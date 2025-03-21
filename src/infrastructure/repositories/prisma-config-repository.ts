@@ -12,7 +12,11 @@ export class ConfigRepository implements IConfigRepository {
             include: {
                 device: false,
                 schedulerConfig: true, 
-                automationConfig: true,
+                automationConfig: {
+                    include: {
+                        Condition: true 
+                    }
+                }
             }
         })
         return config
@@ -27,6 +31,19 @@ export class ConfigRepository implements IConfigRepository {
     }
 
     public async createSchedulerConfig(configId: number, start: string, end: string, repetition?: string): Promise<SchedulerConfig> {
+        const existingConfig = await prisma.configuration.findUnique({
+            where: { id: configId },
+            include: { schedulerConfig: true, automationConfig: true }
+        });
+    
+        if (!existingConfig) {
+            throw new Error(`Configuration with ID ${configId} does not exist.`);
+        }
+
+        if (existingConfig.schedulerConfig || existingConfig.automationConfig) {
+            throw new Error(`Configuration with ID ${configId} already has a config. Cannot create another one.`);
+        }
+        
         const newSchedulerConfig = await prisma.schedulerConfig.create({
             data: {
                 configuration: { connect: { id: configId } },
@@ -39,6 +56,19 @@ export class ConfigRepository implements IConfigRepository {
     }
 
     public async createAutomationConfig(configId: number): Promise<AutomationConfig> {
+        const existingConfig = await prisma.configuration.findUnique({
+            where: { id: configId },
+            include: { schedulerConfig: true, automationConfig: true }
+        });
+    
+        if (!existingConfig) {
+            throw new Error(`Configuration with ID ${configId} does not exist.`);
+        }
+
+        if (existingConfig.schedulerConfig || existingConfig.automationConfig) {
+            throw new Error(`Configuration with ID ${configId} already has a config. Cannot create another one.`);
+        }
+
         const newAutomationConfig = await prisma.automationConfig.create({
             data: {
                 configuration: { connect: { id: configId } }
@@ -59,5 +89,15 @@ export class ConfigRepository implements IConfigRepository {
         })
 
         return newCondition;
+    }
+
+    public async turnConfig(subject: string, action: boolean): Promise<Configuration> {
+        const configId = parseInt(subject, 10);
+        const updatedConfig = await prisma.configuration.update({
+            where: {id: configId},
+            data: {action}
+        })
+
+        return updatedConfig
     }
 }

@@ -14,24 +14,32 @@ export class ConfigUseCase {
         const { name, description, deviceId} = req.body
 
         const newConfig= await this.configRepository.createConfig(name, description, deviceId)
-        return res.status(200).json({ status: true, message: "Config created successfully" })
+        return res.status(200).json({ status: true, message: "Config created successfully" , data: newConfig})
     }
 
     public async createSchedulerConfig(req: Request, res: Response) {
         const { configId, start, end, repetition} = req.body
         const newSchedulerConfig =  await this.configRepository.createSchedulerConfig(configId, start, end, repetition)
-        return res.status(200).json({ status: true, message: "Scheduler config created successfully" })
+        return res.status(200).json({ status: true, message: "Scheduler config created successfully" , data: newSchedulerConfig})
     }
 
     public async createAutomationConfig(req: Request, res: Response) {
         const { configId } = req.body
         const newAutomationConfig = await this.configRepository.createAutomationConfig(configId)
-        return res.status(200).json({ status: true, message: "Automation config created successfully" })
+        return res.status(200).json({ status: true, message: "Automation config created successfully" , data: newAutomationConfig})
     }
 
     public async createCondition(req: Request, res: Response) {
         const { sensorId, condition, threshold, description, configId } = req.body
         const newCondition = await this.configRepository.createCondition(sensorId, condition, threshold, description, configId)
-        return res.status(200).json({ status: true, message: "Condition config created successfully" })
+        return res.status(200).json({ status: true, message: "Condition config created successfully" , data: newCondition})
     }
-}
+
+    public async turnConfig(req: Request, res: Response) {
+        const { subject } = req.params;
+        const { action } = req.body; 
+
+        const turnConfig = await this.configRepository.turnConfig(subject, action)
+        return res.status(200).json({ status: true, message: "Config updated successfully", data: turnConfig})
+    }
+ }
