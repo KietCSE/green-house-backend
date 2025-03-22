@@ -167,6 +167,7 @@ paths:
                 - unit
                 - upperbound
                 - lowerbound
+                - feed
               properties:
                 name:
                   type: string
@@ -183,6 +184,9 @@ paths:
                 lowerbound:
                   type: number
                   description: Lower bound value
+                feed:
+                  type: string
+                  description: feed in adafruit
       responses:
         "200":
           description: Monitor created successfully
@@ -197,7 +201,7 @@ paths:
                   message:
                     type: string
                     example: "Create monitor subject successfully"
-        "400":
+        "500":
           description: Bad request (e.g., duplicate name)
           content:
             application/json:
@@ -210,3 +214,16 @@ paths:
                   message:
                     type: string
                     example: "Monitor name already exists"
+          "400":
+            description: duplicate feed 
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: boolean
+                      example: false
+                    message:
+                      type: string
+                      example: "Feed has already been existed"

@@ -42,6 +42,7 @@ export class MonitorRepository implements IMonitorRepository {
             if (!monitor) {
                 throw Error("Can not find monitor")
             }
+
             await prisma.monitoringSubject.update({
                 where: { id: monitor.id },
                 data: { warning: status }
@@ -76,11 +77,15 @@ export class MonitorRepository implements IMonitorRepository {
         description: string,
         unit: string,
         upperbound: number,
-        lowerbound: number
+        lowerbound: number,
+        feed: string
     ): Promise<boolean> {
         try {
             const isCreated = await prisma.monitoringSubject.findFirst({ where: { name } })
-            if (isCreated) throw Error(`Monitor subject with name "${name}" already exists.`);
+            if (isCreated) throw Error(`Monitor subject with name "${name}" has already been existed.`);
+
+            const feedIsCreated = await prisma.monitoringSubject.findFirst({ where: { feed } })
+            if (feedIsCreated) throw Error("This feed has already been existed")
 
             const isSaved = await prisma.monitoringSubject.create({
                 data: {
@@ -90,7 +95,8 @@ export class MonitorRepository implements IMonitorRepository {
                     lowerbound,
                     upperbound,
                     warning: false,
-                    email: false
+                    email: false,
+                    feed,
                 }
             })
             return true

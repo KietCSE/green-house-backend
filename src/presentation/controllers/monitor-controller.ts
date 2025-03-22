@@ -52,8 +52,8 @@ export class MonitorController {
 
     public async addMonitorSubject(req: Request, res: Response, next: NextFunction) {
         try {
-            const { name, description, unit, upperbound, lowerbound } = req.body
-            await this.loadMonitorUseCase.addMonitorSubject(name, description, unit, upperbound, lowerbound)
+            const { name, description, unit, upperbound, lowerbound, feed } = req.body
+            await this.loadMonitorUseCase.addMonitorSubject(name, description, unit, upperbound, lowerbound, feed)
             return res.status(200).json({ status: true, message: "Create monitor subject successfully" })
         }
         catch (error) {

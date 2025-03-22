@@ -16,8 +16,15 @@ export class LoadMonitorUseCase {
         return listName
     }
 
-    public async addMonitorSubject(name: string, description: string, unit: string, upperbound: number, lowerbound: number): Promise<boolean> {
-        const isSaved = await this.monitorRepository.addMonitorSubject(name, description, unit, upperbound, lowerbound)
+    public async addMonitorSubject(
+        name: string,
+        description: string,
+        unit: string,
+        upperbound: number,
+        lowerbound: number,
+        feed: string
+    ): Promise<boolean> {
+        const isSaved = await this.monitorRepository.addMonitorSubject(name, description, unit, upperbound, lowerbound, feed)
         return isSaved
     }
 }     

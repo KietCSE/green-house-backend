@@ -35,6 +35,7 @@ model MonitoringSubject {
   unit            String
   upperbound      Int
   lowerbound      Int
+  feed            String
   warning         Boolean
   alertDes        String?
   alertupperbound Int?
