@@ -3,12 +3,16 @@ import prisma from '../../config/prisma-config'
 import { INotificationRepository } from '../../domain/repositories/notification-repository'
 
 export class NotificationRepository implements INotificationRepository {
-    public async findAllNotification(): Promise<any | null> {
+    public async findAllNotification(page: number, pageSize: number): Promise<any | null> {
         try {
             const notifications = await prisma.notification.findMany({
-                include: {
+                select: {
+                    date: true,
+                    value: true,
                     monitor: true
-                }
+                },
+                skip: (page - 1) * pageSize,
+                take: pageSize,
             })
             return notifications
         }

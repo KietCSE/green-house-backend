@@ -7,7 +7,11 @@ export class NotificationController {
 
     public async getAllNotification(req: Request, res: Response, next: NextFunction) {
         try {
-            const notifications = await this.notifyUseCase.getAllNotification()
+            const { pageSize, page } = req.query
+            const pageSizeNumber = pageSize ? parseInt(pageSize as string, 10) : 10
+            const pageNumber = page ? parseInt(page as string, 10) : 1
+
+            const notifications = await this.notifyUseCase.getAllNotification(pageNumber, pageSizeNumber)
             res.status(200).json({ status: true, data: notifications })
         } catch (error) {
             next(error)

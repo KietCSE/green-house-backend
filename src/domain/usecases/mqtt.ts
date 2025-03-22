@@ -1,16 +1,11 @@
 import { Request, Response } from "express";
 import { MqttRepository } from "../../infrastructure/repositories/adafruit-mqtt-repository";
 import config from '../../config/load-config';
-import { Socket } from "socket.io";
-import { SocketManager } from "../../adafruit/socket";
-import { Data } from "@prisma/client";
-import { DataRepository } from "../../infrastructure/repositories/prisma-data-repository";
 import { IDataRepository } from "../../domain/repositories/data-repository"
 import { IMonitorRepository } from "../../domain/repositories/monitor-repository"
 import { INotificationRepository } from "../../domain/repositories/notification-repository"
 import { AdafruitHandler } from "./adafruit-handler";
 import axios from "axios";
-import { PersistDataOberver } from "./persist-data";
 
 export class MqttUseCase {
 
@@ -98,7 +93,7 @@ export class MqttUseCase {
                 });
             }
         }
-        catch(error) {
+        catch (error) {
             throw new Error("Error when subscribe feeds")
         }
     }
