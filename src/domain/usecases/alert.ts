@@ -12,10 +12,12 @@ export class AlertDataObserver implements IObserver {
 
     public async execute(data: number, feed: string): Promise<void> {
         const isAlert = await this.monitorRepository.checkMonitor(feed, data)
-        if (isAlert === true) {
-            await this.notificationRepository.saveNotification(data, feed)
-            // gui thong bao den trang nguoi dung 
 
+        if (isAlert === true) {
+            const alert = await this.notificationRepository.saveNotification(data, feed)
+
+            // gui thong bao den trang nguoi dung 
+            console.log(`Alert for ${feed} with ${data}`)
         }
     }
 }

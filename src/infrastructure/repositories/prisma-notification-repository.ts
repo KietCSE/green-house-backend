@@ -17,9 +17,9 @@ export class NotificationRepository implements INotificationRepository {
         }
     }
 
-    public async saveNotification(value: number, subject: string): Promise<boolean> {
+    public async saveNotification(value: number, feed: string): Promise<boolean> {
         try {
-            const monitoringSubject = await prisma.monitoringSubject.findFirst({ where: { name: subject } })
+            const monitoringSubject = await prisma.monitoringSubject.findFirst({ where: { feed } })
 
             if (monitoringSubject === null) {
                 throw Error("Can not find the monitor")

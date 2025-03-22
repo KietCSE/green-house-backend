@@ -17,6 +17,15 @@ export const addMonitorSubject: ValidationChain[] = [
     body("lowerbound")
         .notEmpty().withMessage("lowerbound is required")
         .isNumeric().withMessage("lowerbound is number"),
+        body("lowerbound")
+        .notEmpty().withMessage("lowerbound is required")
+        .isNumeric().withMessage("lowerbound must be a number")
+        .custom((value, { req }) => {
+            if (Number(value) >= Number(req.body.upperbound)) {
+                throw new Error("lowerbound must be less than upperbound");
+            }
+            return true;
+        }),
     body("feed")
         .notEmpty().withMessage("feed is required")
         .isString().withMessage("feed is string"),

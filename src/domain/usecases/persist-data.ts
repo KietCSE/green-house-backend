@@ -11,11 +11,17 @@ export class PersistDataOberver implements IObserver {
     ) { }
 
     public async execute(data: number, feed: string): Promise<void> {
-        await this.dataRepository.saveData(String(data), feed)
-        const isSave = this.insideMemRepository.set(data, feed)
-        if (isSave === false) {
-            throw new Error("Can not save data inside memory")
+        try {
+            await this.dataRepository.saveData(String(data), feed)
+            console.log("saved data to db")
+
+            this.insideMemRepository.set(data, feed)
+
+            console.log("save data to inside mem")
+        }
+        catch (error) {
+            console.error("Can not save data")
+            console.log(error)
         }
     }
-
 }

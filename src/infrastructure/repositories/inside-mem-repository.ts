@@ -5,12 +5,16 @@ export class InsideMemRepository implements IInsideMemory {
 
     private list: Record<string, number> = {}
 
-    constructor() { this.list = {} }
+    constructor() {
+        // init value for all the feed
+        this.list = {
+            "temp": 120,
+            "abc": 100,
+            "game": 569
+        }
+    }
 
     public set(data: number, feed: string): boolean {
-        if (feed in this.list) {
-            return false
-        }
         this.list[feed] = data
         return true
     }

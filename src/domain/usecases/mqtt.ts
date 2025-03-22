@@ -9,13 +9,14 @@ import { IDataRepository } from "../../domain/repositories/data-repository"
 import { IMonitorRepository } from "../../domain/repositories/monitor-repository"
 import { INotificationRepository } from "../../domain/repositories/notification-repository"
 import { AdafruitHandler } from "./adafruit-handler";
-
+import axios from "axios";
+import { PersistDataOberver } from "./persist-data";
 
 export class MqttUseCase {
 
     constructor(
         private mqttRepository: MqttRepository,
-        // private adafruitHandler: AdafruitHandler,
+        private adafruitHandler: AdafruitHandler,
         private dataRepository: IDataRepository,
         private monitorRepository: IMonitorRepository,
         private notificationRepository: INotificationRepository
@@ -60,5 +61,46 @@ export class MqttUseCase {
         }
     }
 
+    private async checkFeedExists(feed: string): Promise<boolean> {
+        const url = `https://io.adafruit.com/api/v2/${config.AIO_USERNAME}/feeds/${feed}`;
+
+        try {
+            const response = await axios.get(url, {
+                headers: { "X-AIO-Key": config.AIO_KEY }, // API Key của Adafruit IO
+            });
+            return response.status === 200;
+        } catch (error) {
+            console.error(`Feed ${feed} không tồn tại hoặc không truy cập được.`);
+            return false;
+        }
+    }
+
+
+    public async listenAllFeed() {
+        try {
+            const listMonnitoringSubject = await this.monitorRepository.loadAllFeedName()
+
+            console.log("start listening feeds")
+
+            for (let feed of listMonnitoringSubject) {
+                const validFeed = await this.checkFeedExists(feed)
+                if (!validFeed) {
+                    console.log(`Invalid feed ${feed}`)
+                    continue
+                }
+
+                const feed_name = `${config.AIO_USERNAME}/feeds/${feed}`;
+
+                this.mqttRepository.subscribe(feed_name, async (message) => {
+                    console.log(message)
+                    const data = Number(message)
+                    this.adafruitHandler.notify(data, feed)
+                });
+            }
+        }
+        catch(error) {
+            throw new Error("Error when subscribe feeds")
+        }
+    }
 
 }

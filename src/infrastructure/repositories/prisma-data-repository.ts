@@ -4,11 +4,11 @@ import prisma from '../../config/prisma-config'
 
 export class DataRepository implements IDataRepository {
 
-    public async saveData(data: string, subject: string): Promise<boolean> {
+    public async saveData(data: string, feed: string): Promise<boolean> {
         try {
-            const monitoringSubject = await prisma.monitoringSubject.findFirst({ where: { name: subject } })
+            const monitoringSubject = await prisma.monitoringSubject.findFirst({ where: { feed } })
             if (!monitoringSubject) {
-                throw Error("Can not find monitor")
+                throw Error("Can not find monitor or feed doesn't exist")
             }
             const newData = await prisma.data.create({
                 data: {

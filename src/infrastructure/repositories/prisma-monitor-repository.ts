@@ -20,12 +20,13 @@ export class MonitorRepository implements IMonitorRepository {
         return stringName
     }
 
-    public async checkMonitor(subject: string, data: number): Promise<boolean> {
+    public async checkMonitor(feed: string, data: number): Promise<boolean> {
         try {
-            const monitor = await prisma.monitoringSubject.findFirst({ where: { name: subject } })
+            const monitor = await prisma.monitoringSubject.findFirst({ where: { feed } })
             if (!monitor) {
                 return false
             }
+            if (monitor.warning === false) return false
             if (monitor.alertupperbound && data > monitor.alertupperbound || monitor.alertlowerbound && data < monitor.alertlowerbound) {
                 return true
             }
@@ -109,6 +110,19 @@ export class MonitorRepository implements IMonitorRepository {
                 throw new Error("Can not save monitor subject");
             }
         }
+    }
+
+    public async loadAllFeedName(): Promise<string[]> {
+        try {
+            const listName = await prisma.monitoringSubject.findMany({ select: { feed: true } })
+            const stringName = listName.map((item) => item.feed)
+            return stringName
+        }
+        catch (error) {
+            console.log(error)
+            return []
+        }
+
     }
 }
 

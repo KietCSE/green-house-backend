@@ -16,6 +16,8 @@
     "@prisma/client": "^6.4.1",
     "@types/bcrypt": "^5.0.2",
     "@types/mqtt": "^0.0.34",
+    "axios": "^1.8.4",
+    "axois": "^0.0.1-security",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
@@ -28,6 +30,7 @@
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
+    "@types/axios": "^0.9.36",
     "@types/express": "^5.0.0",
     "@types/node": "^22.13.9",
     "@types/socket.io": "^3.0.1",

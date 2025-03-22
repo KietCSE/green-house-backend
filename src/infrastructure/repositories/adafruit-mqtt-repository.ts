@@ -29,8 +29,8 @@ export class MqttRepository implements IMqttRepository {
         });
 
         this.client.on("message", (topic, message) => {
-            console.log(`Received message from ${topic}: ${message.toString()}`);
             if (topic === feed) {
+                console.log(`Received message from ${topic}: ${message}`);
                 callback(message.toString());  // handle data
             }
         });
