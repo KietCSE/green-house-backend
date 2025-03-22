@@ -35,4 +35,30 @@ export class DeviceRepository implements IDeviceRepository {
         const newDevice = await prisma.device.create({ data : {id, name, feed, prefixMessage, description, power, status} })
         return newDevice
     }
+
+    public async turnDevice(subject: string, status: boolean): Promise<Device> {
+        const updateDevice = await prisma.device.findFirst({
+            where: { 
+                OR: [
+                    { id: subject },  
+                    { name: subject }
+                ]
+            }
+        });
+
+        if (!updateDevice) {
+            throw new Error("Device not found");
+        }
+        
+        const turnDevice = await prisma.device.update({
+            where: { 
+                id: updateDevice.id
+            },
+            data: {
+                status
+            }
+        })
+
+        return turnDevice;
+    }
 }

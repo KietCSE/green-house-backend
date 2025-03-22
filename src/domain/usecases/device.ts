@@ -24,6 +24,14 @@ export class DeviceUsecase {
 
         // Tạo device khi không trùng lặp id và name
         const newDevice = await this.deviceRepository.createDevice(id, name, feed, prefixMessage, description)
-        return res.status(200).json({ status: true, message: "Device created successfully" })
+        return res.status(200).json({ status: true, message: "Device created successfully" , data: newDevice})
+    }
+
+    public async turnDevice(req: Request, res: Response) {
+        const { subject } = req.params;
+        const { status } = req.body; 
+        
+        const turnDevice = await this.deviceRepository.turnDevice(subject, status);
+        return res.status(200).json({ status: true, message: "Device updated successfully", data: turnDevice})
     }
 }

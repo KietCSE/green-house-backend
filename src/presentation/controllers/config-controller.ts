@@ -50,4 +50,13 @@ export class ConfigController {
             next(error)
         }
     }
+
+    public async turnConfig(req: Request, res: Response, next: NextFunction) {
+        try {
+            await this.configUsecase.turnConfig(req, res)
+        }
+        catch (error) {
+            next(error)
+        }
+    }
 }
