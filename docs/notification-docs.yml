@@ -15,6 +15,23 @@ paths:
         - notification
       summary: Get all notifications
       description: Retrieve all monitoring notifications along with their associated monitor details.
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+          description: Page number (1-100)
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+          description: Number of items per page (1-100)
       responses:
         "200":
           description: A list of notifications
@@ -28,9 +45,6 @@ paths:
                     items:
                       type: object
                       properties:
-                        id:
-                          type: integer
-                          example: 1
                         date:
                           type: string
                           format: date-time
@@ -38,9 +52,6 @@ paths:
                         value:
                           type: number
                           example: 90
-                        monitoringSubjectId:
-                          type: integer
-                          example: 1
                         monitor:
                           type: object
                           properties:
@@ -58,6 +69,4 @@ paths:
                               example: 100
                             lowerbound:
                               type: number
-                              example: 0
-        "500":
-          description: Server error
+                              example: 
