@@ -1,9 +1,22 @@
+import { MonitorRepository } from "../../infrastructure/repositories/prisma-monitor-repository";
+import { NotificationRepository } from "../../infrastructure/repositories/prisma-notification-repository";
 import { IObserver } from "../repositories/observer";
 
 
-export class AlertData implements IObserver {
+export class AlertDataObserver implements IObserver {
+
+    constructor(
+        private monitorRepository: MonitorRepository,
+        private notificationRepository: NotificationRepository
+    ) { }
+
     public async execute(data: number, feed: string): Promise<void> {
-        return
+        const isAlert = await this.monitorRepository.checkMonitor(feed, data)
+        if (isAlert === true) {
+            await this.notificationRepository.saveNotification(data, feed)
+            // gui thong bao den trang nguoi dung 
+
+        }
     }
 }
 

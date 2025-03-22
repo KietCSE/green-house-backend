@@ -1,7 +1,6 @@
 import { IConfigRepository } from "../../domain/repositories/config-repository"
 import { Configuration, SchedulerConfig, AutomationConfig, Condition } from "@prisma/client";
 import prisma from '../../config/prisma-config'
-import { connect } from "http2";
 
 export class ConfigRepository implements IConfigRepository {
     public async findAllConfigsBySubject(subject: string): Promise<Configuration[] | null> {

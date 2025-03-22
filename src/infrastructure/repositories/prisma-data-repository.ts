@@ -4,7 +4,7 @@ import prisma from '../../config/prisma-config'
 
 export class DataRepository implements IDataRepository {
 
-    public async saveData(data: string, subject: string): Promise<void> {
+    public async saveData(data: string, subject: string): Promise<boolean> {
         try {
             const monitoringSubject = await prisma.monitoringSubject.findFirst({ where: { name: subject } })
             if (!monitoringSubject) {
@@ -16,7 +16,7 @@ export class DataRepository implements IDataRepository {
                     monitoringSubjectId: monitoringSubject.id
                 }
             })
-
+            return true
         }
         catch (error) {
             throw Error("Can not save data")
