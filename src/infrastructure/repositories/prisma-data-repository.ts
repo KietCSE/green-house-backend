@@ -39,6 +39,10 @@ export class DataRepository implements IDataRepository {
                     where: {
                         subject: { name: subject }
                     },
+                    select: {
+                        value: true,
+                        date: true
+                    },
                     skip: (page - 1) * pageSize,
                     take: pageSize,
                     orderBy: { date: "desc" }
@@ -52,6 +56,10 @@ export class DataRepository implements IDataRepository {
                             lte: endDate
                         },
                         subject: { name: subject }
+                    },
+                    select: {
+                        value: true,
+                        date: true
                     },
                     skip: (page - 1) * pageSize,
                     take: pageSize,

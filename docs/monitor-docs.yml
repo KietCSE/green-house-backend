@@ -148,3 +148,65 @@ paths:
                   message:
                     type: string
                     example: "Update warning status successfully"
+
+  /api/monitor/add:
+    post:
+      summary: Thêm một đối tượng quan trắc mới
+      description: Thêm mới một đối tượng quan trắc
+      tags:
+        - monitor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - description
+                - unit
+                - upperbound
+                - lowerbound
+              properties:
+                name:
+                  type: string
+                  description: Unique name of the monitor
+                description:
+                  type: string
+                  description: Description of the monitor
+                unit:
+                  type: string
+                  description: Unit of measurement
+                upperbound:
+                  type: number
+                  description: Upper bound value
+                lowerbound:
+                  type: number
+                  description: Lower bound value
+      responses:
+        "200":
+          description: Monitor created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Create monitor subject successfully"
+        "400":
+          description: Bad request (e.g., duplicate name)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Monitor name already exists"

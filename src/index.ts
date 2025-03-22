@@ -24,7 +24,7 @@ const io = new Server(server, {
 app.use(cors({
     origin: '*', // Cho phép tất cả các nguồn
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'], // Cho phép tất cả các phương thức
-    allowedHeaders: ['*'], // Cho phép tất cả các headers
+    allowedHeaders: ['*'],
 }));
 
 

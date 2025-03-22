@@ -14,7 +14,7 @@ const swaggerOptions = {
         },
         servers: [
             {
-                url: `http://localhost:${port}`, // URL của server
+                url: `http://18.179.39.144/api`, // URL của server
             },
         ],
     },

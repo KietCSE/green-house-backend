@@ -3,36 +3,48 @@ paths:
     get:
       tags:
         - data
-      summary: Visualize monitoring data
-      description: Retrieve historical data for a specific monitoring subject, paginated.
+      summary: Retrieve visualization data
+      description: Fetches data based on subject, pagination, and date range.
       parameters:
         - name: subject
           in: query
-          description: The monitoring subject to visualize (e.g., Temperature, Humidity, Air Quality, Light Intensity).
           required: true
           schema:
             type: string
-            enum: ["Temperature", "Humidity", "Air Quality", "Light Intensity"]
-            example: "Light Intensity"
+          description: Monitoring subject to filter data
         - name: page
           in: query
-          description: The page number for pagination.
           required: false
           schema:
             type: integer
-            default: 1
-            example: 2
+            minimum: 1
+            maximum: 100
+          description: Page number (1-100)
         - name: pageSize
           in: query
-          description: The number of results per page.
           required: false
           schema:
             type: integer
-            default: 5
-            example: 3
+            minimum: 1
+            maximum: 100
+          description: Number of items per page (1-100)
+        - name: startDate
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+          description: Start date in YYYY-MM-DD format
+        - name: endDate
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+          description: End date in YYYY-MM-DD format
       responses:
         "200":
-          description: Successfully retrieved monitoring data
+          description: Successfully retrieved data
           content:
             application/json:
               schema:
@@ -42,39 +54,18 @@ paths:
                     type: boolean
                     example: true
                   data:
-                    type: object
-                    properties:
-                      id:
-                        type: integer
-                        example: 4
-                      name:
-                        type: string
-                        example: "Light Intensity"
-                      description:
-                        type: string
-                        example: "Tracks the intensity of light in lumens for plant growth"
-                      upperbound:
-                        type: number
-                        example: 1000
-                      lowerbound:
-                        type: number
-                        example: 0
-                      Data:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            value:
-                              type: string
-                              example: "700"
-                            date:
-                              type: string
-                              format: date-time
-                              example: "2023-10-01T10:35:00.000Z"
-        "400":
-          description: Invalid request (e.g., missing subject parameter)
-        "500":
-          description: Internal server error
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        value:
+                          type: string
+                          example: "750"
+                        date:
+                          type: string
+                          format: date-time
+                          example: "2023-10-01T11:35:00.000Z"
+                       
 
 
   /data/device/history:
