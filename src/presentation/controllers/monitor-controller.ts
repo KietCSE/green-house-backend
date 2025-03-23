@@ -30,8 +30,8 @@ export class MonitorController {
 
     public async setAlertInformation(req: Request, res: Response, next: NextFunction) {
         try {
-            const { subject, alertDes, alertupperbound, alertlowerbound } = req.body
-            await this.alertUseCase.setAlertInformation(subject, alertDes, alertupperbound, alertlowerbound)
+            const { feed, alertDes, alertupperbound, alertlowerbound } = req.body
+            await this.alertUseCase.setAlertInformation(feed, alertDes, alertupperbound, alertlowerbound)
             return res.status(200).json({ status: true, message: "Set alert information successfully" })
         }
         catch (error) {
@@ -41,8 +41,8 @@ export class MonitorController {
 
     public async updateWarningStatus(req: Request, res: Response, next: NextFunction) {
         try {
-            const { subject, status } = req.body
-            await this.alertUseCase.updateAlertStatus(subject, status)
+            const { feed, status } = req.body
+            await this.alertUseCase.updateAlertStatus(feed, status)
             return res.status(200).json({ status: true, message: "Update warning status successfully" })
         }
         catch (error) {
@@ -55,6 +55,28 @@ export class MonitorController {
             const { name, description, unit, upperbound, lowerbound, feed } = req.body
             await this.loadMonitorUseCase.addMonitorSubject(name, description, unit, upperbound, lowerbound, feed)
             return res.status(200).json({ status: true, message: "Create monitor subject successfully" })
+        }
+        catch (error) {
+            next(error)
+        }
+    }
+
+    public async updateMonitorSubject(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { name, description, unit, upperbound, lowerbound, feed } = req.body
+            await this.loadMonitorUseCase.updateMonitorSubject(name, description, unit, upperbound, lowerbound, feed)
+            return res.status(200).json({ status: true, message: "Update monitor subject successfully" })
+        }
+        catch (error) {
+            next(error)
+        }
+    }
+
+    public async deleteMonitorSubject(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { feed } = req.params
+            await this.loadMonitorUseCase.deleteMonitorSubject(feed)
+            return res.status(200).json({ status: true, message: "Delete monitor subject successfully" })
         }
         catch (error) {
             next(error)

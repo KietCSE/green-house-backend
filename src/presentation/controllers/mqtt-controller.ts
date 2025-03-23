@@ -15,7 +15,7 @@ export class MqttController {
 
     public async listenFeed(req: Request, res: Response, next: NextFunction) {
         try {
-            await this.mqttUsecase.listenFeed(req, res)
+            // await this.mqttUsecase.listenFeed(req, res)
         }
         catch (error) {
             next(error)

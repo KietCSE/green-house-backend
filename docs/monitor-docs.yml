@@ -4,7 +4,7 @@ paths:
       tags:
         - monitor
       summary: Get all monitors
-      description: Retrieve a list of all monitoring information including temperature, humidity, air quality, and light intensity.
+      description: Retrieve a list of all monitors with detail information 
       responses:
         "200":
           description: A list of monitoring parameters
@@ -33,15 +33,24 @@ paths:
                         lowerbound:
                           type: number
                           example: 0
+                        alertDesc:
+                          type: string
+                          example: "Temperature is out of range"
+                        alertlowerbound:
+                          type: number
+                          example: 0
+                        alertupperbound:
+                          type: number
+                          example: 10
         "500":
           description: Server error
 
-  /monitor/name/all:
+  /monitor/feed/all:
     get:
       tags:
         - monitor
       summary: Get all monitor names
-      description: Retrieve a list name of monitoring subjects.
+      description: Retrieve a list of feed names for all monitoring subjects.
       responses:
         "200":
           description: Successfully retrieved the list of monitor names
@@ -57,7 +66,7 @@ paths:
                     type: array
                     items:
                       type: string
-                    example: ["Temperature", "Humidity", "Air Quality", "Light Intensity"]
+                    example: ["Temperature", "Humidity", "AirQuality", "LightIntensity"]
         "500":
           description: Internal server error
   
@@ -74,12 +83,12 @@ paths:
             schema:
               type: object
               required:
-                - subject
+                - feed
                 - alertupperbound
                 - alertlowerbound
                 - alertDes
               properties:
-                subject:
+                feed:
                   type: string
                   example: "Temperature"
                   description: Tên của đối tượng giám sát.
@@ -123,10 +132,10 @@ paths:
             schema:
               type: object
               required:
-                - subject
+                - feed
                 - status
               properties:
-                subject:
+                feed:
                   type: string
                   example: "Temperature"
                   description: Tên của đối tượng giám sát.

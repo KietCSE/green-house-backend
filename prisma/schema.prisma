@@ -41,6 +41,7 @@ model MonitoringSubject {
   alertupperbound Int?
   alertlowerbound Int?
   email           Boolean
+  delete          Boolean        @default(false)
   Data            Data[]
   Notification    Notification[]
 }

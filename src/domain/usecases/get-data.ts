@@ -5,14 +5,14 @@ export class GetDataUseCase {
     constructor(private dataRepository: IDataRepository) { }
 
     public async getDataByDateAndSubject(
-        subject: string,
+        feed: string,
         pageSize: number,
         page: number,
         startDate?: Date,
         endDate?: Date
     ): Promise<any[]> {
         const data = await this.dataRepository.findDataByDateAndSubject(
-            subject,
+            feed,
             pageSize,
             page,
             startDate,

@@ -10,19 +10,22 @@ export class MonitorRepository implements IMonitorRepository {
     }
 
     public async findAllSubject(): Promise<MonitoringSubject[] | null> {
-        const data = await prisma.monitoringSubject.findMany()
+        const data = await prisma.monitoringSubject.findMany({ where: { delete: false } })
         return data
     }
 
     public async loadAllSubjectName(): Promise<string[] | null> {
-        const listName = await prisma.monitoringSubject.findMany({ select: { name: true } })
+        const listName = await prisma.monitoringSubject.findMany({
+            where: { delete: false },
+            select: { name: true }
+        })
         const stringName = listName.map((item) => item.name)
         return stringName
     }
 
     public async checkMonitor(feed: string, data: number): Promise<boolean> {
         try {
-            const monitor = await prisma.monitoringSubject.findFirst({ where: { feed } })
+            const monitor = await prisma.monitoringSubject.findFirst({ where: { feed, delete: false } })
             if (!monitor) {
                 return false
             }
@@ -37,9 +40,9 @@ export class MonitorRepository implements IMonitorRepository {
         }
     }
 
-    public async updateWarningStatus(subject: string, status: boolean): Promise<boolean> {
+    public async updateWarningStatus(feed: string, status: boolean): Promise<boolean> {
         try {
-            const monitor = await prisma.monitoringSubject.findFirst({ where: { name: subject } })
+            const monitor = await prisma.monitoringSubject.findFirst({ where: { feed, delete: false } })
             if (!monitor) {
                 throw Error("Can not find monitor")
             }
@@ -56,9 +59,9 @@ export class MonitorRepository implements IMonitorRepository {
     }
 
 
-    public async setAlertInformation(subject: string, alertDes: string, alertupperbound: number, alertlowerbound: number): Promise<boolean> {
+    public async setAlertInformation(feed: string, alertDes: string, alertupperbound: number, alertlowerbound: number): Promise<boolean> {
         try {
-            const monitor = await prisma.monitoringSubject.findFirst({ where: { name: subject } })
+            const monitor = await prisma.monitoringSubject.findFirst({ where: { feed, delete: false } })
             if (!monitor) {
                 throw Error("Can not find monitor")
             }
@@ -82,10 +85,7 @@ export class MonitorRepository implements IMonitorRepository {
         feed: string
     ): Promise<boolean> {
         try {
-            const isCreated = await prisma.monitoringSubject.findFirst({ where: { name } })
-            if (isCreated) throw Error(`Monitor subject with name "${name}" has already been existed.`);
-
-            const feedIsCreated = await prisma.monitoringSubject.findFirst({ where: { feed } })
+            const feedIsCreated = await prisma.monitoringSubject.findFirst({ where: { feed, delete: false } })
             if (feedIsCreated) throw Error("This feed has already been existed")
 
             const isSaved = await prisma.monitoringSubject.create({
@@ -98,6 +98,8 @@ export class MonitorRepository implements IMonitorRepository {
                     warning: false,
                     email: false,
                     feed,
+                    alertlowerbound: 0,
+                    alertupperbound: 0,
                 }
             })
             return true
@@ -112,9 +114,71 @@ export class MonitorRepository implements IMonitorRepository {
         }
     }
 
+    public async updateMonitorSubject(
+        name: string,
+        description: string,
+        unit: string,
+        upperbound: number,
+        lowerbound: number,
+        feed: string,
+    ): Promise<boolean> {
+        try {
+            const feedIsCreated = await prisma.monitoringSubject.findFirst({ where: { feed, delete: false } })
+            if (!feedIsCreated) throw new Error("Feed does not exist, cannot update");
+
+            await prisma.monitoringSubject.update({
+                where: { id: feedIsCreated.id },
+                data: {
+                    name,
+                    description,
+                    unit,
+                    lowerbound,
+                    upperbound,
+                }
+            });
+
+            return true;
+        }
+        catch (error) {
+            console.error("Error updating monitor subject:", error);
+            if (error instanceof Error) {
+                throw new Error(error.message);
+            } else {
+                throw new Error("Cannot update monitor subject");
+            }
+        }
+    }
+
+
+    public async deleteMonitorSubject(feed: string): Promise<boolean> {
+        try {
+            const feedIsCreated = await prisma.monitoringSubject.findFirst({ where: { feed, delete: false } })
+            if (!feedIsCreated) throw new Error("Feed does not exist, cannot delete");
+
+            const deleted = await prisma.monitoringSubject.update({
+                where: { id: feedIsCreated.id },
+                data: { delete: true }
+            })
+
+            return !!deleted
+        }
+        catch (error) {
+            console.error(error)
+            if (error instanceof Error) {
+                throw new Error(error.message);
+            } else {
+                throw new Error("Cannot delete monitor subject");
+            }
+        }
+    }
+
+
     public async loadAllFeedName(): Promise<string[]> {
         try {
-            const listName = await prisma.monitoringSubject.findMany({ select: { feed: true } })
+            const listName = await prisma.monitoringSubject.findMany({
+                where: { delete: false },
+                select: { feed: true }
+            })
             const stringName = listName.map((item) => item.feed)
             return stringName
         }

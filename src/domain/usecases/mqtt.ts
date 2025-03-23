@@ -1,20 +1,18 @@
 import { Request, Response } from "express";
-import { MqttRepository } from "../../infrastructure/repositories/adafruit-mqtt-repository";
 import config from '../../config/load-config';
-import { IDataRepository } from "../../domain/repositories/data-repository"
 import { IMonitorRepository } from "../../domain/repositories/monitor-repository"
-import { INotificationRepository } from "../../domain/repositories/notification-repository"
 import { AdafruitHandler } from "./adafruit-handler";
+import { IMqttRepository } from "../repositories/mqtt-repository";
 import axios from "axios";
 
 export class MqttUseCase {
 
+    private subsribeFeeds = new Set<string>
+
     constructor(
-        private mqttRepository: MqttRepository,
+        private mqttRepository: IMqttRepository,
         private adafruitHandler: AdafruitHandler,
-        private dataRepository: IDataRepository,
         private monitorRepository: IMonitorRepository,
-        private notificationRepository: INotificationRepository
     ) { }
 
     public async sendMessage(req: Request, res: Response) {
@@ -34,28 +32,6 @@ export class MqttUseCase {
         });
     }
 
-    public async listenFeed(req: Request, res: Response) {
-        try {
-            const { feed } = req.params;
-            if (!feed) {
-                return res.status(400).json({ success: false, error: "Missing feed" });
-            }
-
-            const feed_name = `${config.AIO_USERNAME}/feeds/${feed}`;
-
-            this.mqttRepository.subscribe(feed_name, async (message) => {
-                console.log(message)
-                const data = Number(message)
-                // this.adafruitHandler.notify(data, feed_name)
-            });
-
-            res.status(200).json({ status: true, message: "Subscribe successfully" })
-        }
-        catch (error) {
-            res.status(400).json({ status: false, message: "Error when subscribe adafruit" })
-        }
-    }
-
     private async checkFeedExists(feed: string): Promise<boolean> {
         const url = `https://io.adafruit.com/api/v2/${config.AIO_USERNAME}/feeds/${feed}`;
 
@@ -70,30 +46,48 @@ export class MqttUseCase {
         }
     }
 
+    public async subscribeToFeed(feed: string) {
+        try {
+            if (this.subsribeFeeds.has(feed)) {
+                console.log("Already subcribe to ", feed)
+                return
+            }
 
-    public async listenAllFeed() {
+            const validFeed = await this.checkFeedExists(feed)
+            if (!validFeed) {
+                console.log(`This feed already existed in adafruit ${feed}`)
+                return
+            }
+
+            const feed_name = `${config.AIO_USERNAME}/feeds/${feed}`;
+
+            this.mqttRepository.subscribe(feed_name, async (message) => {
+                console.log(message)
+                const data = Number(message)
+                this.adafruitHandler.notify(data, feed)
+            });
+
+            this.subsribeFeeds.add(feed)
+            console.log('Successfull to listen ', feed)
+        }
+        catch (error) {
+            console.error(`Error subscribing to feed ${feed}:`, error);
+            throw new Error(`Error when subscribe feed ${feed}`)
+        }
+    }
+
+    public async listenAllFeed(): Promise<void> {
         try {
             const listMonnitoringSubject = await this.monitorRepository.loadAllFeedName()
 
             console.log("start listening feeds")
 
             for (let feed of listMonnitoringSubject) {
-                const validFeed = await this.checkFeedExists(feed)
-                if (!validFeed) {
-                    console.log(`Invalid feed ${feed}`)
-                    continue
-                }
-
-                const feed_name = `${config.AIO_USERNAME}/feeds/${feed}`;
-
-                this.mqttRepository.subscribe(feed_name, async (message) => {
-                    console.log(message)
-                    const data = Number(message)
-                    this.adafruitHandler.notify(data, feed)
-                });
+                await this.subscribeToFeed(feed)
             }
         }
         catch (error) {
+            console.log(error)
             throw new Error("Error when subscribe feeds")
         }
     }

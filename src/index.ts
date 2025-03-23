@@ -11,6 +11,7 @@ import { errorHandler } from './presentation/middleware/exception';
 import { SocketManager } from './adafruit/socket';
 import cors from "cors"
 import listEndpoints from "express-list-endpoints";
+import { mqttUseCase } from './factory/mqtt-factory'
 
 const app = express();
 const server = http.createServer(app);
@@ -54,9 +55,10 @@ app.use(errorHandler)
 // const port = Number(process.env.PORT) || 3000;
 const port = config.PORT;
 
+
+
 server.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
-
     // Liệt kê các API đã đăng ký
     // console.table(listEndpoints(app));
 });

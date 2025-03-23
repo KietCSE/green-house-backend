@@ -6,7 +6,7 @@ paths:
       summary: Retrieve visualization data
       description: Fetches data based on subject, pagination, and date range.
       parameters:
-        - name: subject
+        - name: feed
           in: query
           required: true
           schema:
@@ -65,6 +65,19 @@ paths:
                           type: string
                           format: date-time
                           example: "2023-10-01T11:35:00.000Z"
+        "500":               
+          description: Bad request (e.g., duplicate name)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Monitor feed does not exists"
                        
 
 

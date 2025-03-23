@@ -6,7 +6,8 @@ export class DataRepository implements IDataRepository {
 
     public async saveData(data: string, feed: string): Promise<boolean> {
         try {
-            const monitoringSubject = await prisma.monitoringSubject.findFirst({ where: { feed } })
+            console.log(feed)
+            const monitoringSubject = await prisma.monitoringSubject.findFirst({ where: { feed, delete: false } })
             if (!monitoringSubject) {
                 throw Error("Can not find monitor or feed doesn't exist")
             }
@@ -19,17 +20,24 @@ export class DataRepository implements IDataRepository {
             return true
         }
         catch (error) {
+            console.log(error)
             throw Error("Can not save data")
         }
     }
 
     public async findDataByDateAndSubject(
-        subject: string,
+        feed: string,
         pageSize: number,
         page: number,
         startDate?: Date,
         endDate?: Date
     ): Promise<any[]> {
+
+        const monitoringSubject = await prisma.monitoringSubject.findFirst({ where: { feed, delete: false } })
+        if (!monitoringSubject) {
+            throw Error("monitor or feed doesn't exist")
+        }
+
         try {
 
             let data
@@ -37,7 +45,7 @@ export class DataRepository implements IDataRepository {
             if (!endDate || !startDate) {
                 data = await prisma.data.findMany({
                     where: {
-                        subject: { name: subject }
+                        subject: { feed, delete: false }
                     },
                     select: {
                         value: true,
@@ -55,7 +63,7 @@ export class DataRepository implements IDataRepository {
                             gte: startDate,
                             lte: endDate
                         },
-                        subject: { name: subject }
+                        subject: { feed, delete: false }
                     },
                     select: {
                         value: true,
@@ -66,7 +74,6 @@ export class DataRepository implements IDataRepository {
                     orderBy: { date: "desc" }
                 })
             }
-
 
             return data
         }
