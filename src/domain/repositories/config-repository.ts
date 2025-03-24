@@ -10,4 +10,5 @@ export interface IConfigRepository {
     createAutomationConfig(configId: number): Promise<AutomationConfig>;
 
     turnConfig(subject: String, action: boolean): Promise<Configuration>
+    findConditionBySensor(subject: string): Promise<Condition | null>
 }

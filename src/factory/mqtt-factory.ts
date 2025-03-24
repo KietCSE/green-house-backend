@@ -8,6 +8,9 @@ import { PersistDataOberver } from "../domain/usecases/persist-data-observer";
 import { InsideMemRepository } from "../infrastructure/repositories/inside-mem-repository";
 import { AlertDataObserver } from "../domain/usecases/alert-observer";
 import { MonitorRepository } from "../infrastructure/repositories/prisma-monitor-repository";
+import { AlertAutomationObserver } from "../domain/usecases/alert-automation-observer";
+import { HistoryRepository } from "../infrastructure/repositories/prisma-history-repository";
+import { ConfigRepository } from "../infrastructure/repositories/prisma-config-repository";
 
 
 const mqttRepository = new MqttRepository()
@@ -17,12 +20,16 @@ const adafruitHandler = new AdafruitHandler()
 
 const monitorRepository = new MonitorRepository()
 const insideMemRepository = new InsideMemRepository()
-const persistDataOberver = new PersistDataOberver(dataRepository, insideMemRepository)
+const histotyRepository = new HistoryRepository()
+const configRepository = new ConfigRepository()
 
+const persistDataOberver = new PersistDataOberver(dataRepository, insideMemRepository)
 const alertDataObserver = new AlertDataObserver(monitorRepository, notificationRepository)
+const alertAutomationObserver = new AlertAutomationObserver(histotyRepository, configRepository, monitorRepository)
 
 adafruitHandler.subscribe(persistDataOberver)
 adafruitHandler.subscribe(alertDataObserver)
+adafruitHandler.subscribe(alertAutomationObserver)
 
 export const mqttUseCase = new MqttUseCase(
     mqttRepository,
