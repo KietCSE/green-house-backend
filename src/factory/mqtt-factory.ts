@@ -4,9 +4,9 @@ import { MqttRepository } from "../infrastructure/repositories/adafruit-mqtt-rep
 import { dataRepository } from "./data-factory";
 import { notificationRepository } from "./notification-factory";
 import { AdafruitHandler } from "../domain/usecases/adafruit-handler";
-import { PersistDataOberver } from "../domain/usecases/persist-data";
+import { PersistDataOberver } from "../domain/usecases/persist-data-observer";
 import { InsideMemRepository } from "../infrastructure/repositories/inside-mem-repository";
-import { AlertDataObserver } from "../domain/usecases/alert";
+import { AlertDataObserver } from "../domain/usecases/alert-observer";
 import { MonitorRepository } from "../infrastructure/repositories/prisma-monitor-repository";
 
 
