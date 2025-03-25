@@ -3,7 +3,7 @@ paths:
     get:
       tags:
         - monitor
-      summary: Get all monitors
+      summary: Get all monitors information
       description: Retrieve a list of all monitors with detail information 
       responses:
         "200":
@@ -49,7 +49,7 @@ paths:
     get:
       tags:
         - monitor
-      summary: Get all monitor names
+      summary: Get all monitor feed
       description: Retrieve a list of feed names for all monitoring subjects.
       responses:
         "200":
@@ -70,9 +70,9 @@ paths:
         "500":
           description: Internal server error
   
-  /api/monitor/alert:
+  /monitor/alert:
     post:
-      summary: Thêm mới 1 cảnh báo cho MonitoringSubject
+      summary: Thêm hoặc update mới 1 cảnh báo cho đối tượng quan trắc
       description: Thiết lập hoặc cập nhật thông tin cảnh báo cho một đối tượng giám sát.
       tags:
         - monitor
@@ -87,11 +87,13 @@ paths:
                 - alertupperbound
                 - alertlowerbound
                 - alertDes
+                - status
+                - email
               properties:
                 feed:
                   type: string
                   example: "Temperature"
-                  description: Tên của đối tượng giám sát.
+                  description: feed của đối tượng giám sát.
                 alertDes:
                   type: string
                   example: "Nhiệt độ vượt ngưỡng an toàn"
@@ -102,6 +104,14 @@ paths:
                   description: Giới hạn trên của cảnh báo.
                 alertlowerbound:
                   type: integer
+                  example: 0
+                  description: Giới hạn dưới của cảnh báo.
+                status:
+                  type: booelean
+                  example: 0
+                  description: Giới hạn dưới của cảnh báo.
+                email:
+                  type: boolean
                   example: 0
                   description: Giới hạn dưới của cảnh báo.
         responses:
@@ -118,47 +128,22 @@ paths:
                   message:
                     type: string
                     example: "Set alert information successfully"
+        "500":
+            description: wrong information 
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: boolean
+                      example: false
+                    message:
+                      type: string
+                      example: "Feed is not found"
 
-  /api/monitor/alert/status:
-    patch:
-      summary: Cập nhật trạng thái cảnh báo cho một MonitoringSubject
-      description: Bật hoặc tắt cảnh báo cho một đối tượng giám sát.
-      tags:
-        - monitor
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - feed
-                - status
-              properties:
-                feed:
-                  type: string
-                  example: "Temperature"
-                  description: Tên của đối tượng giám sát.
-                status:
-                  type: boolean
-                  example: true
-                  description: Trạng thái cảnh báo (`true` để bật, `false` để tắt).
-      responses:
-        "200":
-          description: Cập nhật trạng thái cảnh báo thành công.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: boolean
-                    example: true
-                  message:
-                    type: string
-                    example: "Update warning status successfully"
 
-  /api/monitor/add:
+  /monitor/add:
     post:
       summary: Thêm một đối tượng quan trắc mới
       description: Thêm mới một đối tượng quan trắc
@@ -236,3 +221,110 @@ paths:
                     message:
                       type: string
                       example: "Feed has already been existed"
+  /monitor/update:
+    put:
+      tags:
+        - monitor
+      summary: Update a monitor subject with a specified feed
+      description: Updates the details of a monitor subject if the specified feed exists.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "hcmut"
+                description:
+                  type: string
+                  example: "aaaa"
+                unit:
+                  type: string
+                  example: "%"
+                upperbound:
+                  type: integer
+                  example: 300
+                lowerbound:
+                  type: integer
+                  example: 200
+                feed:
+                  type: string
+                  example: "kaka"
+      responses:
+        "200":
+          description: Monitor update response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                  message:
+                    type: string
+              examples:
+                success:
+                  summary: Successful update
+                  value:
+                    status: true
+                    message: "Update monitor subject successfully"
+        "500":
+          description: Bad request (e.g., wrong feed)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Feed is not found"
+
+  /monitor/delete/{feed}:
+    delete:
+      tags:
+        - monitor
+      summary: Delete a monitor subject
+      description: Deletes a monitor subject if the specified feed exists.
+      parameters:
+        - name: feed
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "kaka"
+      responses:
+        "200":
+          description: Monitor delete response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                  message:
+                    type: string
+              examples:
+                failure:
+                  summary: Feed does not exist
+                  value:
+                    status: true
+                    message: "Update successfully"
+        "500":
+          description: Bad request (e.g., wrong feed)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Feed is not found"

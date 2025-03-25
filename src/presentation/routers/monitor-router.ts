@@ -1,6 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { createMonitorController } from "../../factory/monitor-factory";
 import { addMonitorSubject, validateRequest } from "../middleware/monitor-validation";
+import { setAlertValdation } from "../middleware/alert-validation";
 
 const router: Router = Router();
 
@@ -13,7 +14,9 @@ router.get('/feed/all', (req: Request, res: Response, next: NextFunction) => { m
 
 router.patch('/alert/status', (req: Request, res: Response, next: NextFunction) => { monitorController.updateWarningStatus(req, res, next) })
 
-router.post('/alert', (req: Request, res: Response, next: NextFunction) => { monitorController.setAlertInformation(req, res, next) })
+router.post('/alert',
+    setAlertValdation, validateRequest,
+    (req: Request, res: Response, next: NextFunction) => { monitorController.setAlertInformation(req, res, next) })
 
 router.post('/add',
     addMonitorSubject, validateRequest,

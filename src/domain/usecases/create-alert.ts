@@ -7,9 +7,18 @@ export class AlertUseCase {
         feed: string,
         alertDes: string,
         alertupperbound: number,
-        alertlowerbound: number
+        alertlowerbound: number,
+        status: boolean,
+        email: boolean
     ): Promise<boolean> {
-        return await this.monitorRepository.setAlertInformation(feed, alertDes, alertupperbound, alertlowerbound)
+        return await this.monitorRepository.setAlertInformation(
+            feed, 
+            alertDes, 
+            alertupperbound, 
+            alertlowerbound,
+            status,
+            email
+        )
     }
 
     public async updateAlertStatus(feed: string, status: boolean): Promise<boolean> {

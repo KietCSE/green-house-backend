@@ -17,7 +17,7 @@ export const addMonitorSubject: ValidationChain[] = [
     body("lowerbound")
         .notEmpty().withMessage("lowerbound is required")
         .isNumeric().withMessage("lowerbound is number"),
-        body("lowerbound")
+    body("lowerbound")
         .notEmpty().withMessage("lowerbound is required")
         .isNumeric().withMessage("lowerbound must be a number")
         .custom((value, { req }) => {

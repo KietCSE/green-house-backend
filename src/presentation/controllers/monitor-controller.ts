@@ -30,8 +30,8 @@ export class MonitorController {
 
     public async setAlertInformation(req: Request, res: Response, next: NextFunction) {
         try {
-            const { feed, alertDes, alertupperbound, alertlowerbound } = req.body
-            await this.alertUseCase.setAlertInformation(feed, alertDes, alertupperbound, alertlowerbound)
+            const { feed, alertDes, alertupperbound, alertlowerbound, status, email } = req.body
+            await this.alertUseCase.setAlertInformation(feed, alertDes, alertupperbound, alertlowerbound, status, email)
             return res.status(200).json({ status: true, message: "Set alert information successfully" })
         }
         catch (error) {

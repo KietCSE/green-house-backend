@@ -59,22 +59,41 @@ export class MonitorRepository implements IMonitorRepository {
     }
 
 
-    public async setAlertInformation(feed: string, alertDes: string, alertupperbound: number, alertlowerbound: number): Promise<boolean> {
+    public async setAlertInformation(
+        feed: string,
+        alertDes: string,
+        alertupperbound: number,
+        alertlowerbound: number,
+        status: boolean,
+        email: boolean
+    ): Promise<boolean> {
         try {
             const monitor = await prisma.monitoringSubject.findFirst({ where: { feed, delete: false } })
             if (!monitor) {
-                throw Error("Can not find monitor")
+                throw Error("Can not find monitor, maybe feed is wrong")
             }
             const data = await prisma.monitoringSubject.update({
                 where: { id: monitor.id },
-                data: { alertDes: alertDes, alertupperbound: alertupperbound, alertlowerbound: alertlowerbound }
+                data: {
+                    alertDes,
+                    alertupperbound,
+                    alertlowerbound,
+                    warning: status,
+                    email
+                }
             })
             return true
         }
         catch (error) {
-            throw Error("Can not set alert information")
+            console.error("Error saving monitor subject:", error);
+            if (error instanceof Error) {
+                throw new Error(error.message);
+            } else {
+                throw new Error("Can not set alert");
+            }
         }
     }
+
 
     public async addMonitorSubject(
         name: string,

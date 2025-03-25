@@ -3,7 +3,7 @@ paths:
     get:
       tags:
         - data
-      summary: Retrieve visualization data
+      summary: Retrieve visualization data with specified feed
       description: Fetches data based on subject, pagination, and date range.
       parameters:
         - name: feed
