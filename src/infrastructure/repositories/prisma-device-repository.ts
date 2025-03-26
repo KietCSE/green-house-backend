@@ -61,4 +61,21 @@ export class DeviceRepository implements IDeviceRepository {
 
         return turnDevice;
     }
+
+    public async updateDevice(id: string, name?: string, feed?: string, prefixMessage?: string, description?: string): Promise<Device> {
+        const updatedDevice = await prisma.device.update({
+            where: { id },
+            data: { name, feed, prefixMessage, description }
+        });
+        return updatedDevice;
+    }
+
+    public async deleteDevice(id: string): Promise<Device | null> {
+        try {
+            const deletedDevice = await prisma.device.delete({ where: { id } });
+            return deletedDevice;
+        } catch (error) {
+            return null;
+        }
+    }
 }

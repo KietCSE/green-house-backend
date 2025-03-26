@@ -57,6 +57,115 @@ paths:
           description: Device not found
         '500':
           description: Internal server error
+
+    patch:
+      tags:
+        - device
+      summary: Update device info
+      description: Update one or more fields of a specific device (by Id)
+      parameters:
+        - name: subject
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Id of the device
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "New Sensor Name"
+                feed:
+                  type: string
+                  example: "updated_feed"
+                description:
+                  type: string
+                  example: "Updated description"
+                power:
+                  type: number
+                  example: 150
+                status:
+                  type: boolean
+                  example: false
+      responses:
+        '200':
+          description: Device updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Device updated successfully"
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: "device123"
+                      name:
+                        type: string
+                        example: "Updated Sensor Name"
+                      feed:
+                        type: string
+                        example: "updated_feed"
+                      description:
+                        type: string
+                        example: "Updated description"
+                      power:
+                        type: number
+                        example: 150
+                      status:
+                        type: boolean
+                        example: false
+        '400':
+          description: Bad request (invalid input)
+        '404':
+          description: Device not found
+        '500':
+          description: Internal server error
+    
+    delete:
+      tags:
+        - device
+      summary: Delete a device
+      description: Delete a specific device by Id
+      parameters:
+        - name: subject
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Id of the device to delete
+      responses:
+        '200':
+          description: Device deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Device deleted successfully"
+        '404':
+          description: Device not found
+        '500':
+          description: Internal server error
+    
+  /device/turn/{subject}:
     patch:
       tags:
         - device
@@ -121,7 +230,6 @@ paths:
                     example: "Device not found"
         "500":
           description: Internal server error
-
   /device:
     get:
       tags:

@@ -60,5 +60,5 @@ const port = config.PORT;
 server.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
     // Liệt kê các API đã đăng ký
-    // console.table(listEndpoints(app));
+    console.table(listEndpoints(app));
 });
