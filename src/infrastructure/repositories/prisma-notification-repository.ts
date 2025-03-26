@@ -13,6 +13,7 @@ export class NotificationRepository implements INotificationRepository {
                 },
                 skip: (page - 1) * pageSize,
                 take: pageSize,
+                orderBy: { date: "desc" }
             })
             return notifications
         }

@@ -16,8 +16,8 @@ const adafruitHandler = new AdafruitHandler()
 //subcribe for adafruit handler
 
 const monitorRepository = new MonitorRepository()
-const insideMemRepository = new InsideMemRepository()
-const persistDataOberver = new PersistDataOberver(dataRepository, insideMemRepository)
+const insideMemRepository = InsideMemRepository.getInstance()
+const persistDataOberver = new PersistDataOberver(dataRepository)
 
 const alertDataObserver = new AlertDataObserver(monitorRepository, notificationRepository)
 

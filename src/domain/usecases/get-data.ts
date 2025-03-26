@@ -1,8 +1,12 @@
 
+import { InsideMemRepository } from "../../infrastructure/repositories/inside-mem-repository"
 import { IDataRepository } from "../repositories/data-repository"
 
+
 export class GetDataUseCase {
-    constructor(private dataRepository: IDataRepository) { }
+    constructor(
+        private dataRepository: IDataRepository,
+    ) { }
 
     public async getDataByDateAndSubject(
         feed: string,
@@ -21,4 +25,9 @@ export class GetDataUseCase {
         return data
     }
 
+
+    public getCurentData() {
+        const data = InsideMemRepository.getInstance().getAll()
+        return data
+    }
 }

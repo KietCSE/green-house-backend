@@ -4,6 +4,7 @@ import { IMonitorRepository } from "../../domain/repositories/monitor-repository
 import { AdafruitHandler } from "./adafruit-handler";
 import { IMqttRepository } from "../repositories/mqtt-repository";
 import axios from "axios";
+import { InsideMemRepository } from "../../infrastructure/repositories/inside-mem-repository";
 
 export class MqttUseCase {
 
@@ -68,6 +69,10 @@ export class MqttUseCase {
             });
 
             this.subsribeFeeds.add(feed)
+
+            // insert first data 
+            InsideMemRepository.getInstance().set(NaN, feed)
+
             console.log('Successfull to listen ', feed)
         }
         catch (error) {

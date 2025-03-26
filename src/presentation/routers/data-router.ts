@@ -4,6 +4,7 @@ import { createHistoryController } from "../../factory/history-factory"
 import { validateRequest } from "../middleware/data-validation";
 import { LoadDataValidation } from "../middleware/data-validation";
 import { LoadHistoryDeviceValidation } from "../middleware/history-validation";
+
 const router: Router = Router();
 
 const dataController = createDataController();
@@ -18,5 +19,10 @@ router.get('/visualize',
 router.get('/device/history',
     LoadHistoryDeviceValidation, validateRequest,
     (req: Request, res: Response, next: NextFunction) => { HistoryDeviceController.getAllHistoryDevice(req, res, next) })
+
+
+router.get("/current", (req: Request, res: Response, next: NextFunction) => {
+    dataController.getCurrentData(req, res, next)
+})
 
 export default router

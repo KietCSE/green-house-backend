@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express"
 import { GetDataUseCase } from '../../domain/usecases/get-data'
+import { nextTick } from "process"
 
 
 export class DataController {
@@ -40,4 +41,13 @@ export class DataController {
         }
     }
 
+    public getCurrentData(req: Request, res: Response, next: NextFunction) {
+        try {
+            const data = this.getDataUseCase.getCurentData()
+            return res.status(200).json({ status: true, data: data })
+        }
+        catch (error) {
+            next(error)
+        }
+    }
 }
