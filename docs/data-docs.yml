@@ -78,6 +78,58 @@ paths:
                   message:
                     type: string
                     example: "Monitor feed does not exists"
+  
+  /data/current:
+    get:
+      tags:
+          - data
+      summary: Lấy dữ liệu hiện tại của các feed
+      description: API này trả về danh sách các feed cùng với giá trị và thời gian cập nhật gần nhất.
+      responses:
+        "200":
+          description: Trả về danh sách các feed với giá trị và thời gian cập nhật.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    additionalProperties:
+                      type: object
+                      properties:
+                        value:
+                          type: integer
+                          nullable: true
+                          example: null
+                        dateTime:
+                          type: string
+                          format: date-time
+                          example: "2025-03-26T00:56:34.122Z"
+              example:
+                status: true
+                data:
+                  abc:
+                    value: null
+                    dateTime: "2025-03-26T00:56:34.122Z"
+                  one-piece:
+                    value: null
+                    dateTime: "2025-03-26T00:56:34.424Z"
+                  kietprogaming:
+                    value: 900
+                    dateTime: "2025-03-26T00:57:40.348Z"
+                  test-tuankiet:
+                    value: null
+                    dateTime: "2025-03-26T00:56:35.338Z"
+                  hello-kiet:
+                    value: null
+                    dateTime: "2025-03-26T00:56:35.645Z"
+                  bosch:
+                    value: 120
+                    dateTime: "2025-03-26T01:00:11.579Z"
                        
 
 
