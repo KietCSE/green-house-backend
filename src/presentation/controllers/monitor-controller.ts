@@ -30,8 +30,10 @@ export class MonitorController {
 
     public async setAlertInformation(req: Request, res: Response, next: NextFunction) {
         try {
-            const { feed, alertDes, alertupperbound, alertlowerbound, status, email } = req.body
-            await this.alertUseCase.setAlertInformation(feed, alertDes, alertupperbound, alertlowerbound, status, email)
+            const { alertDes, alertupperbound, alertlowerbound, status, email } = req.body
+            const id: number = Number(req.params.id)
+
+            await this.alertUseCase.setAlertInformation(id, alertDes, alertupperbound, alertlowerbound, status, email)
             return res.status(200).json({ status: true, message: "Set alert information successfully" })
         }
         catch (error) {
@@ -63,8 +65,11 @@ export class MonitorController {
 
     public async updateMonitorSubject(req: Request, res: Response, next: NextFunction) {
         try {
-            const { name, description, unit, upperbound, lowerbound, feed } = req.body
-            await this.loadMonitorUseCase.updateMonitorSubject(name, description, unit, upperbound, lowerbound, feed)
+            const { name, description, unit, upperbound, lowerbound } = req.body
+
+            const id: number = Number(req.params.id);
+
+            await this.loadMonitorUseCase.updateMonitorSubject(name, description, unit, upperbound, lowerbound, id)
             return res.status(200).json({ status: true, message: "Update monitor subject successfully" })
         }
         catch (error) {
@@ -74,8 +79,8 @@ export class MonitorController {
 
     public async deleteMonitorSubject(req: Request, res: Response, next: NextFunction) {
         try {
-            const { feed } = req.params
-            await this.loadMonitorUseCase.deleteMonitorSubject(feed)
+            const id: number = Number(req.params.id)
+            await this.loadMonitorUseCase.deleteMonitorSubject(id)
             return res.status(200).json({ status: true, message: "Delete monitor subject successfully" })
         }
         catch (error) {

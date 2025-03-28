@@ -3,7 +3,7 @@ paths:
     get:
       tags:
         - monitor
-      summary: Get all monitors information
+      summary: Lấy toàn bộ thông tin của các đối tượng quan trắc
       description: Retrieve a list of all monitors with detail information 
       responses:
         "200":
@@ -49,7 +49,7 @@ paths:
     get:
       tags:
         - monitor
-      summary: Get all monitor feed
+      summary: Lấy toàn bộ tên feed
       description: Retrieve a list of feed names for all monitoring subjects.
       responses:
         "200":
@@ -70,12 +70,19 @@ paths:
         "500":
           description: Internal server error
   
-  /monitor/alert:
+  /monitor/alert/{id}:
     post:
-      summary: Thêm hoặc update mới 1 cảnh báo cho đối tượng quan trắc
-      description: Thiết lập hoặc cập nhật thông tin cảnh báo cho một đối tượng giám sát.
       tags:
         - monitor
+      summary: Thêm hoặc update mới 1 cảnh báo cho đối tượng quan trắc
+      description: Thiết lập hoặc cập nhật thông tin cảnh báo cho một đối tượng giám sát.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+            example: 1
       requestBody:
         required: true
         content:
@@ -83,17 +90,12 @@ paths:
             schema:
               type: object
               required:
-                - feed
                 - alertupperbound
                 - alertlowerbound
                 - alertDes
                 - status
                 - email
               properties:
-                feed:
-                  type: string
-                  example: "Temperature"
-                  description: feed của đối tượng giám sát.
                 alertDes:
                   type: string
                   example: "Nhiệt độ vượt ngưỡng an toàn"
@@ -107,14 +109,14 @@ paths:
                   example: 0
                   description: Giới hạn dưới của cảnh báo.
                 status:
-                  type: booelean
+                  type: boolean
                   example: 0
                   description: Giới hạn dưới của cảnh báo.
                 email:
                   type: boolean
                   example: 0
                   description: Giới hạn dưới của cảnh báo.
-        responses:
+      responses:
         "200":
           description: Cập nhật cảnh báo thành công.
           content:
@@ -140,10 +142,10 @@ paths:
                       example: false
                     message:
                       type: string
-                      example: "Feed is not found"
+                      example: "Id is not found"
 
 
-  /monitor/add:
+  /monitor:
     post:
       summary: Thêm một đối tượng quan trắc mới
       description: Thêm mới một đối tượng quan trắc
@@ -221,12 +223,19 @@ paths:
                     message:
                       type: string
                       example: "Feed has already been existed"
-  /monitor/update:
-    put:
+  /monitor/{id}:
+    patch:
       tags:
         - monitor
       summary: Update a monitor subject with a specified feed
       description: Updates the details of a monitor subject if the specified feed exists.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+          example: 1
       requestBody:
         required: true
         content:
@@ -249,9 +258,6 @@ paths:
                 lowerbound:
                   type: integer
                   example: 200
-                feed:
-                  type: string
-                  example: "kaka"
       responses:
         "200":
           description: Monitor update response
@@ -284,19 +290,18 @@ paths:
                     type: string
                     example: "Feed is not found"
 
-  /monitor/delete/{feed}:
     delete:
       tags:
         - monitor
       summary: Delete a monitor subject
       description: Deletes a monitor subject if the specified feed exists.
       parameters:
-        - name: feed
+        - name: id
           in: path
           required: true
           schema:
-            type: string
-          example: "kaka"
+            type: number
+          example: 1
       responses:
         "200":
           description: Monitor delete response

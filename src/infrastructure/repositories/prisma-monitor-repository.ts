@@ -10,7 +10,10 @@ export class MonitorRepository implements IMonitorRepository {
     }
 
     public async findAllSubject(): Promise<MonitoringSubject[] | null> {
-        const data = await prisma.monitoringSubject.findMany({ where: { delete: false } })
+        const data = await prisma.monitoringSubject.findMany({
+            where: { delete: false },
+            orderBy: { id: "asc" }
+        })
         return data
     }
 
@@ -60,7 +63,7 @@ export class MonitorRepository implements IMonitorRepository {
 
 
     public async setAlertInformation(
-        feed: string,
+        id: number,
         alertDes: string,
         alertupperbound: number,
         alertlowerbound: number,
@@ -68,9 +71,9 @@ export class MonitorRepository implements IMonitorRepository {
         email: boolean
     ): Promise<boolean> {
         try {
-            const monitor = await prisma.monitoringSubject.findFirst({ where: { feed, delete: false } })
+            const monitor = await prisma.monitoringSubject.findFirst({ where: { id, delete: false } })
             if (!monitor) {
-                throw Error("Can not find monitor, maybe feed is wrong")
+                throw Error("Can not find monitor, maybe id is wrong")
             }
             const data = await prisma.monitoringSubject.update({
                 where: { id: monitor.id },
@@ -139,11 +142,11 @@ export class MonitorRepository implements IMonitorRepository {
         unit: string,
         upperbound: number,
         lowerbound: number,
-        feed: string,
+        id: number,
     ): Promise<boolean> {
         try {
-            const feedIsCreated = await prisma.monitoringSubject.findFirst({ where: { feed, delete: false } })
-            if (!feedIsCreated) throw new Error("Feed does not exist, cannot update");
+            const feedIsCreated = await prisma.monitoringSubject.findFirst({ where: { id, delete: false } })
+            if (!feedIsCreated) throw new Error("Id does not exist, cannot update");
 
             await prisma.monitoringSubject.update({
                 where: { id: feedIsCreated.id },
@@ -168,18 +171,19 @@ export class MonitorRepository implements IMonitorRepository {
         }
     }
 
-
-    public async deleteMonitorSubject(feed: string): Promise<boolean> {
+    // delete a monitor subject, if success -> return feed name, else return null 
+    public async deleteMonitorSubject(id: number): Promise<string | null> {
         try {
-            const feedIsCreated = await prisma.monitoringSubject.findFirst({ where: { feed, delete: false } })
-            if (!feedIsCreated) throw new Error("Feed does not exist, cannot delete");
+            const feedIsCreated = await prisma.monitoringSubject.findFirst({ where: { id, delete: false } })
+            if (!feedIsCreated) throw new Error("Id does not exist, cannot delete");
 
             const deleted = await prisma.monitoringSubject.update({
                 where: { id: feedIsCreated.id },
                 data: { delete: true }
             })
 
-            return !!deleted
+            if (!!deleted) return feedIsCreated.feed
+            return null
         }
         catch (error) {
             console.error(error)

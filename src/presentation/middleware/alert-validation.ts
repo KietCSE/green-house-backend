@@ -1,12 +1,10 @@
-import { body, validationResult, ValidationChain } from "express-validator";
+import { body, query, validationResult, ValidationChain, param } from "express-validator";
 import { Request, Response, NextFunction } from "express";
 
 export const setAlertValdation: ValidationChain[] = [
-    body("feed")
+    param("id")
         .notEmpty()
-        .withMessage("Feed is required")
-        .isString()
-        .withMessage("Feed is string"),
+        .withMessage("id is required"),
     body("alertDes")
         .optional()
         .isString()

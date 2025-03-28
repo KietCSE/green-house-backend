@@ -4,7 +4,7 @@ export class AlertUseCase {
     constructor(private monitorRepository: IMonitorRepository) { }
 
     public async setAlertInformation(
-        feed: string,
+        id: number,
         alertDes: string,
         alertupperbound: number,
         alertlowerbound: number,
@@ -12,9 +12,9 @@ export class AlertUseCase {
         email: boolean
     ): Promise<boolean> {
         return await this.monitorRepository.setAlertInformation(
-            feed, 
-            alertDes, 
-            alertupperbound, 
+            id,
+            alertDes,
+            alertupperbound,
             alertlowerbound,
             status,
             email

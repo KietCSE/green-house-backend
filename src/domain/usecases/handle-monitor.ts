@@ -85,17 +85,17 @@ export class LoadMonitorUseCase {
         unit: string,
         upperbound: number,
         lowerbound: number,
-        feed: string,
+        id: number,
     ): Promise<boolean> {
-        const isUpdated = await this.monitorRepository.updateMonitorSubject(name, description, unit, upperbound, lowerbound, feed)
+        const isUpdated = await this.monitorRepository.updateMonitorSubject(name, description, unit, upperbound, lowerbound, id)
         return isUpdated
     }
 
 
     // chi xoa feed tren 
-    public async deleteMonitorSubject(feed: string): Promise<boolean> {
+    public async deleteMonitorSubject(id: number): Promise<boolean> {
 
-        const deleted = await this.monitorRepository.deleteMonitorSubject(feed)
+        const feed = await this.monitorRepository.deleteMonitorSubject(id)
 
         const url = `https://io.adafruit.com/api/v2/${config.AIO_USERNAME}/feeds/${feed}`;
 

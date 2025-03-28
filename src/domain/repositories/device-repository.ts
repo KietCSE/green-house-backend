@@ -5,4 +5,4 @@ export interface IDeviceRepository {
     findAllDevices(): Promise<Device[] | null>
     createDevice(id: string, name: string, feed: string, prefixMessage: string, description: string): Promise<Device>
     turnDevice(subject: string, status: boolean): Promise<Device>
-}
+} 

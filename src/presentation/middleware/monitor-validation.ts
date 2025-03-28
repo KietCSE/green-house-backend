@@ -1,7 +1,10 @@
-import { body, validationResult, ValidationChain } from "express-validator";
+import { body, query, validationResult, ValidationChain, param } from "express-validator";
 import { Request, Response, NextFunction } from "express";
 
 export const addMonitorSubject: ValidationChain[] = [
+    param("id")
+        .notEmpty().withMessage("id must be required")
+        .isNumeric().withMessage("id must be a number"),
     body("name")
         .notEmpty().withMessage("name is required")
         .isString().withMessage("Subject is required"),
@@ -26,9 +29,6 @@ export const addMonitorSubject: ValidationChain[] = [
             }
             return true;
         }),
-    body("feed")
-        .notEmpty().withMessage("feed is required")
-        .isString().withMessage("feed is string"),
 ]
 
 export const validateRequest = (req: Request, res: Response, next: NextFunction): void => {
