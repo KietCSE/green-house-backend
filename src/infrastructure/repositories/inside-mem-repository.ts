@@ -25,4 +25,12 @@ export class InsideMemRepository implements IInsideMemory {
     public getAll(): Record<string, { value: number; dateTime: Date }> {
         return this.list;
     }
+
+    public delete(feed: string): boolean {
+        if (feed in this.list) {
+            delete this.list[feed]
+            return true
+        }
+        return false
+    }
 }

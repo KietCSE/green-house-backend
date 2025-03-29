@@ -80,7 +80,8 @@ export class MonitorController {
     public async deleteMonitorSubject(req: Request, res: Response, next: NextFunction) {
         try {
             const id: number = Number(req.params.id)
-            await this.loadMonitorUseCase.deleteMonitorSubject(id)
+            const isDeleted = await this.loadMonitorUseCase.deleteMonitorSubject(id)
+            if (!isDeleted) return res.status(200).json({ status: false, message: "Can not delete in database" })
             return res.status(200).json({ status: true, message: "Delete monitor subject successfully" })
         }
         catch (error) {

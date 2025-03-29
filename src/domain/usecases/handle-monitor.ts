@@ -4,6 +4,7 @@ import { MonitoringSubject } from "@prisma/client";
 import config from '../../config/load-config';
 import axios from "axios";
 import { MqttUseCase } from "./mqtt";
+import { InsideMemRepository } from "../../infrastructure/repositories/inside-mem-repository";
 
 
 export class LoadMonitorUseCase {
@@ -95,7 +96,9 @@ export class LoadMonitorUseCase {
     // chi xoa feed tren 
     public async deleteMonitorSubject(id: number): Promise<boolean> {
 
-        const feed = await this.monitorRepository.deleteMonitorSubject(id)
+        const feed: string | null = await this.monitorRepository.deleteMonitorSubject(id)
+
+        if (feed === null) return false
 
         const url = `https://io.adafruit.com/api/v2/${config.AIO_USERNAME}/feeds/${feed}`;
 
@@ -111,6 +114,8 @@ export class LoadMonitorUseCase {
             console.error(error)
             throw new Error('Can not delete feed')
         }
+
+        InsideMemRepository.getInstance().delete(feed)
 
         return true
     }
