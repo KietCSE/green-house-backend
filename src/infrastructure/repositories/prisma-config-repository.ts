@@ -37,6 +37,24 @@ export class ConfigRepository implements IConfigRepository {
         return newConfig
     }
 
+    public async updateConfig(configId: number, name?: string, description?: string): Promise<Configuration> {
+        const updatedConfig = await prisma.configuration.update({
+            where: {id :configId},
+            data: {
+                name: name,
+                description: description
+            }
+        })  
+        return updatedConfig
+    }
+
+    public async deleteConfig(configId: number): Promise<Configuration> {
+        const deletedConfig = await prisma.configuration.delete({
+            where: {id: configId}
+        })
+        return deletedConfig
+    }
+
     public async createSchedulerConfig(configId: number, start: string, end: string, repetition?: string): Promise<SchedulerConfig> {
         const existingConfig = await prisma.configuration.findUnique({
             where: { id: configId },
@@ -60,6 +78,16 @@ export class ConfigRepository implements IConfigRepository {
             }
         })
         return newSchedulerConfig
+    }
+
+    public async updateSchedulerConfig(configId: number, start?: string, end?: string, repetition?: string): Promise<SchedulerConfig> {
+        const updatedConfig = await prisma.schedulerConfig.update({
+            where: {id: configId},
+            data: {
+                start, end, repitation: repetition
+            }
+        })
+        return updatedConfig
     }
 
     public async createAutomationConfig(configId: number): Promise<AutomationConfig> {
@@ -96,6 +124,23 @@ export class ConfigRepository implements IConfigRepository {
         })
 
         return newCondition;
+    }
+
+    public async updateCondition(conditionId: number, sensorId?: string, condition?: string, threshold?: string, description?: string): Promise<Condition> {
+        const updatedCondition = await prisma.condition.update({
+            where: {id: conditionId},
+            data: {
+                sensorId, condition, threshold, description
+            }
+        })
+        return updatedCondition
+    }
+
+    public async deleteCondition(conditionId: number): Promise<Condition> {
+        const deletedCondition = await prisma.condition.delete({
+            where: {id: conditionId}
+        })
+        return deletedCondition
     }
 
     public async turnConfig(subject: string, action: boolean): Promise<Configuration> {

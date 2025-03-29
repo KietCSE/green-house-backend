@@ -434,6 +434,8 @@ paths:
           description: Configurations not found
         '500':
           description: Internal server error
+
+  /device/config/turn/{subject}:  
     patch:
       tags:
         - device
