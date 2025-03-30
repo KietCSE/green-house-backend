@@ -13,7 +13,6 @@ router.patch('/scheduler/:subject', (req: Request, res: Response, next: NextFunc
 router.post('/automation', (req: Request, res: Response, next: NextFunction) => { configController.createAutomationConfig(req, res, next) })
 router.post('/automation/condition', (req: Request, res: Response, next: NextFunction) => { configController.createCondition(req, res, next) })
 router.patch('/automation/condition/:subject', (req: Request, res: Response, next: NextFunction) => { configController.updateCondition(req, res, next)});
-router.delete('/automation/condition/:subject', (req: Request, res: Response, next: NextFunction) => { configController.deleteCondition(req, res, next);
-});
+router.delete('/automation/condition/:subject', (req: Request, res: Response, next: NextFunction) => { configController.deleteCondition(req, res, next);});
 
 export default router
