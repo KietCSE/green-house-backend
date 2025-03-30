@@ -1,6 +1,7 @@
 import { Notification } from '@prisma/client'
 import prisma from '../../config/prisma-config'
 import { INotificationRepository } from '../../domain/repositories/notification-repository'
+import { NotificationData } from '../../presentation/dtos/notification'
 
 export class NotificationRepository implements INotificationRepository {
     public async findAllNotification(page: number, pageSize: number): Promise<any | null> {
@@ -22,7 +23,7 @@ export class NotificationRepository implements INotificationRepository {
         }
     }
 
-    public async saveNotification(value: number, feed: string): Promise<boolean> {
+    public async saveNotification(value: number, feed: string): Promise<NotificationData | null> {
         try {
             const monitoringSubject = await prisma.monitoringSubject.findFirst({ where: { feed } })
 
@@ -34,9 +35,11 @@ export class NotificationRepository implements INotificationRepository {
                 data: {
                     value,
                     monitoringSubjectId: monitoringSubject.id
-                }
+                },
             })
-            return true
+            if (!data) return null
+
+            return new NotificationData(data, monitoringSubject)
         }
         catch (error) {
             throw Error("Can not save notification")

@@ -8,6 +8,7 @@ import { PersistDataOberver } from "../domain/usecases/persist-data-observer";
 import { InsideMemRepository } from "../infrastructure/repositories/inside-mem-repository";
 import { AlertDataObserver } from "../domain/usecases/alert-observer";
 import { MonitorRepository } from "../infrastructure/repositories/prisma-monitor-repository";
+import { EmailService } from "../infrastructure/services/gmail";
 
 
 const mqttRepository = new MqttRepository()
@@ -19,7 +20,9 @@ const monitorRepository = new MonitorRepository()
 const insideMemRepository = InsideMemRepository.getInstance()
 const persistDataOberver = new PersistDataOberver(dataRepository)
 
-const alertDataObserver = new AlertDataObserver(monitorRepository, notificationRepository)
+const emailService = new EmailService
+const alertDataObserver = new AlertDataObserver(monitorRepository, notificationRepository, emailService)
+
 
 adafruitHandler.subscribe(persistDataOberver)
 adafruitHandler.subscribe(alertDataObserver)

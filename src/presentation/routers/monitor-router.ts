@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { createMonitorController } from "../../factory/monitor-factory";
-import { addMonitorSubject, validateRequest } from "../middleware/monitor-validation";
+import { addMonitorSubject, updateMonitorSubject, validateRequest } from "../middleware/monitor-validation";
 import { setAlertValdation } from "../middleware/alert-validation";
 
 const router: Router = Router();
@@ -27,7 +27,7 @@ router.delete('/:id',
 
 
 router.patch('/:id',
-    addMonitorSubject, validateRequest,
+    updateMonitorSubject, validateRequest,
     (req: Request, res: Response, next: NextFunction) => { monitorController.updateMonitorSubject(req, res, next) })
 
 
