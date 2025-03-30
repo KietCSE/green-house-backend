@@ -42,4 +42,22 @@ export class DeviceController {
             next(error)
         }
     }
+
+    public async updateDevice(req: Request, res: Response, next: NextFunction) {
+        try {
+            await this.deviceUsecase.updateDevice(req, res)
+        }
+        catch (error) {
+            next(error)
+        }
+    }
+
+    public async deleteDevice(req: Request, res: Response, next: NextFunction) {
+        try {
+            await this.deviceUsecase.deleteDevice(req, res)
+        }
+        catch (error) {
+            next(error)
+        }
+    }
 }

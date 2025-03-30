@@ -17,10 +17,30 @@ export class ConfigUseCase {
         return res.status(200).json({ status: true, message: "Config created successfully" , data: newConfig})
     }
 
+    public async updateConfig(req: Request, res: Response) {
+        const { configId } = req.params;
+        const { name, description } = req.body;
+        const updatedConfig = await this.configRepository.updateConfig(Number(configId), name, description);
+        return res.status(200).json({ status: true, message: "Config updated successfully", data: updatedConfig });
+    }
+
+    public async deleteConfig(req: Request, res: Response) {
+        const { configId } = req.params;
+        const deletedConfig = await this.configRepository.deleteConfig(Number(configId));
+        return res.status(200).json({ status: true, message: "Config deleted successfully", data: deletedConfig });
+    }
+
     public async createSchedulerConfig(req: Request, res: Response) {
         const { configId, start, end, repetition} = req.body
         const newSchedulerConfig =  await this.configRepository.createSchedulerConfig(configId, start, end, repetition)
         return res.status(200).json({ status: true, message: "Scheduler config created successfully" , data: newSchedulerConfig})
+    }
+
+    public async updateSchedulerConfig(req: Request, res: Response) {
+        const { configId } = req.params;
+        const { start, end, repetition } = req.body;
+        const updatedSchedulerConfig = await this.configRepository.updateSchedulerConfig(Number(configId), start, end, repetition);
+        return res.status(200).json({ status: true, message: "Scheduler config updated successfully", data: updatedSchedulerConfig });
     }
 
     public async createAutomationConfig(req: Request, res: Response) {
@@ -33,6 +53,19 @@ export class ConfigUseCase {
         const { sensorId, condition, threshold, description, configId } = req.body
         const newCondition = await this.configRepository.createCondition(sensorId, condition, threshold, description, configId)
         return res.status(200).json({ status: true, message: "Condition config created successfully" , data: newCondition})
+    }
+
+    public async updateCondition(req: Request, res: Response) {
+        const { conditionId } = req.params;
+        const { sensorId, condition, threshold, description } = req.body;
+        const updatedCondition = await this.configRepository.updateCondition(Number(conditionId), sensorId, condition, threshold, description);
+        return res.status(200).json({ status: true, message: "Condition updated successfully", data: updatedCondition });
+    }
+
+    public async deleteCondition(req: Request, res: Response) {
+        const { conditionId } = req.params;
+        const deletedCondition = await this.configRepository.deleteCondition(Number(conditionId));
+        return res.status(200).json({ status: true, message: "Condition deleted successfully", data: deletedCondition });
     }
 
     public async turnConfig(req: Request, res: Response) {

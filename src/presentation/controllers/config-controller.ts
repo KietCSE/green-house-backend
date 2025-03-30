@@ -23,6 +23,23 @@ export class ConfigController {
             next(error)
         }
     }
+
+    public async updateConfig(req: Request, res: Response, next: NextFunction) {
+        try {
+            await this.configUsecase.updateConfig(req, res);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    public async deleteConfig(req: Request, res: Response, next: NextFunction) {
+        try {
+            await this.configUsecase.deleteConfig(req, res);
+        } catch (error) {
+            next(error);
+        }
+    }
+
     
     public async createSchedulerConfig(req: Request, res: Response, next: NextFunction) {
         try {
@@ -30,6 +47,14 @@ export class ConfigController {
         }
         catch (error) {
             next(error)
+        }
+    }
+
+    public async updateSchedulerConfig(req: Request, res: Response, next: NextFunction) {
+        try {
+            await this.configUsecase.updateSchedulerConfig(req, res);
+        } catch (error) {
+            next(error);
         }
     }
     
@@ -48,6 +73,22 @@ export class ConfigController {
         }
         catch (error) {
             next(error)
+        }
+    }
+
+    public async updateCondition(req: Request, res: Response, next: NextFunction) {
+        try {
+            await this.configUsecase.updateCondition(req, res);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    public async deleteCondition(req: Request, res: Response, next: NextFunction) {
+        try {
+            await this.configUsecase.deleteCondition(req, res);
+        } catch (error) {
+            next(error);
         }
     }
 

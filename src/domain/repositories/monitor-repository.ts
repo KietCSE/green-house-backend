@@ -2,6 +2,7 @@ import { MonitoringSubject } from "@prisma/client"
 
 export interface IMonitorRepository {
     findDataBySubject(subject: string): Promise<MonitoringSubject | null>
+    findDataByFeed(subject: string): Promise<MonitoringSubject | null>
     findAllSubject(): Promise<MonitoringSubject[] | null>
     checkMonitor(subject: string, data: number): Promise<boolean>
     updateWarningStatus(subject: string, status: boolean): Promise<boolean>

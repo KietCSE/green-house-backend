@@ -34,4 +34,23 @@ export class DeviceUsecase {
         const turnDevice = await this.deviceRepository.turnDevice(subject, status);
         return res.status(200).json({ status: true, message: "Device updated successfully", data: turnDevice })
     }
+
+    public async updateDevice(req: Request, res: Response) {
+        const { id } = req.params;
+        const updateData = req.body;
+        
+        const updatedDevice = await this.deviceRepository.updateDevice(id, updateData);
+        return res.status(200).json({ status: true, message: "Device updated successfully", data: updatedDevice })
+    }
+
+    public async deleteDevice(req: Request, res: Response) {
+        const { id } = req.params;
+        
+        const isDeleted = await this.deviceRepository.deleteDevice(id);
+        if (isDeleted) {
+            return res.status(200).json({ status: true, message: "Device deleted successfully" });
+        } else {
+            return res.status(404).json({ status: false, message: "Device not found" });
+        }
+    }
 }
