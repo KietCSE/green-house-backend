@@ -19,7 +19,7 @@ export class AlertDataObserver implements IObserver {
 
             const alert = await this.notificationRepository.saveNotification(data, feed)
 
-            // if (alert) this.mailService.SendEmail(alert, "ptkiet170104@gmail.com")
+            if (alert) this.mailService.SendEmail(alert, "ptkiet170104@gmail.com")
 
             // gui thong bao den trang nguoi dung 
             console.log(`Alert for ${feed} with ${data}`)

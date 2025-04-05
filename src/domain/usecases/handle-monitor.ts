@@ -77,6 +77,8 @@ export class LoadMonitorUseCase {
         }
 
         const isSaved = await this.monitorRepository.addMonitorSubject(name, description, unit, upperbound, lowerbound, feed)
+        this.mqttUsecase.subscribeToFeed(feed)
+
         return isSaved
     }
 
