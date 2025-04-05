@@ -1,7 +1,10 @@
 import { Configuration, SchedulerConfig, AutomationConfig, Condition } from "@prisma/client";
+export type SchedulerWithConfig = SchedulerConfig & { configuration: Configuration };
 
 export interface IConfigRepository {
     findAllConfigsBySubject(subject: string): Promise<Configuration[] | null>;
+    findAllSchedulers(): Promise<SchedulerWithConfig[]>
+
     createConfig(name: string, description: string, deviceId: string): Promise<Configuration>
     updateConfig(configId: number, name?: string, description?: string): Promise<Configuration>;
     deleteConfig(configId: number): Promise<Configuration>;

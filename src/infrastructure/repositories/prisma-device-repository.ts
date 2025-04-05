@@ -1,8 +1,12 @@
 import { IDeviceRepository } from "../../domain/repositories/device-repository"
 import { Device } from '@prisma/client'
 import prisma from '../../config/prisma-config'
+import { MqttRepository } from "./adafruit-mqtt-repository"
+import config from '../../config/load-config';
 
 export class DeviceRepository implements IDeviceRepository {
+    private mqttRepository = new MqttRepository();
+
     public async findDeviceBySubject(subject: string): Promise<Device | null> {
         const device = await prisma.device.findFirst({  // Có thể tìm theo Id và tên
             where: { 
@@ -58,6 +62,14 @@ export class DeviceRepository implements IDeviceRepository {
                 status
             }
         })
+
+        const feed_name = `${config.AIO_USERNAME}/feeds/${turnDevice.feed}`;
+
+        if (status) {
+            this.mqttRepository.publish(feed_name, turnDevice.prefixMessage + "100")
+        } else {
+            this.mqttRepository.publish(feed_name, turnDevice.prefixMessage + "0")
+        }
 
         return turnDevice;
     }

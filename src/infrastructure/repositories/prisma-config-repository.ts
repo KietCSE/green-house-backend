@@ -1,4 +1,4 @@
-import { IConfigRepository } from "../../domain/repositories/config-repository"
+import { IConfigRepository, SchedulerWithConfig } from "../../domain/repositories/config-repository"
 import { Configuration, SchedulerConfig, AutomationConfig, Condition } from "@prisma/client";
 import prisma from '../../config/prisma-config'
 
@@ -8,6 +8,12 @@ export class ConfigRepository implements IConfigRepository {
             where: {
                 sensorId: subject
             }
+        });
+    }
+
+    public async findAllSchedulers(): Promise<SchedulerWithConfig[]> {
+        return await prisma.schedulerConfig.findMany({
+            include: { configuration: true }
         });
     }
 
@@ -149,6 +155,10 @@ export class ConfigRepository implements IConfigRepository {
             where: {id: configId},
             data: {action}
         })
+
+        if (action) {
+
+        }
 
         return updatedConfig
     }

@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 
 // hien thi thong tin can thiet khi query du lieu
 const prisma = new PrismaClient({
-    log: ['query', 'info', 'warn', 'error']
+    // log: ['query', 'info', 'warn', 'error']
 });
 
 
