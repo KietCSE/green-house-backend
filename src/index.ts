@@ -8,10 +8,10 @@ import swaggerUi from 'swagger-ui-express'
 import swaggerJsDoc from 'swagger-jsdoc'
 import { connectDB } from './config/prisma-config';
 import { errorHandler } from './presentation/middleware/exception';
-import { SocketManager } from './adafruit/socket';
+// import { SocketManager } from './adafruit/socket';
 import cors from "cors"
 import listEndpoints from "express-list-endpoints";
-import { mqttUseCase } from './factory/mqtt-factory'
+// import { mqttUseCase } from './factory/mqtt-factory'
 
 const app = express();
 const server = http.createServer(app);
