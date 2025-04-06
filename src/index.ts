@@ -22,6 +22,8 @@ const io = new Server(server, {
     }
 });
 
+app.set('trust proxy', true);
+
 app.use(cors({
     origin: '*', // Cho phép tất cả các nguồn
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'], // Cho phép tất cả các phương thức
@@ -57,7 +59,7 @@ const port = config.PORT;
 
 
 
-server.listen(port, () => {
+server.listen(port, '0.0.0.0', () => {
     console.log(`Server is running on http://localhost:${port}`);
     // Liệt kê các API đã đăng ký
     console.table(listEndpoints(app));
