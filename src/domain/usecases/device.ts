@@ -36,17 +36,17 @@ export class DeviceUsecase {
     }
 
     public async updateDevice(req: Request, res: Response) {
-        const { id } = req.params;
-        const updateData = req.body;
+        const { subject } = req.params;
+        const { name, feed, prefixMessage, description } = req.body;
         
-        const updatedDevice = await this.deviceRepository.updateDevice(id, updateData);
+        const updatedDevice = await this.deviceRepository.updateDevice(subject, name, feed, prefixMessage, description);
         return res.status(200).json({ status: true, message: "Device updated successfully", data: updatedDevice })
     }
 
     public async deleteDevice(req: Request, res: Response) {
-        const { id } = req.params;
+        const { subject } = req.params;
         
-        const isDeleted = await this.deviceRepository.deleteDevice(id);
+        const isDeleted = await this.deviceRepository.deleteDevice(subject);
         if (isDeleted) {
             return res.status(200).json({ status: true, message: "Device deleted successfully" });
         } else {
