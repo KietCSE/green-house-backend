@@ -15,7 +15,7 @@ export interface IConfigRepository {
     
     createAutomationConfig(configId: number): Promise<AutomationConfig>;
 
-    findConditionBySensor(subject: string): Promise<Condition | null>
+    findConditionBySensor(subject: string): Promise<Condition[] | null>
     createCondition(sensorId: string, condition: string, threshold: string, description: string, configId: number): Promise<Condition>;
     updateCondition(conditionId: number,sensorId?: string, condition?: string, threshold?: string, description?: string): Promise<Condition>;
     deleteCondition(conditionId: number): Promise<Condition>;

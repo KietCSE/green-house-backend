@@ -9,8 +9,8 @@ export class MonitorRepository implements IMonitorRepository {
         return monitor
     }
 
-    public async findDataByFeed(subject: string): Promise<MonitoringSubject | null> {
-        const monitor = await prisma.monitoringSubject.findFirst({ where: { feed: subject } })
+    public async findDataByFeed(subject: string): Promise<MonitoringSubject[] | null> {
+        const monitor = await prisma.monitoringSubject.findMany({ where: { feed: subject } })
         return monitor
     }
 

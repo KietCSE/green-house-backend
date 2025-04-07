@@ -12,6 +12,7 @@ import { EmailService } from "../infrastructure/services/gmail";
 import { AlertAutomationObserver } from "../domain/usecases/alert-automation-observer";
 import { HistoryRepository } from "../infrastructure/repositories/prisma-history-repository";
 import { ConfigRepository } from "../infrastructure/repositories/prisma-config-repository";
+import { DeviceRepository } from "../infrastructure/repositories/prisma-device-repository";
 
 
 const mqttRepository = new MqttRepository()
@@ -28,8 +29,9 @@ const alertDataObserver = new AlertDataObserver(monitorRepository, notificationR
 
 const histotyRepository = new HistoryRepository()
 const configRepository = new ConfigRepository()
+const deiviceRepository = new DeviceRepository()
 
-const alertAutomationObserver = new AlertAutomationObserver(histotyRepository, configRepository, monitorRepository)
+const alertAutomationObserver = new AlertAutomationObserver(histotyRepository, configRepository, monitorRepository, deiviceRepository, emailService)
 
 adafruitHandler.subscribe(persistDataOberver)
 adafruitHandler.subscribe(alertDataObserver)

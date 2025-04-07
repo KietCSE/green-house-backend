@@ -37,9 +37,9 @@ export class DeviceUsecase {
 
     public async updateDevice(req: Request, res: Response) {
         const { subject } = req.params;
-        const { name, feed, prefixMessage, description } = req.body;
+        const { name, feed, prefixMessage, description, power } = req.body;
         
-        const updatedDevice = await this.deviceRepository.updateDevice(subject, name, feed, prefixMessage, description);
+        const updatedDevice = await this.deviceRepository.updateDevice(subject, name, feed, prefixMessage, description, power);
         return res.status(200).json({ status: true, message: "Device updated successfully", data: updatedDevice })
     }
 
