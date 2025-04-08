@@ -16,6 +16,11 @@ router.put('/status/:id',
     UpdateNotification, validateRequest,
     (req: Request, res: Response, next: NextFunction) => { notificationController.updateStatusNotification(req, res, next) })
 
+
+router.get('/poll', (req: Request, res: Response, next: NextFunction) => {
+    notificationController.pollingNotification(req, res, next)
+})
+
 export default router
 
 

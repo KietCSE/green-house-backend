@@ -32,7 +32,19 @@ export class NotificationController {
                 res.status(200).json({ status: true, message: "Update notification status successfully" })
             else
                 res.status(200).json({ status: false, message: "Update notification status fail" })
+        }
+        catch (error) {
+            next(error)
+        }
+    }
 
+    public async pollingNotification(req: Request, res: Response, next: NextFunction) {
+        try {
+            const data = this.notifyUseCase.pollingNotification()
+            if (data)
+                res.status(200).json({ status: true, data })
+            else
+                res.status(200).json({ status: false, data })
         }
         catch (error) {
             next(error)

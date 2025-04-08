@@ -1,3 +1,5 @@
+import { CacheNotification } from "../../infrastructure/repositories/inside-notification-repository";
+import { NotificationInfo } from "../../presentation/dtos/notification";
 import { INotificationRepository } from "../repositories/notification-repository";
 
 export class NotifyUseCase {
@@ -12,6 +14,11 @@ export class NotifyUseCase {
     public async updateStatusNotification(value: boolean, notificationId: number): Promise<boolean> {
         const updated = await this.notificationRepository.updateReadStatus(value, notificationId)
         return updated
+    }
+
+    public pollingNotification(): NotificationInfo | null {
+        const data = CacheNotification.getInstance().pop()
+        return data
     }
 
 }
