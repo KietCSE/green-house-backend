@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { createNotificationController } from "../../factory/notification-factory"
-import { LoadNotification, validateRequest } from "../middleware/notification-validation";
+import { LoadNotification, UpdateNotification, validateRequest } from "../middleware/notification-validation";
 
 const router: Router = Router();
 
@@ -11,6 +11,10 @@ router.get('/all',
     LoadNotification, validateRequest,
     (req: Request, res: Response, next: NextFunction) => { notificationController.getAllNotification(req, res, next) })
 
+
+router.put('/status/:id',
+    UpdateNotification, validateRequest,
+    (req: Request, res: Response, next: NextFunction) => { notificationController.updateStatusNotification(req, res, next) })
 
 export default router
 

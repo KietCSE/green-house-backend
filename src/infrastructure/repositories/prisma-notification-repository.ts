@@ -4,12 +4,15 @@ import { INotificationRepository } from '../../domain/repositories/notification-
 import { NotificationData } from '../../presentation/dtos/notification'
 
 export class NotificationRepository implements INotificationRepository {
+
     public async findAllNotification(page: number, pageSize: number): Promise<any | null> {
         try {
             const notifications = await prisma.notification.findMany({
                 select: {
+                    id: true,
                     date: true,
                     value: true,
+                    read: true,
                     monitor: true
                 },
                 skip: (page - 1) * pageSize,
@@ -22,6 +25,7 @@ export class NotificationRepository implements INotificationRepository {
             throw Error("Can not get all notifications")
         }
     }
+
 
     public async saveNotification(value: number, feed: string): Promise<NotificationData | null> {
         try {
@@ -43,6 +47,28 @@ export class NotificationRepository implements INotificationRepository {
         }
         catch (error) {
             throw Error("Can not save notification")
+        }
+    }
+
+
+    public async updateReadStatus(value: boolean, notificationId: number): Promise<boolean> {
+        try {
+            const notification = await prisma.notification.findFirst({ where: { id: notificationId } })
+
+            if (!notification) throw Error("Can not find the notìication")
+
+            const updated = await prisma.notification.update({
+                where: { id: notificationId },
+                data: { read: value }
+            })
+
+            // console.log(updated)
+
+            return !!updated
+        }
+        catch (error) {
+            console.log(error)
+            throw Error("Can not update status")
         }
     }
 

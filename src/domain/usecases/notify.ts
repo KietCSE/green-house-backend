@@ -8,11 +8,11 @@ export class NotifyUseCase {
         return notifications
     }
 
-    // public async saveNotification(value: number, monitoringSubjectId: number): Promise<boolean | null> {
-    //     const notification = await this.notificationRepository.saveNotification(value, monitoringSubjectId)
-    //     return notification
-    // }
 
+    public async updateStatusNotification(value: boolean, notificationId: number): Promise<boolean> {
+        const updated = await this.notificationRepository.updateReadStatus(value, notificationId)
+        return updated
+    }
 
 }
 

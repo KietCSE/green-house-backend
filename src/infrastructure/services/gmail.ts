@@ -4,7 +4,7 @@ import { NotificationData } from "../../presentation/dtos/notification";
 
 export class EmailService {
 
-    public async SendEmail(monitor: NotificationData, email: string) {
+    public async SendEmail(monitor: NotificationData, email: string, htmlText?: string) {
 
         const transporter = nodemailer.createTransport({
             service: "gmail",
@@ -15,18 +15,19 @@ export class EmailService {
         });
 
         const mailOptions: nodemailer.SendMailOptions = {
-            from: `"Green Hourse System" <${process.env.EMAIL_USER}>`,
+            from: `"Green House System" <${process.env.EMAIL_USER}>`,
             to: email,
             subject: `⚠️ Cảnh báo: ${monitor.monitoringSubject.name} vượt ngưỡng!`,
-            html: `
-                <h2>🔔 Cảnh báo từ hệ thống</h2>
-                <p><strong>Đối tượng quan trắc:</strong> ${monitor.monitoringSubject.name}</p>
-                <p><strong>Giá trị hiện tại:</strong> ${monitor.notification.value} ${monitor.monitoringSubject.unit}</p>
-                <p><strong>Ngưỡng cảnh báo dưới:</strong> ${monitor.monitoringSubject.alertlowerbound} ${monitor.monitoringSubject.unit}</p>
-                <p><strong>Ngưỡng cảnh báo trên:</strong> ${monitor.monitoringSubject.alertupperbound} ${monitor.monitoringSubject.unit}</p>
-                <p><strong>Miêu tả:</strong> ${monitor.monitoringSubject.alertDes}</p>
-                <p><strong>Thời gian:</strong> ${new Date(monitor.notification.date).toLocaleString()}</p>
-            `,
+            html: htmlText ? htmlText :
+                `
+                    <h2>🔔 Cảnh báo từ hệ thống</h2>
+                    <p><strong>Đối tượng quan trắc:</strong> ${monitor.monitoringSubject.name}</p>
+                    <p><strong>Giá trị hiện tại:</strong> ${monitor.notification.value} ${monitor.monitoringSubject.unit}</p>
+                    <p><strong>Ngưỡng cảnh báo dưới:</strong> ${monitor.monitoringSubject.alertlowerbound} ${monitor.monitoringSubject.unit}</p>
+                    <p><strong>Ngưỡng cảnh báo trên:</strong> ${monitor.monitoringSubject.alertupperbound} ${monitor.monitoringSubject.unit}</p>
+                    <p><strong>Miêu tả:</strong> ${monitor.monitoringSubject.alertDes}</p>
+                    <p><strong>Thời gian:</strong> ${new Date(monitor.notification.date).toLocaleString()}</p>
+                `,
         };
 
         try {

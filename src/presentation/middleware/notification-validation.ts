@@ -1,4 +1,4 @@
-import { query, validationResult, ValidationChain } from "express-validator";
+import { query, body, param, validationResult, ValidationChain } from "express-validator";
 import { Request, Response, NextFunction } from "express";
 
 export const LoadNotification: ValidationChain[] = [
@@ -10,6 +10,16 @@ export const LoadNotification: ValidationChain[] = [
         .optional()
         .isInt({ min: 1, max: 100 })
         .withMessage("Page must be a number greater than 0"),
+]
+
+
+export const UpdateNotification: ValidationChain[] = [
+    param("id")
+        .isNumeric()
+        .withMessage("Id must be a number"),
+    body("value")
+        .isBoolean()
+        .withMessage("Value must be a boolean"),
 ]
 
 export const validateRequest = (req: Request, res: Response, next: NextFunction): void => {

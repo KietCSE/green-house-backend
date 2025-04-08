@@ -8,12 +8,33 @@ export class NotificationController {
     public async getAllNotification(req: Request, res: Response, next: NextFunction) {
         try {
             const { pageSize, page } = req.query
-            const pageSizeNumber = pageSize ? parseInt(pageSize as string, 10) : 10
+            const pageSizeNumber = pageSize ? parseInt(pageSize as string, 10) : 20
             const pageNumber = page ? parseInt(page as string, 10) : 1
 
             const notifications = await this.notifyUseCase.getAllNotification(pageNumber, pageSizeNumber)
             res.status(200).json({ status: true, data: notifications })
         } catch (error) {
+            next(error)
+        }
+    }
+
+
+    public async updateStatusNotification(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { value } = req.body
+            const { id } = req.params
+            const val = value ? Boolean(value) : false
+            const notificationId = id ? parseInt(id as string, 10) : -1;
+            console.log(value, notificationId)
+            const updated = await this.notifyUseCase.updateStatusNotification(val, notificationId)
+
+            if (updated)
+                res.status(200).json({ status: true, message: "Update notification status successfully" })
+            else
+                res.status(200).json({ status: false, message: "Update notification status fail" })
+
+        }
+        catch (error) {
             next(error)
         }
     }
