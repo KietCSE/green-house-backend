@@ -40,8 +40,6 @@ paths:
           description: Successfully retrieved notifications
           content:
             application/json:
-              schema:
-                $ref: '#/components/schemas/NotificationResponse'
               examples:
                 SuccessExample:
                   value:
@@ -71,10 +69,6 @@ paths:
           description: Successful response
           content:
             application/json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/NotificationPollSuccess'
-                  - $ref: '#/components/schemas/NotificationPollFailure'
               examples:
                 SuccessExample:
                   value:
@@ -112,8 +106,6 @@ paths:
         required: true
         content:
           application/json:
-            schema:
-              $ref: '#/components/schemas/NotificationStatusUpdate'
             examples:
               MarkAsRead:
                 value:
@@ -126,8 +118,6 @@ paths:
           description: Status updated successfully
           content:
             application/json:
-              schema:
-                $ref: '#/components/schemas/NotificationStatusResponse'
               examples:
                 SuccessExample:
                   value:
