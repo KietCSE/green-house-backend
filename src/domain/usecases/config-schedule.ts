@@ -19,7 +19,7 @@ export class ConfigSchedulerUseCase {
         console.log("Scheduler started...");
 
         // Chạy mỗi phút để kiểm tra lịch trình
-        cron.schedule("*/5 * * * * *", async () => {
+        cron.schedule("* * * * *", async () => {
             console.log("Checking scheduler configs...");
             const now = new Date();
             const currentTime = now.toTimeString().slice(0, 5); // Lấy HH:MM
@@ -34,7 +34,8 @@ export class ConfigSchedulerUseCase {
                 const device = await this.deviceRepository.findDeviceBySubject(configuration.deviceId);
 
                 // Nếu trạng thái khác với DB -> cập nhật
-                if (isActive !== device?.status) {
+                if (Number(isActive) - Number(device?.status) !== 0) {
+                    // console.log(isActive, device?.status)
                     if (!device?.status) {
                         const notification = new NotificationSchedule (
                             device?.name ?? "Không xác định",
