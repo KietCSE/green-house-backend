@@ -24,6 +24,7 @@ model Notification {
   id                  Int               @id @default(autoincrement())
   date                DateTime          @default(now())
   value               Int
+  read                Boolean           @default(false)
   monitor             MonitoringSubject @relation(fields: [monitoringSubjectId], references: [id])
   monitoringSubjectId Int
 }
@@ -84,7 +85,7 @@ model Configuration {
   name             String
   description      String
   action           Boolean // true is turn on, false is turn off 
-  device           Device            @relation(fields: [deviceId], references: [id],  onDelete: Cascade)
+  device           Device            @relation(fields: [deviceId], references: [id], onDelete: Cascade)
   deviceId         String
   schedulerConfig  SchedulerConfig? // Quan hệ one-to-one với SchedulerConfig
   automationConfig AutomationConfig? // Quan hệ one-to-one với AutomationConfig
@@ -95,13 +96,13 @@ model SchedulerConfig {
   start         String // time end 
   end           String // time start
   repitation    String? // t3, t2, weekly, daily or null ?
-  configuration Configuration @relation(fields: [id], references: [id],  onDelete: Cascade) // Quan hệ ngược
+  configuration Configuration @relation(fields: [id], references: [id], onDelete: Cascade) // Quan hệ ngược
 }
 
 model AutomationConfig {
   id            Int           @id // id = configuration Id 
   Condition     Condition[]
-  configuration Configuration @relation(fields: [id], references: [id],  onDelete: Cascade) // Quan hệ ngược
+  configuration Configuration @relation(fields: [id], references: [id], onDelete: Cascade) // Quan hệ ngược
 }
 
 model Condition {
@@ -110,6 +111,6 @@ model Condition {
   condition          String // >=, <= , ==
   threshold          String
   description        String
-  automation         AutomationConfig @relation(fields: [automationConfigId], references: [id],  onDelete: Cascade)
+  automation         AutomationConfig @relation(fields: [automationConfigId], references: [id], onDelete: Cascade)
   automationConfigId Int
 }

@@ -8,65 +8,185 @@ servers:
 tags:
   - name: notification
     description: Endpoints related users's notifications
+
 paths:
   /notification/all:
     get:
       tags:
         - notification
-      summary: Get all notifications
-      description: Retrieve all monitoring notifications along with their associated monitor details.
+      summary: Retrieve all notifications
+      description: Retrieves a list of all notifications for the user.
       parameters:
         - name: page
           in: query
+          description: The page number to retrieve (1 to 100)
           required: false
           schema:
             type: integer
             minimum: 1
             maximum: 100
-          description: Page number (1-100)
+            default: 1
         - name: pageSize
           in: query
+          description: The number of notifications per page (1 to 100)
           required: false
           schema:
             type: integer
             minimum: 1
             maximum: 100
-          description: Number of items per page (1-100)
+            default: 20
       responses:
-        "200":
-          description: A list of notifications
+        '200':
+          description: Successfully retrieved notifications
           content:
             application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        date:
-                          type: string
-                          format: date-time
-                          example: "2023-10-01T10:00:00.000Z"
-                        value:
-                          type: number
-                          example: 90
-                        monitor:
-                          type: object
-                          properties:
-                            id:
-                              type: integer
-                              example: 1
-                            name:
-                              type: string
-                              example: "Temperature"
-                            description:
-                              type: string
-                              example: "Measures the ambient temperature in degrees Celsius"
-                            upperbound:
-                              type: number
-                              example: 100
-                            lowerbound:
-                              type: number
-                              example: 
+              examples:
+                SuccessExample:
+                  value:
+                    status: true
+                    data:
+                      - id: 22
+                        date: "2025-04-09T00:00:38.338Z"
+                        description: "test alert send mail"
+                        lowerbound: 0
+                        upperbound: 5
+                        unit: "%"
+                        value: 15
+                        name: "nhiet do"
+
+
+  /notification/poll:
+    get:
+      tags:
+        - notification
+      summary: Poll for notifications
+      description: >
+        Checks for notifications. Calls the Polling API when the user is active to retrieve notifications, with each polling request returning only one notification.
+        - If there is data: `status` = true and the information is returned in `data`.
+        - If there is no data: `status` = false and `data` is set to `null`.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              examples:
+                SuccessExample:
+                  value:
+                    status: true
+                    data:
+                      id: 22
+                      date: "2025-04-09T00:00:38.338Z"
+                      description: "test alert send mail"
+                      lowerbound: 0
+                      upperbound: 5
+                      unit: "%"
+                      value: 15
+                      name: "nhiet do"
+                FailureExample:
+                  value:
+                    status: false
+                    data: null
+  /notification/device/schedule/poll:
+    get:
+      tags:
+        - notification
+      summary: Poll for scheduled configuration notifications
+      description: >
+        Checks for scheduled configuration notifications. 
+        Each polling request returns at most one matching schedule (if any).
+        
+        - If there is data: `status = true` and detailed information is returned in `data`.
+        - If there is no data: `status = false` and `data = null`.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              examples:
+                SuccessExample:
+                  value:
+                    status: true
+                    data:
+                      deviceName: "Thermostat"
+                      deviceDescription: "Controls temperature"
+                      configDescription: "Turn on thermostat at 10:00"
+                      scheduleStart: "10:00"
+                      scheduleEnd: "12:00"
+                      repetition: "daily"
+                FailureExample:
+                  value:
+                    status: false
+                    data: null
+
+  /notification/device/auto/poll:
+    get:
+      tags:
+        - notification
+      summary: Poll for automatic configuration notifications
+      description: >
+        Checks for auto-triggered notifications based on sensor conditions.
+        Each polling request returns at most one matched auto-config event (if any).
+
+        - If there is data: `status = true` and `data` contains notification detail.
+        - If there is no data: `status = false` and `data = null`.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              examples:
+                SuccessExample:
+                  value:
+                    status: true
+                    data:
+                      deviceName: "Thermostat"
+                      deviceDescription: "Controls temperature"
+                      configDescription: "Turn on thermostat at 10:00"
+                      conditionDescription: "Device 001 exceeds threshold"
+                      conditionOperator: ">"
+                      conditionThreshold: "50"
+                      currentValue: 100
+                FailureExample:
+                  value:
+                    status: false
+                    data: null
+
+  /notification/status/{id}:
+    patch:
+      tags:
+        - notification
+      summary: Update notification status
+      description: Updates the read/unread status of a notification
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          example: 22
+          description: The ID of the notification to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            examples:
+              MarkAsRead:
+                value:
+                  value: true
+              MarkAsUnread:
+                value:
+                  value: false
+      responses:
+        '200':
+          description: Status updated successfully
+          content:
+            application/json:
+              examples:
+                SuccessExample:
+                  value:
+                    status: true
+                    message: "Notification status updated successfully"
+                FailureExample:
+                  value:
+                    status: false
+                    message: "Failed to update notification status"

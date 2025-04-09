@@ -1,3 +1,4 @@
+import { CacheNotification } from "../../infrastructure/repositories/inside-notification-repository";
 import { MonitorRepository } from "../../infrastructure/repositories/prisma-monitor-repository";
 import { NotificationRepository } from "../../infrastructure/repositories/prisma-notification-repository";
 import { EmailService } from "../../infrastructure/services/gmail";
@@ -19,7 +20,10 @@ export class AlertDataObserver implements IObserver {
 
             const alert = await this.notificationRepository.saveNotification(data, feed)
 
-            if (alert) this.mailService.SendEmail(alert, "ptkiet170104@gmail.com")
+            if (alert) {
+                CacheNotification.getInstance().push(alert)
+                this.mailService.SendEmail(alert, "ptkiet170104@gmail.com")
+            }
 
             // gui thong bao den trang nguoi dung 
             console.log(`Alert for ${feed} with ${data}`)

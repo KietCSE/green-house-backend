@@ -5,6 +5,8 @@ import { MonitorRepository } from "../../infrastructure/repositories/prisma-moni
 import { DeviceRepository } from "../../infrastructure/repositories/prisma-device-repository";
 import { DeviceHistoryInfo } from "@prisma/client";
 import { EmailService } from "../../infrastructure/services/gmail";
+import { NotificationDevice } from "../../presentation/dtos/notification-device";
+import { CacheNotificationDevice } from "../../infrastructure/repositories/inside-notification-device-repository";
 
 export class AlertAutomationObserver implements IObserver {
 
@@ -59,8 +61,17 @@ export class AlertAutomationObserver implements IObserver {
                         console.error(`Device not found for ID: ${config.deviceId}`);
                         return;
                     }
-
-                    this.mailService.SendEmailConfig(data, device, config, condition, "kennezversion@gmail.com");
+                    const notification = new NotificationDevice (
+                        device.name,
+                        device.description,
+                        config.description,
+                        condition.description,
+                        condition.condition,
+                        condition.threshold,
+                        data,
+                    )
+                    CacheNotificationDevice.getInstance().push(notification)
+                    await this.mailService.SendEmailConfig(notification, "kennezversion@gmail.com");
     
                     await this.histotyRepository.createHistory(DeviceHistoryInfo.Auto, config.deviceId);
                 } else {

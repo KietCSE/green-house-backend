@@ -56,7 +56,7 @@ export class MqttUseCase {
 
             const validFeed = await this.checkFeedExists(feed)
             if (!validFeed) {
-                console.log(`This feed already existed in adafruit ${feed}`)
+                console.log(`This feed doesn't exist in adafruit ${feed}`)
                 return
             }
 

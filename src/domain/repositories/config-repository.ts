@@ -9,14 +9,14 @@ export interface IConfigRepository {
     updateConfig(configId: number, name?: string, description?: string): Promise<Configuration>;
     deleteConfig(configId: number): Promise<Configuration>;
     turnConfig(subject: String, action: boolean): Promise<Configuration>
-    
-    createSchedulerConfig(configId: number, start: string, end: string, repetition?: string): Promise<SchedulerConfig>;    
+
+    createSchedulerConfig(configId: number, start: string, end: string, repetition?: string): Promise<SchedulerConfig>;
     updateSchedulerConfig(configId: number, start?: string, end?: string, repetition?: string): Promise<SchedulerConfig>;
-    
+
     createAutomationConfig(configId: number): Promise<AutomationConfig>;
 
     findConditionBySensor(subject: string): Promise<Condition[] | null>
     createCondition(sensorId: string, condition: string, threshold: string, description: string, configId: number): Promise<Condition>;
-    updateCondition(conditionId: number,sensorId?: string, condition?: string, threshold?: string, description?: string): Promise<Condition>;
+    updateCondition(conditionId: number, sensorId?: string, condition?: string, threshold?: string, description?: string): Promise<Condition>;
     deleteCondition(conditionId: number): Promise<Condition>;
 }

@@ -1,3 +1,8 @@
+import { CacheNotificationDevice } from "../../infrastructure/repositories/inside-notification-device-repository";
+import { CacheNotification } from "../../infrastructure/repositories/inside-notification-repository";
+import { CacheNotificationScheduler } from "../../infrastructure/repositories/inside-notification-schedule-repository";
+import { NotificationInfo } from "../../presentation/dtos/notification";
+import { NotificationDevice, NotificationSchedule } from "../../presentation/dtos/notification-device";
 import { INotificationRepository } from "../repositories/notification-repository";
 
 export class NotifyUseCase {
@@ -8,12 +13,26 @@ export class NotifyUseCase {
         return notifications
     }
 
-    // public async saveNotification(value: number, monitoringSubjectId: number): Promise<boolean | null> {
-    //     const notification = await this.notificationRepository.saveNotification(value, monitoringSubjectId)
-    //     return notification
-    // }
 
+    public async updateStatusNotification(value: boolean, notificationId: number): Promise<boolean> {
+        const updated = await this.notificationRepository.updateReadStatus(value, notificationId)
+        return updated
+    }
 
+    public pollingNotification(): NotificationInfo | null {
+        const data = CacheNotification.getInstance().pop()
+        return data
+    }
+
+    public pollingNotificationDevice(): NotificationDevice | null {
+        const data = CacheNotificationDevice.getInstance().pop()
+        return data
+    }
+
+    public pollingNotificationScheduler(): NotificationSchedule | null {
+        const data = CacheNotificationScheduler.getInstance().pop()
+        return data
+    }
 }
 
 
