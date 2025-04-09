@@ -12,7 +12,7 @@ router.get('/all',
     (req: Request, res: Response, next: NextFunction) => { notificationController.getAllNotification(req, res, next) })
 
 
-router.put('/status/:id',
+router.patch('/status/:id',
     UpdateNotification, validateRequest,
     (req: Request, res: Response, next: NextFunction) => { notificationController.updateStatusNotification(req, res, next) })
 
