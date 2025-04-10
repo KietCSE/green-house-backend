@@ -43,15 +43,10 @@ jobs:
               run: | 
                 ssh -o StrictHostKeyChecking=no -i "my-server.pem" ${{ secrets.SERVER_URL }} << EOF
                   echo "CONNECT SUCCESSFULLY"
-                  cd /home/ubuntu
-                  sudo docker stop $(sudo docker ps -q)
-                  echo "REMOVE CONTAINER SUCCESSFULLY"
-                  sudo sudo docker rm -f $(sudo docker ps -aq)
-                  sudo docker rmi -f $(sudo docker images -q)
-                  echo "REMOVE ALL IMAGES SUCCESSFULLY"
-                  sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/green
-                  echo "PULL IMAGE SUCCESSFULLY"
-                  sudo docker run -dp 80:80 ${{ secrets.DOCKERHUB_USERNAME }}/green
-                  echo "RUN CONTAINER SUCCESSFULLY"
+                  cd ~
+                  docker pull kietcse/green 
+                  echo "START SUCCESSFULLY"
+                  docker image prune -f
+                  echo "DELETE SUCCESSFULLY"
                 EOF
               
