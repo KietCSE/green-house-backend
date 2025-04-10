@@ -1,6 +1,4 @@
-import { NotificationInfo } from "../../presentation/dtos/notification"
-
 export interface ICacheNotification {
-    pop(): NotificationInfo | null
+    pop(): any | null
     push(obj: any): void
 }

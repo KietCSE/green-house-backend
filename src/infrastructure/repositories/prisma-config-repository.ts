@@ -3,8 +3,8 @@ import { Configuration, SchedulerConfig, AutomationConfig, Condition } from "@pr
 import prisma from '../../config/prisma-config'
 
 export class ConfigRepository implements IConfigRepository {
-    public async findConditionBySensor(subject: string): Promise<Condition | null> {
-        return await prisma.condition.findFirst({
+    public async findConditionBySensor(subject: string): Promise<Condition[] | null> {
+        return await prisma.condition.findMany({
             where: {
                 sensorId: subject
             }

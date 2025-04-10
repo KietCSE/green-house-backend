@@ -3,7 +3,6 @@ import { NotifyUseCase } from "../domain/usecases/notify";
 import { NotificationRepository } from "../infrastructure/repositories/prisma-notification-repository";
 import { CacheNotification } from "../infrastructure/repositories/inside-notification-repository";
 
-
 CacheNotification.getInstance()
 export const notificationRepository = new NotificationRepository()
 

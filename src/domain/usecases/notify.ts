@@ -1,5 +1,8 @@
+import { CacheNotificationDevice } from "../../infrastructure/repositories/inside-notification-device-repository";
 import { CacheNotification } from "../../infrastructure/repositories/inside-notification-repository";
+import { CacheNotificationScheduler } from "../../infrastructure/repositories/inside-notification-schedule-repository";
 import { NotificationInfo } from "../../presentation/dtos/notification";
+import { NotificationDevice, NotificationSchedule } from "../../presentation/dtos/notification-device";
 import { INotificationRepository } from "../repositories/notification-repository";
 
 export class NotifyUseCase {
@@ -21,6 +24,15 @@ export class NotifyUseCase {
         return data
     }
 
+    public pollingNotificationDevice(): NotificationDevice | null {
+        const data = CacheNotificationDevice.getInstance().pop()
+        return data
+    }
+
+    public pollingNotificationScheduler(): NotificationSchedule | null {
+        const data = CacheNotificationScheduler.getInstance().pop()
+        return data
+    }
 }
 
 

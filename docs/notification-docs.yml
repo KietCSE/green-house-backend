@@ -86,7 +86,70 @@ paths:
                   value:
                     status: false
                     data: null
+  /notification/device/schedule/poll:
+    get:
+      tags:
+        - notification
+      summary: Poll for scheduled configuration notifications
+      description: >
+        Checks for scheduled configuration notifications. 
+        Each polling request returns at most one matching schedule (if any).
+        
+        - If there is data: `status = true` and detailed information is returned in `data`.
+        - If there is no data: `status = false` and `data = null`.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              examples:
+                SuccessExample:
+                  value:
+                    status: true
+                    data:
+                      deviceName: "Thermostat"
+                      deviceDescription: "Controls temperature"
+                      configDescription: "Turn on thermostat at 10:00"
+                      scheduleStart: "10:00"
+                      scheduleEnd: "12:00"
+                      repetition: "daily"
+                FailureExample:
+                  value:
+                    status: false
+                    data: null
 
+  /notification/device/auto/poll:
+    get:
+      tags:
+        - notification
+      summary: Poll for automatic configuration notifications
+      description: >
+        Checks for auto-triggered notifications based on sensor conditions.
+        Each polling request returns at most one matched auto-config event (if any).
+
+        - If there is data: `status = true` and `data` contains notification detail.
+        - If there is no data: `status = false` and `data = null`.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              examples:
+                SuccessExample:
+                  value:
+                    status: true
+                    data:
+                      deviceName: "Thermostat"
+                      deviceDescription: "Controls temperature"
+                      configDescription: "Turn on thermostat at 10:00"
+                      conditionDescription: "Device 001 exceeds threshold"
+                      conditionOperator: ">"
+                      conditionThreshold: "50"
+                      currentValue: 100
+                FailureExample:
+                  value:
+                    status: false
+                    data: null
 
   /notification/status/{id}:
     patch:

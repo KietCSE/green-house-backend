@@ -13,7 +13,6 @@ export class NotificationData {
     }
 }
 
-
 export class NotificationInfo {
     private id: number
     private name: string
