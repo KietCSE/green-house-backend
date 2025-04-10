@@ -44,7 +44,8 @@ jobs:
                 ssh -o StrictHostKeyChecking=no -i "my-server.pem" ${{ secrets.SERVER_URL }} << EOF
                   echo "CONNECT SUCCESSFULLY"
                   cd ~
-                  docker pull kietcse/green 
+                  docker pull kietcse/green
+                  docker compose up -d --force-recreate greenhouse-backend
                   echo "START SUCCESSFULLY"
                   docker image prune -f
                   echo "DELETE SUCCESSFULLY"
