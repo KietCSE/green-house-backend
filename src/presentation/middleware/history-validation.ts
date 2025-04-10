@@ -10,6 +10,14 @@ export const LoadHistoryDeviceValidation: ValidationChain[] = [
         .optional()
         .isInt({ min: 1 })
         .withMessage("Page must be a number greater than 0"),
+    query("endDate")
+        .optional()
+        .isISO8601()
+        .withMessage("startDate must be a valid date in ISO 8601 format (e.g., YYYY-MM-DD or YYYY-MM-DDTHH:mm:ssZ)"),
+    query("startDate")
+        .optional()
+        .isISO8601()
+        .withMessage("endDate must be a valid date in ISO 8601 format (e.g., YYYY-MM-DD or YYYY-MM-DDTHH:mm:ssZ)"),
 ]
 
 export const validateRequest = (req: Request, res: Response, next: NextFunction): void => {

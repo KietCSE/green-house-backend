@@ -9,14 +9,14 @@ export class GetDataUseCase {
     ) { }
 
     public async getDataByDateAndSubject(
-        feed: string,
+        id: number,
         pageSize: number,
         page: number,
         startDate?: Date,
         endDate?: Date
-    ): Promise<any[]> {
+    ): Promise<any> {
         const data = await this.dataRepository.findDataByDateAndSubject(
-            feed,
+            id,
             pageSize,
             page,
             startDate,
@@ -24,7 +24,6 @@ export class GetDataUseCase {
         )
         return data
     }
-
 
     public getCurentData() {
         const data = InsideMemRepository.getInstance().getAll()

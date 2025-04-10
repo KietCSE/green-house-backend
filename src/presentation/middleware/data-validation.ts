@@ -2,11 +2,11 @@ import { query, validationResult, ValidationChain } from "express-validator";
 import { Request, Response, NextFunction } from "express";
 
 export const LoadDataValidation: ValidationChain[] = [
-    query("feed")
+    query("id")
         .notEmpty()
-        .withMessage("Feed is required")
-        .isString()
-        .withMessage("Feed is string"),
+        .withMessage("Id is required")
+        .isInt()
+        .withMessage("Id is a number"),
     query("pageSize")
         .optional()
         .isInt({ min: 1, max: 100 })

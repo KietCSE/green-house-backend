@@ -14,9 +14,21 @@ export class HistoryRepository implements IHistoryRepository {
         }
     }
 
-    public async findAllHistory(page: number, pageSize: number): Promise<any[] | null> {
+    public async findAllHistory(
+        page: number,
+        pageSize: number,
+        startDate?: Date,
+        endDate?: Date
+    ): Promise<{ data: any[]; total: number } | null> {
         try {
-            const data = prisma.deviceHistory.findMany({
+
+            const data = await prisma.deviceHistory.findMany({
+                where: {
+                    date: {
+                        gte: startDate,
+                        lte: endDate
+                    }
+                },
                 skip: (page - 1) * pageSize,
                 take: pageSize,
                 select: {
@@ -24,12 +36,20 @@ export class HistoryRepository implements IHistoryRepository {
                     date: true,
                     deviceId: true
                 }
-            })
-            return data
-        }
-        catch (error) {
-            throw Error("Can not get history data")
-        }
+            });
 
+            const total = await prisma.deviceHistory.count({
+                where: {
+                    date: {
+                        gte: startDate,
+                        lte: endDate
+                    }
+                }
+            });
+
+            return { data, total };
+        } catch (error) {
+            throw new Error("Can not get history data");
+        }
     }
 }

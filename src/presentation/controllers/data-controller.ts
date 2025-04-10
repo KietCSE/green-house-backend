@@ -9,9 +9,9 @@ export class DataController {
 
     public async getDataBySubject(req: Request, res: Response, next: NextFunction) {
         try {
-            const { feed, pageSize, page, startDate, endDate } = req.query
+            const { id, pageSize, page, startDate, endDate } = req.query
 
-            const feedName = feed ? feed as string : ''
+            const Id = id ? parseInt(id as string, 10) : -1
             const pageSizeNumber = pageSize ? parseInt(pageSize as string, 10) : 10
             const pageNumber = page ? parseInt(page as string, 10) : 1
             const startDateObj = startDate ? new Date(startDate as string) : null;
@@ -21,7 +21,7 @@ export class DataController {
 
             if (startDateObj !== null) {
                 data = await this.getDataUseCase.getDataByDateAndSubject(
-                    feedName,
+                    Id,
                     pageSizeNumber,
                     pageNumber,
                     startDateObj,
@@ -29,12 +29,12 @@ export class DataController {
                 )
             }
             else data = await this.getDataUseCase.getDataByDateAndSubject(
-                feedName,
+                Id,
                 pageSizeNumber,
                 pageNumber
             )
 
-            return res.status(200).json({ status: true, data: data })
+            return res.status(200).json({ status: true, totalOfRecord: data?.total, data: data?.data })
         }
         catch (error) {
             next(error)
