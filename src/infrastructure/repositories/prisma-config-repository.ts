@@ -1,13 +1,18 @@
-import { IConfigRepository, SchedulerWithConfig } from "../../domain/repositories/config-repository"
+import { ConditionWithAuto, IConfigRepository, SchedulerWithConfig } from "../../domain/repositories/config-repository"
 import { Configuration, SchedulerConfig, AutomationConfig, Condition } from "@prisma/client";
 import prisma from '../../config/prisma-config'
 
 export class ConfigRepository implements IConfigRepository {
-    public async findConditionBySensor(subject: string): Promise<Condition[] | null> {
+    public async findConditionBySensor(subject: string): Promise<ConditionWithAuto[] | null> {
         return await prisma.condition.findMany({
             where: {
                 sensorId: subject
-            }
+            },
+            include: {  automation: {
+                include: {
+                    configuration: true
+                }
+            } }
         });
     }
 
@@ -61,7 +66,7 @@ export class ConfigRepository implements IConfigRepository {
         return deletedConfig
     }
 
-    public async createSchedulerConfig(configId: number, start: string, end: string, repetition?: string): Promise<SchedulerConfig> {
+    public async createSchedulerConfig(configId: number, start: string, end: string, repetition: string[]): Promise<SchedulerConfig> {
         const existingConfig = await prisma.configuration.findUnique({
             where: { id: configId },
             include: { schedulerConfig: true, automationConfig: true }
@@ -80,13 +85,13 @@ export class ConfigRepository implements IConfigRepository {
                 configuration: { connect: { id: configId } },
                 start,
                 end,
-                repitation: repetition ?? null,
+                repitation: repetition,
             }
         })
         return newSchedulerConfig
     }
 
-    public async updateSchedulerConfig(configId: number, start?: string, end?: string, repetition?: string): Promise<SchedulerConfig> {
+    public async updateSchedulerConfig(configId: number, start?: string, end?: string, repetition?: string[]): Promise<SchedulerConfig> {
         const updatedConfig = await prisma.schedulerConfig.update({
             where: { id: configId },
             data: {

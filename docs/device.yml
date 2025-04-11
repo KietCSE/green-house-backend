@@ -279,7 +279,12 @@ paths:
         tags:
           - device
         summary: Create a new device
-        description: Add a new device to the system
+        description: > 
+          Add a new device to the system. 
+
+          - If `power` is set to `-1`, the device will toggle its mode (ON/OFF).  
+          
+          - If `power` is within the range `[0, 100]`, the device will operate in adjustable mode with the specified power level.
         requestBody:
           required: true
           content:
@@ -302,6 +307,9 @@ paths:
                   description:
                     type: string
                     example: "Measures room temperature"
+                  power:
+                    type: number
+                    example: "60"
         responses:
           '200':
             description: Device created successfully
@@ -334,6 +342,9 @@ paths:
                         description:
                           type: string
                           example: "Measures room temperature"
+                        power:
+                          type: number
+                          example: "60"
           '409':
             description: Device's Id (or name) already exists
           '500':

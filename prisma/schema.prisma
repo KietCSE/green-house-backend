@@ -95,7 +95,7 @@ model SchedulerConfig {
   id            Int           @id // id = configuration Id 
   start         String // time end 
   end           String // time start
-  repitation    String? // t3, t2, weekly, daily or null ?
+  repitation    String[] // mon, tue, wen, ...
   configuration Configuration @relation(fields: [id], references: [id], onDelete: Cascade) // Quan hệ ngược
 }
 
