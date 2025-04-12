@@ -12,7 +12,10 @@ export class PersistDataOberver implements IObserver {
 
     public async execute(data: number, feed: string): Promise<void> {
         try {
+            if (typeof data !== 'number' || isNaN(data)) return
+
             const isSaved = await this.dataRepository.saveData(String(data), feed)
+
             if (isSaved) console.log("saved data to db")
             else console.log("Data is invalid, can not save")
 
