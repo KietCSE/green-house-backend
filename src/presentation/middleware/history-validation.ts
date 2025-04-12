@@ -35,7 +35,6 @@ export const LoadHistoryDeviceValidation: ValidationChain[] = [
     query("endDate")
         .optional()
         .custom((endDate, { req }) => {
-
             if (!req.query) {
                 throw new Error("Query parameters are missing");
             }
