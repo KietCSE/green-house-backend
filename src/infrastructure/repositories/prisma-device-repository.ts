@@ -33,8 +33,7 @@ export class DeviceRepository implements IDeviceRepository {
         return devices;
     }
 
-    public async createDevice(id: string, name: string, feed: string,  prefixMessage: string, description: string): Promise<Device> {
-        const power = 0
+    public async createDevice(id: string, name: string, feed: string,  prefixMessage: string, description: string, power: number): Promise<Device> {
         const status = false
         const newDevice = await prisma.device.create({ data : {id, name, feed, prefixMessage, description, power, status} })
         return newDevice
@@ -64,20 +63,24 @@ export class DeviceRepository implements IDeviceRepository {
         })
 
         const feed_name = `${config.AIO_USERNAME}/feeds/${turnDevice.feed}`;
-
+        
         if (status) {
-            this.mqttRepository.publish(feed_name, turnDevice.prefixMessage + "100")
+            var power = turnDevice.power
+            if (power === -1) power = 100
+            this.mqttRepository.publish(feed_name, turnDevice.prefixMessage + power.toString())
         } else {
             this.mqttRepository.publish(feed_name, turnDevice.prefixMessage + "0")
         }
 
+        console.log("Device turn:", turnDevice.id, status)
+
         return turnDevice;
     }
 
-    public async updateDevice(id: string, name?: string, feed?: string, prefixMessage?: string, description?: string, power? :number): Promise<Device> {
+    public async updateDevice(id: string, status?: boolean, name?: string, feed?: string, prefixMessage?: string, description?: string, power? :number): Promise<Device> {
         const updatedDevice = await prisma.device.update({
             where: { id },
-            data: { name, feed, prefixMessage, description, power }
+            data: { name, status, feed, prefixMessage, description, power }
         });
         return updatedDevice;
     }

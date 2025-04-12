@@ -7,6 +7,7 @@ import { DeviceHistoryInfo } from "@prisma/client";
 import { EmailService } from "../../infrastructure/services/gmail";
 import { NotificationDevice } from "../../presentation/dtos/notification-device";
 import { CacheNotificationDevice } from "../../infrastructure/repositories/inside-notification-device-repository";
+import { ConfigSchedulerUseCase } from "./config-schedule";
 
 export class AlertAutomationObserver implements IObserver {
 
@@ -15,7 +16,7 @@ export class AlertAutomationObserver implements IObserver {
         private configRepository: ConfigRepository,
         private monitorRepository: MonitorRepository,
         private deviceRepository: DeviceRepository,
-        private mailService: EmailService
+        private mailService: EmailService, 
     ) { }
 
     public async execute(data: number, feed: string): Promise<void> {
@@ -50,11 +51,10 @@ export class AlertAutomationObserver implements IObserver {
                 const operatorFn = operators[condition.condition];
                 if (operatorFn && operatorFn(data, threshold)) {
                     console.log(`Alert: ${sensor.name} ${condition.condition} ${condition.threshold}`);
-    
-                    const config = await this.configRepository.turnConfig(
-                        condition.automationConfigId.toString(),
-                        true
-                    );
+                    
+                    const config = condition.automation.configuration
+
+                    if (!config.action) continue;
 
                     const device = await this.deviceRepository.findDeviceBySubject(config.deviceId);
                     if (!device) {
@@ -70,10 +70,11 @@ export class AlertAutomationObserver implements IObserver {
                         condition.threshold,
                         data,
                     )
+                    
                     CacheNotificationDevice.getInstance().push(notification)
                     await this.mailService.SendEmailConfig(notification, "kennezversion@gmail.com");
-    
                     await this.histotyRepository.createHistory(DeviceHistoryInfo.Auto, config.deviceId);
+                    await this.deviceRepository.turnDevice(config.deviceId, true);
                 } else {
                     console.log(`Sensor ${sensor.name} is within normal range for condition: ${condition.condition} ${condition.threshold}`);
                 }

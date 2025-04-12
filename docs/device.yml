@@ -279,7 +279,12 @@ paths:
         tags:
           - device
         summary: Create a new device
-        description: Add a new device to the system
+        description: > 
+          Add a new device to the system. 
+
+          - If `power` is set to `-1`, the device will toggle its mode (ON/OFF).  
+          
+          - If `power` is within the range `[0, 100]`, the device will operate in adjustable mode with the specified power level.
         requestBody:
           required: true
           content:
@@ -302,6 +307,9 @@ paths:
                   description:
                     type: string
                     example: "Measures room temperature"
+                  power:
+                    type: number
+                    example: "60"
         responses:
           '200':
             description: Device created successfully
@@ -334,6 +342,9 @@ paths:
                         description:
                           type: string
                           example: "Measures room temperature"
+                        power:
+                          type: number
+                          example: "60"
           '409':
             description: Device's Id (or name) already exists
           '500':
@@ -778,14 +789,21 @@ paths:
                 start:
                   type: string
                   format: date-time
-                  example: "2024-03-10T10:00:00Z"
+                  example: "12:00"
                 end:
                   type: string
                   format: date-time
-                  example: "2024-03-10T12:00:00Z"
+                  example: "13:00"
                 repetition:
-                  type: string
-                  example: "daily"
+                  type: array
+                  items:
+                    type: string
+                    enum: [mon, tue, wed, thu, fri, sat, sun]
+                  example: ["mon", "wed", "fri"]
+                  description: |
+                    Mảng các ngày lặp lại theo tuần. 
+                    Giá trị hợp lệ: mon, tue, wed, thu, fri, sat, sun.
+                    Nếu không có thì không cần lập lịch (thiết bị không chạy định kỳ).
       responses:
         '200':
           description: Scheduler configuration created successfully
@@ -819,14 +837,17 @@ paths:
                 start:
                   type: string
                   format: date-time
-                  example: "2024-03-11T08:00:00Z"
+                  example: "12:00"
                 end:
                   type: string
                   format: date-time
-                  example: "2024-03-11T18:00:00Z"
+                  example: "13:00"
                 repetition:
-                  type: string
-                  example: "weekly"
+                  type: array
+                  items:
+                    type: string
+                    enum: [mon, tue, wed, thu, fri, sat, sun]
+                  example: ["mon", "wed", "fri"]
       responses:
         '200':
           description: Scheduler configuration updated successfully
@@ -850,14 +871,17 @@ paths:
                       start:
                         type: string
                         format: date-time
-                        example: "2024-03-11T08:00:00Z"
+                        example: "12:00"
                       end:
                         type: string
                         format: date-time
-                        example: "2024-03-11T18:00:00Z"
+                        example: "13:00"
                       repetition:
-                        type: string
-                        example: "weekly"
+                        type: array
+                        items:
+                          type: string
+                          enum: [mon, tue, wed, thu, fri, sat, sun]
+                        example: ["mon", "wed", "fri"]
         '400':
           description: Invalid request data
         '404':
