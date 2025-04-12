@@ -35,6 +35,14 @@ export class DeviceUsecase {
         return res.status(200).json({ status: true, message: "Device updated successfully", data: turnDevice })
     }
 
+    public async turnDeviceManual(req: Request, res: Response) {
+        const { subject } = req.params;
+        const { status } = req.body;
+
+        const turnDevice = await this.deviceRepository.turnDeviceManual(subject, status);
+        return res.status(200).json({ status: true, message: "Device updated successfully", data: turnDevice })
+    }
+
     public async updateDevice(req: Request, res: Response) {
         const { subject } = req.params;
         const { name, status, feed, prefixMessage, description, power } = req.body;
