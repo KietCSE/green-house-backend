@@ -56,6 +56,19 @@ export class EmailService {
 
     }
 
+    public async SendEmailConfigToAllUser(data: NotificationDevice) {
+        const listemail = await prisma.user.findMany({
+            where: { receiveNotification: true },
+            select: { email: true }
+        })
+        listemail
+            .map(e => e.email)
+            .filter(e => !!e)
+            .forEach(e => {
+                this.SendEmailConfig(data, e)
+            })
+    }
+
     public async SendEmailConfig(data: NotificationDevice, email: string) {
 
         const transporter = nodemailer.createTransport({
@@ -97,6 +110,19 @@ export class EmailService {
             console.error("Error occurred:", error);
         }
 
+    }
+
+    public async SendEmailScheduleToAllUser(data: NotificationSchedule) {
+        const listemail = await prisma.user.findMany({
+            where: { receiveNotification: true },
+            select: { email: true }
+        })
+        listemail
+            .map(e => e.email)
+            .filter(e => !!e)
+            .forEach(e => {
+                this.SendEmailSchedule(data, e)
+            })
     }
 
     public async SendEmailSchedule(data: NotificationSchedule, email: string) {

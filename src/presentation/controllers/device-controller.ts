@@ -43,6 +43,15 @@ export class DeviceController {
         }
     }
 
+    public async turnDeviceManual(req: Request, res: Response, next: NextFunction) {
+        try {
+            await this.deviceUsecase.turnDeviceManual(req, res)
+        }
+        catch (error) {
+            next(error)
+        }
+    }
+
     public async updateDevice(req: Request, res: Response, next: NextFunction) {
         try {
             await this.deviceUsecase.updateDevice(req, res)

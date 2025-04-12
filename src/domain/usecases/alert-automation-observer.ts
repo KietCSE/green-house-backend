@@ -72,7 +72,7 @@ export class AlertAutomationObserver implements IObserver {
                     )
                     
                     CacheNotificationDevice.getInstance().push(notification)
-                    await this.mailService.SendEmailConfig(notification, "kennezversion@gmail.com");
+                    await this.mailService.SendEmailConfigToAllUser(notification);
                     await this.histotyRepository.createHistory(DeviceHistoryInfo.Auto, config.deviceId);
                     await this.deviceRepository.turnDevice(config.deviceId, true);
                 } else {
