@@ -1,11 +1,13 @@
 import { IDeviceRepository } from "../../domain/repositories/device-repository"
-import { Device } from '@prisma/client'
+import { Device, DeviceHistoryInfo } from '@prisma/client'
 import prisma from '../../config/prisma-config'
 import { MqttRepository } from "./adafruit-mqtt-repository"
 import config from '../../config/load-config';
+import { HistoryRepository } from "./prisma-history-repository";
 
 export class DeviceRepository implements IDeviceRepository {
     private mqttRepository = new MqttRepository();
+    private historyRepository = new HistoryRepository();
 
     public async findDeviceBySubject(subject: string): Promise<Device | null> {
         const device = await prisma.device.findFirst({  // Có thể tìm theo Id và tên
@@ -37,6 +39,12 @@ export class DeviceRepository implements IDeviceRepository {
         const status = false
         const newDevice = await prisma.device.create({ data : {id, name, feed, prefixMessage, description, power, status} })
         return newDevice
+    }
+
+    public async turnDeviceManual(subject: string, status: boolean): Promise<Device> {
+        const turnedDevice = await this.turnDevice(subject, status)
+        if (turnedDevice.status) await this.historyRepository.createHistory(DeviceHistoryInfo.Manual, turnedDevice.id)
+        return turnedDevice
     }
 
     public async turnDevice(subject: string, status: boolean): Promise<Device> {

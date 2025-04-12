@@ -54,7 +54,7 @@ export class ConfigSchedulerUseCase {
                     );
                   
                     CacheNotificationScheduler.getInstance().push(notification);
-                    await this.mailService.SendEmailSchedule(notification, "kennezversion@gmail.com");
+                    await this.mailService.SendEmailScheduleToAllUser(notification);
                     await this.historyRepository.createHistory(DeviceHistoryInfo.Scheduler, configuration.deviceId);
                     console.log(`Device ${configuration.deviceId} turned ON at ${start}`);
                 }
