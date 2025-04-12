@@ -17,37 +17,48 @@ export class HistoryRepository implements IHistoryRepository {
     public async findAllHistory(
         page: number,
         pageSize: number,
-        startDate?: Date,
-        endDate?: Date
+        startDate: Date | null,
+        endDate: Date | null,
+        indexOfDevice: string | null,
+        actionInfo: string | null
     ): Promise<{ data: any[]; total: number } | null> {
         try {
+            const where: any = {}
 
-            const data = await prisma.deviceHistory.findMany({
-                where: {
-                    date: {
-                        gte: startDate,
-                        lte: endDate
-                    }
-                },
-                skip: (page - 1) * pageSize,
-                take: pageSize,
-                select: {
-                    info: true,
-                    date: true,
-                    deviceId: true
-                }
-            });
+            if (startDate || endDate) {
+                where.date = {}
+                if (startDate) where.date.gte = startDate
+                if (endDate) where.date.lte = endDate
+            }
 
-            const total = await prisma.deviceHistory.count({
-                where: {
-                    date: {
-                        gte: startDate,
-                        lte: endDate
-                    }
-                }
-            });
+            if (indexOfDevice) {
+                where.deviceId = indexOfDevice
+            }
 
-            return { data, total };
+            if (actionInfo) {
+                where.info = actionInfo
+            }
+
+            console.log(where)
+
+            const [data, total] = await Promise.all([
+                prisma.deviceHistory.findMany({
+                    where,
+                    skip: (page - 1) * pageSize,
+                    take: pageSize,
+                    select: {
+                        info: true,
+                        date: true,
+                        deviceId: true
+                    },
+                    orderBy: { date: 'desc' }
+                }),
+
+                prisma.deviceHistory.count({ where })
+            ])
+
+            return { data, total }
+
         } catch (error) {
             throw new Error("Can not get history data");
         }

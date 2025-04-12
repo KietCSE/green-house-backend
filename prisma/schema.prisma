@@ -71,6 +71,7 @@ model Device {
 enum DeviceHistoryInfo {
   Auto
   Scheduler
+  Manual
 }
 
 model DeviceHistory {
