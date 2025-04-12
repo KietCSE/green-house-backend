@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 import config from "../../config/load-config";
 import { NotificationInfo } from "../../presentation/dtos/notification";
-import { Condition, Configuration, Device } from "@prisma/client";
+// import { Condition, Configuration, Device } from "@prisma/client";
 import { NotificationDevice, NotificationSchedule } from "../../presentation/dtos/notification-device";
 import prisma from '../../config/prisma-config'
 
