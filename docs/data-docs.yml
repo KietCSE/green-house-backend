@@ -141,39 +141,59 @@ paths:
       tags:
         - device
       summary: Get device history
-      description: Retrieve historical records of device operations.
+      description: Retrieve historical records of device operations. Filter by date range, device ID, or action type. Results are paginated and sorted by date in descending order (newest first).
       parameters:
-      - name: page
-        in: query
-        description: Page number (must be greater than 0)
-        required: false
-        schema:
-          type: integer
-          minimum: 1
-          example: 1
-      - name: pageSize
-        in: query
-        description: Number of records per page (1–100)
-        required: false
-        schema:
-          type: integer
-          minimum: 1
-          maximum: 100
-          example: 10
-      - name: startDate
-        in: query
-        required: false
-        schema:
-          type: string
-          format: date
-        description: Start date in YYYY-MM-DD format
-      - name: endDate
-        in: query
-        required: false
-        schema:
-          type: string
-          format: date
-        description: End date in YYYY-MM-DD format
+        - name: page
+          in: query
+          description: Page number for pagination (must be greater than 0)
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            example: 1
+        - name: pageSize
+          in: query
+          description: Number of records per page (between 1 and 100)
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            example: 10
+        - name: startDate
+          in: query
+          description: Start date for filtering records (ISO 8601 format, e.g., YYYY-MM-DD or YYYY-MM-DDTHH:mm:ssZ). Must be less than or equal to endDate if both are provided.
+          required: false
+          schema:
+            type: string
+            format: date-time
+            example: "2025-04-01"
+        - name: endDate
+          in: query
+          description: End date for filtering records (ISO 8601 format, e.g., YYYY-MM-DD or YYYY-MM-DDTHH:mm:ssZ). Must be greater than or equal to startDate if both are provided.
+          required: false
+          schema:
+            type: string
+            format: date-time
+            example: "2025-04-10"
+        - name: deviceId
+          in: query
+          description: Device ID to filter records (e.g., a unique string identifier for the device)
+          required: false
+          schema:
+            type: string
+            example: "DEV-001"
+        - name: typeAction
+          in: query
+          description: Type of action to filter records (must be one of Auto, Scheduler, Manual)
+          required: false
+          schema:
+            type: string
+            enum:
+              - Auto
+              - Scheduler
+              - Manual
+            example: "Manual"
       responses:
         "200":
           description: Successfully retrieved device history
@@ -184,26 +204,52 @@ paths:
                 properties:
                   status:
                     type: boolean
+                    description: Indicates if the request was successful
                     example: true
-                  totalOfRecord: 
+                  totalOfRecord:
                     type: integer
+                    description: Total number of records matching the query
                     example: 100
                   data:
                     type: array
+                    description: List of device history records
                     items:
                       type: object
                       properties:
                         info:
                           type: string
-                          example: "Auto"
+                          description: Type of action performed
+                          enum:
+                            - Auto
+                            - Scheduler
+                            - Manual
+                          example: "Manual"
                         date:
                           type: string
                           format: date-time
-                          example: "2023-10-01T10:00:00.000Z"
+                          description: Timestamp of the action
+                          example: "2025-04-01T10:00:00.000Z"
                         deviceId:
                           type: string
+                          description: Unique identifier of the device
                           example: "DEV-001"
-
+                required:
+                  - status
+                  - totalOfRecord
+                  - data
+        "400":
+          description: Bad request due to invalid parameters (e.g., startDate > endDate, invalid typeAction)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "startDate must be less than or equal to endDate"
         "500":
           description: Internal server error
           content:
@@ -214,10 +260,6 @@ paths:
                   status:
                     type: boolean
                     example: false
-                  totalOfRecord: 
-                    type: integer
-                    example: 0
-                  data:
-                    type: array
-                    items:
-                      type: object
+                  message:
+                    type: string
+                    example: "Cannot retrieve history data"
