@@ -8,7 +8,8 @@ const config = {
     AIO_FEED_ID: String(process.env.AIO_FEED_ID),
     AIO_URL: String(process.env.AIO_URL),
     EMAIL_PWD: String(process.env.EMAIL_PWD),
-    EMAIL_USER: String(process.env.EMAIL_USER)
+    EMAIL_USER: String(process.env.EMAIL_USER),
+    JWT_SECRET: String(process.env.JWT_SECRET)
 };
 
 export default config;

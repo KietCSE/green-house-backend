@@ -17,7 +17,6 @@ export class AuthenticationRepository implements IUserRepository {
         const createdEmail = await prisma.user.findFirst({ where: { email: email } })
         return createdEmail
     }
-
 }
 
 
