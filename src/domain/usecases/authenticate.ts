@@ -1,4 +1,4 @@
-import { AuthenticationRepository } from '../../infrastructure/repositories/prisma-auth-repository'
+// import { AuthenticationRepository } from '../../infrastructure/repositories/prisma-auth-repository'
 import { Request, Response } from 'express'
 import ResponseEnity from '../../presentation/dtos/responseEntity'
 import bcrypt from 'bcrypt'
@@ -58,5 +58,9 @@ export class AuthenticationUseCase {
         }
     }
 
+    public async turnOnOffNotification(value: boolean, userid: number): Promise<boolean> {
+        const data = await this.authenticationRepository.turnOnOffNotification(value, userid)
+        return data
+    }
 }
 

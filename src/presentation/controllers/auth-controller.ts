@@ -22,5 +22,22 @@ export class AuthenticationController {
             next(error)
         }
     }
+
+    public async turnOnOffNotification(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { value } = req.body
+            const userid = Number(req.userid)
+            const updated = await this.authenticationUseCase.turnOnOffNotification(value, userid)
+
+            if (updated)
+                res.status(200).json({ status: true, message: `Update notification of user to ${value}` })
+            else
+                res.status(200).json({ status: false, message: `Update notification of user to ${value}` })
+        }
+        catch (error) {
+            next(error)
+        }
+    }
+
 }
 

@@ -2,6 +2,7 @@ import { JwtPayload } from 'jsonwebtoken';
 
 declare module 'express-serve-static-core' {
     interface Request {
-        userid?: JwtPayload | string | number;
+        user?: JwtPayload | string | number;
+        userid?: number;
     }
 }

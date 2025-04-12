@@ -4,9 +4,12 @@ import { CacheNotificationScheduler } from "../../infrastructure/repositories/in
 import { NotificationInfo } from "../../presentation/dtos/notification";
 import { NotificationDevice, NotificationSchedule } from "../../presentation/dtos/notification-device";
 import { INotificationRepository } from "../repositories/notification-repository";
+// import { IUserRepository } from "../repositories/user-repository";
 
 export class NotifyUseCase {
-    constructor(private notificationRepository: INotificationRepository) { }
+    constructor(
+        private notificationRepository: INotificationRepository,
+    ) { }
 
     public async getAllNotification(page: number, pageSize: number): Promise<any[] | null> {
         const notifications = await this.notificationRepository.findAllNotification(page, pageSize)

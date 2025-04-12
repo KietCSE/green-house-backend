@@ -105,6 +105,9 @@ paths:
                         type: string
                         format: email
                         example: "kiet@gmail.com"
+                      token:
+                        type: string
+                        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywidXNlcm5hbWUiOiJ0dWFua2lldCIsImVtYWlsIjoiZ2lveHVhbmh1dXlob2FkYW9sYXlAZ21haWwuY29tIiwiaWF0IjoxNzQ0NDMzMjM5LCJleHAiOjE3NDQ0MzY4Mzl9.QWRY5HVN06o4E6OaPaiHxy9aMczGsjEgIXdoRH4T8Dg"
                   message:
                     type: string
                     example: "Login successfully"
@@ -167,3 +170,49 @@ paths:
                     example: "User already exists or email already exists"
         "500":
           description: Server error
+
+  /user/notification:
+    patch:
+      summary: Cập nhật tùy chọn nhận thông báo của người dùng
+      tags:
+        - user
+      security:
+        - bearerAuth: [] 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                value:
+                  type: boolean
+              required:
+                - value
+      responses:
+        '200':
+          description: Cập nhật thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Update notification of user to true
+        '400':
+          description: Cập nhật thất bại
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Update notification of user to true

@@ -1,6 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { createNotificationController } from "../../factory/notification-factory"
 import { LoadNotification, UpdateNotification, validateRequest } from "../middleware/notification-validation";
+import { verifyToken, turnOnOffNotification } from "../middleware/jwt-validation";
 
 const router: Router = Router();
 
@@ -28,6 +29,7 @@ router.get('/device/auto/poll', (req: Request, res: Response, next: NextFunction
 router.get('/device/schedule/poll', (req: Request, res: Response, next: NextFunction) => {
     notificationController.pollingNotificationSchedule(req, res, next)
 })
+
 
 export default router
 

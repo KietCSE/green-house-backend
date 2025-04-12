@@ -22,7 +22,7 @@ export class AlertDataObserver implements IObserver {
 
             if (alert) {
                 CacheNotification.getInstance().push(alert)
-                this.mailService.SendEmail(alert, "ptkiet170104@gmail.com")
+                this.mailService.SendEmailToAllUser(alert)
             }
 
             // gui thong bao den trang nguoi dung 

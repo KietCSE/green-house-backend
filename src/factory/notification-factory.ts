@@ -2,6 +2,7 @@ import { NotificationController } from "../presentation/controllers/notification
 import { NotifyUseCase } from "../domain/usecases/notify";
 import { NotificationRepository } from "../infrastructure/repositories/prisma-notification-repository";
 import { CacheNotification } from "../infrastructure/repositories/inside-notification-repository";
+// import { userRepository } from './auth-factory'
 
 CacheNotification.getInstance()
 export const notificationRepository = new NotificationRepository()

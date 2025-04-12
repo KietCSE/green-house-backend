@@ -3,10 +3,25 @@ import config from "../../config/load-config";
 import { NotificationInfo } from "../../presentation/dtos/notification";
 import { Condition, Configuration, Device } from "@prisma/client";
 import { NotificationDevice, NotificationSchedule } from "../../presentation/dtos/notification-device";
+import prisma from '../../config/prisma-config'
+
 
 export class EmailService {
 
-    public async SendEmail(monitor: NotificationInfo, email: string, htmlText?: string) {
+    public async SendEmailToAllUser(monitor: NotificationInfo, htmlText?: string) {
+        const listemail = await prisma.user.findMany({
+            where: { receiveNotification: true },
+            select: { email: true }
+        })
+        listemail
+            .map(e => e.email)
+            .filter(e => !!e)
+            .forEach(e => {
+                this.SendEmail(monitor, e, htmlText)
+            })
+    }
+
+    private async SendEmail(monitor: NotificationInfo, email: string, htmlText?: string) {
 
         const transporter = nodemailer.createTransport({
             service: "gmail",
@@ -33,7 +48,6 @@ export class EmailService {
         };
 
         try {
-            console.log(email)
             const info = await transporter.sendMail(mailOptions);
             console.log("Email sent successfully:", info.response);
         } catch (error) {
@@ -42,7 +56,7 @@ export class EmailService {
 
     }
 
-    public async SendEmailConfig(data: NotificationDevice ,email: string) {
+    public async SendEmailConfig(data: NotificationDevice, email: string) {
 
         const transporter = nodemailer.createTransport({
             service: "gmail",
@@ -85,7 +99,7 @@ export class EmailService {
 
     }
 
-    public async SendEmailSchedule(data: NotificationSchedule ,email: string) {
+    public async SendEmailSchedule(data: NotificationSchedule, email: string) {
 
         const transporter = nodemailer.createTransport({
             service: "gmail",

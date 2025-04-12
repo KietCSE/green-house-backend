@@ -77,7 +77,4 @@ export class NotificationController {
         }
     }
 
-    public async turnOnOffNotification(req: Request, res: Response, next : NextFunction) {
-        
-    }
 }
