@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE "Configuration" ADD COLUMN     "changePower" INTEGER NOT NULL DEFAULT 100,
+ADD COLUMN     "defaultPower" INTEGER NOT NULL DEFAULT 100;
+
+-- AlterTable
+ALTER TABLE "Device" ADD COLUMN     "type" INTEGER NOT NULL DEFAULT 0;

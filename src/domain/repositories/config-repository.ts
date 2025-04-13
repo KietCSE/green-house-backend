@@ -7,8 +7,8 @@ export interface IConfigRepository {
     findAllConfigsBySubject(subject: string): Promise<Configuration[] | null>;
     findAllSchedulers(): Promise<SchedulerWithConfig[]>
 
-    createConfig(name: string, description: string, deviceId: string): Promise<Configuration>
-    updateConfig(configId: number, name?: string, description?: string): Promise<Configuration>;
+    createConfig(name: string, description: string, deviceId: string, changePower: number): Promise<Configuration>
+    updateConfig(configId: number, name?: string, description?: string, changePower?: number): Promise<Configuration>;
     deleteConfig(configId: number): Promise<Configuration>;
     turnConfig(subject: String, action: boolean): Promise<Configuration>
 

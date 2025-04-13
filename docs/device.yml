@@ -62,7 +62,10 @@ paths:
       tags:
         - device
       summary: Update device info
-      description: Update one or more fields of a specific device (by Id)
+      description: > 
+        Update one or more fields of a specific device (by Id)
+
+        - If `type` is set to `0`, the device will toggle its mode (ON/OFF). the power will be 100 automatically
       parameters:
         - name: subject
           in: path
@@ -92,6 +95,9 @@ paths:
                 status:
                   type: boolean
                   example: false
+                type:
+                  type: int
+                  example: 1
       responses:
         '200':
           description: Device updated successfully
@@ -127,6 +133,9 @@ paths:
                       status:
                         type: boolean
                         example: false
+                      type:
+                        type: int
+                        example: 1
         '400':
           description: Bad request (invalid input)
         '404':
@@ -282,9 +291,9 @@ paths:
         description: > 
           Add a new device to the system. 
 
-          - If `power` is set to `-1`, the device will toggle its mode (ON/OFF).  
+          - If `type` is set to `0`, the device will toggle its mode (ON/OFF). the power must be 100
           
-          - If `power` is within the range `[0, 100]`, the device will operate in adjustable mode with the specified power level.
+          - If `type` is set to `1`, is within the range `[0, 100]`, the device will operate in adjustable mode with the specified power level.
         requestBody:
           required: true
           content:
@@ -310,6 +319,9 @@ paths:
                   power:
                     type: number
                     example: "60"
+                  type:
+                    type: number
+                    example: "0"
         responses:
           '200':
             description: Device created successfully
@@ -345,6 +357,9 @@ paths:
                         power:
                           type: number
                           example: "60"
+                        type:
+                          type: number
+                          example: "0"
           '409':
             description: Device's Id (or name) already exists
           '500':
@@ -736,6 +751,9 @@ paths:
                 deviceId:
                   type: string
                   example: "device123"
+                changePower:
+                  type: number
+                  example: "60"
       responses:
         '200':
           description: Configuration created successfully
@@ -765,6 +783,12 @@ paths:
                       deviceId:
                         type: string
                         example: "device123"
+                      defaultPower:
+                        type: number
+                        example: "100"
+                      changePower:
+                        type: number
+                        example: "60"
         '409':
           description: Device has been configured before
         '500':
