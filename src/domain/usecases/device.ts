@@ -15,7 +15,7 @@ export class DeviceUsecase {
     }
 
     public async createDevice(req: Request, res: Response) {
-        const { id, name, feed, prefixMessage, description, power } = req.body
+        const { id, name, feed, prefixMessage, description, power, type } = req.body
         const deviceById = await this.deviceRepository.findDeviceBySubject(id)
         if (deviceById) return res.status(409).json({ status: false, message: "Device's Id already exists" })
 
@@ -23,7 +23,7 @@ export class DeviceUsecase {
         if (deviceByName) return res.status(409).json({ status: false, message: "Device's name already exists" })
 
         // Tạo device khi không trùng lặp id và name
-        const newDevice = await this.deviceRepository.createDevice(id, name, feed, prefixMessage, description, power)
+        const newDevice = await this.deviceRepository.createDevice(id, name, feed, prefixMessage, description, power, type)
         return res.status(200).json({ status: true, message: "Device created successfully", data: newDevice })
     }
 
@@ -45,9 +45,9 @@ export class DeviceUsecase {
 
     public async updateDevice(req: Request, res: Response) {
         const { subject } = req.params;
-        const { name, status, feed, prefixMessage, description, power } = req.body;
+        const { name, status, feed, prefixMessage, description, power, type } = req.body;
         
-        const updatedDevice = await this.deviceRepository.updateDevice(subject, name, status, feed, prefixMessage, description, power);
+        const updatedDevice = await this.deviceRepository.updateDevice(subject, name, status, feed, prefixMessage, description, power, type);
         return res.status(200).json({ status: true, message: "Device updated successfully", data: updatedDevice })
     }
 

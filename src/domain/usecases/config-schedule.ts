@@ -42,6 +42,7 @@ export class ConfigSchedulerUseCase {
 
                 if (isStartTime && device.status === false) {
                     // Bật thiết bị
+                    await this.deviceRepository.updateDevice(configuration.deviceId, undefined, undefined, undefined, undefined, undefined, configuration.changePower);
                     await this.deviceRepository.turnDevice(configuration.deviceId, true);
                     
                     const notification = new NotificationSchedule(
@@ -61,7 +62,12 @@ export class ConfigSchedulerUseCase {
                   
                 if (isEndTime && device.status === true) {
                     // Tắt thiết bị
-                    await this.deviceRepository.turnDevice(configuration.deviceId, false);
+                    if (configuration.defaultPower === 0) {
+                        await this.deviceRepository.turnDevice(configuration.deviceId, false);
+                    } else {
+                        await this.deviceRepository.updateDevice(configuration.deviceId, undefined, undefined, undefined, undefined, undefined, configuration.defaultPower);
+                        await this.deviceRepository.turnDevice(configuration.deviceId, true);
+                    }
                     console.log(`Device ${configuration.deviceId} turned OFF at ${end}`);
                 }                  
             }
