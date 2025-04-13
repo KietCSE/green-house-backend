@@ -74,6 +74,7 @@ export class AlertAutomationObserver implements IObserver {
                     CacheNotificationDevice.getInstance().push(notification)
                     await this.mailService.SendEmailConfigToAllUser(notification);
                     await this.histotyRepository.createHistory(DeviceHistoryInfo.Auto, config.deviceId);
+                    await this.deviceRepository.updateDevice(config.deviceId, undefined, undefined, undefined, undefined, undefined, config.changePower);
                     await this.deviceRepository.turnDevice(config.deviceId, true);
                 } else {
                     console.log(`Sensor ${sensor.name} is within normal range for condition: ${condition.condition} ${condition.threshold}`);

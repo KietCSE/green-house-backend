@@ -35,9 +35,10 @@ export class DeviceRepository implements IDeviceRepository {
         return devices;
     }
 
-    public async createDevice(id: string, name: string, feed: string,  prefixMessage: string, description: string, power: number): Promise<Device> {
+    public async createDevice(id: string, name: string, feed: string,  prefixMessage: string, description: string, power: number, type: number): Promise<Device> {
         const status = false
-        const newDevice = await prisma.device.create({ data : {id, name, feed, prefixMessage, description, power, status} })
+        if (type === 0) power = 100
+        const newDevice = await prisma.device.create({ data : {id, name, feed, prefixMessage, description, power, status, type} })
         return newDevice
     }
 
@@ -73,9 +74,7 @@ export class DeviceRepository implements IDeviceRepository {
         const feed_name = `${config.AIO_USERNAME}/feeds/${turnDevice.feed}`;
         
         if (status) {
-            var power = turnDevice.power
-            if (power === -1) power = 100
-            this.mqttRepository.publish(feed_name, turnDevice.prefixMessage + power.toString())
+            this.mqttRepository.publish(feed_name, turnDevice.prefixMessage + turnDevice.power.toString())
         } else {
             this.mqttRepository.publish(feed_name, turnDevice.prefixMessage + "0")
         }
@@ -85,10 +84,11 @@ export class DeviceRepository implements IDeviceRepository {
         return turnDevice;
     }
 
-    public async updateDevice(id: string, status?: boolean, name?: string, feed?: string, prefixMessage?: string, description?: string, power? :number): Promise<Device> {
+    public async updateDevice(id: string, status?: boolean, name?: string, feed?: string, prefixMessage?: string, description?: string, power? :number, type? :number): Promise<Device> {
+        if (type && type === 0) power = 100
         const updatedDevice = await prisma.device.update({
             where: { id },
-            data: { name, status, feed, prefixMessage, description, power }
+            data: { name, status, feed, prefixMessage, description, power, type }
         });
         return updatedDevice;
     }

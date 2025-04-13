@@ -11,9 +11,9 @@ export class ConfigUseCase {
     }
 
     public async createConfig(req: Request, res: Response) {
-        const { name, description, deviceId} = req.body
+        const { name, description, deviceId, changePower} = req.body
 
-        const newConfig= await this.configRepository.createConfig(name, description, deviceId)
+        const newConfig= await this.configRepository.createConfig(name, description, deviceId, changePower)
         return res.status(200).json({ status: true, message: "Config created successfully" , data: newConfig})
     }
 

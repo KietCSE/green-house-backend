@@ -1,8 +1,10 @@
 import { ConditionWithAuto, IConfigRepository, SchedulerWithConfig } from "../../domain/repositories/config-repository"
 import { Configuration, SchedulerConfig, AutomationConfig, Condition } from "@prisma/client";
 import prisma from '../../config/prisma-config'
+import { DeviceRepository } from "./prisma-device-repository";
 
 export class ConfigRepository implements IConfigRepository {
+    private deviceRepository = new DeviceRepository()
     public async findConditionBySensor(subject: string): Promise<ConditionWithAuto[] | null> {
         return await prisma.condition.findMany({
             where: {
@@ -40,20 +42,29 @@ export class ConfigRepository implements IConfigRepository {
         return config
     }
 
-    public async createConfig(name: string, description: string, deviceId: string): Promise<Configuration> {
+    public async createConfig(name: string, description: string, deviceId: string, changePower: number): Promise<Configuration> {
         const action = false
+
+        const device = await this.deviceRepository.findDeviceBySubject(deviceId)
+
+        if (!device) throw new Error(`Device with ID ${deviceId} does not exist.`);
+
+        var defaultPower = device.power;
+        if (!device.status) defaultPower = 0;
+
         const newConfig = await prisma.configuration.create({
-            data: { name, description, action, deviceId }
+            data: { name, description, action, deviceId, defaultPower, changePower}
         })
         return newConfig
     }
 
-    public async updateConfig(configId: number, name?: string, description?: string): Promise<Configuration> {
+    public async updateConfig(configId: number, name?: string, description?: string, changePower?: number): Promise<Configuration> {
         const updatedConfig = await prisma.configuration.update({
             where: { id: configId },
             data: {
                 name: name,
-                description: description
+                description: description,
+                changePower: changePower
             }
         })
         return updatedConfig
@@ -160,10 +171,6 @@ export class ConfigRepository implements IConfigRepository {
             where: { id: configId },
             data: { action }
         })
-
-        if (action) {
-
-        }
 
         return updatedConfig
     }

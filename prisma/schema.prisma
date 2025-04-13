@@ -62,8 +62,9 @@ model Device {
   feed          String
   prefixMessage String
   description   String
-  power         Float //0.1, 0.65, 0.7
+  power         Float //0 .. 100
   status        Boolean //true is on, false is off
+  type          Int             @default(0)
   DeviceHistory DeviceHistory[]
   Configuration Configuration[]
 }
@@ -89,6 +90,8 @@ model Configuration {
   action           Boolean // true is turn on, false is turn off 
   device           Device            @relation(fields: [deviceId], references: [id], onDelete: Cascade)
   deviceId         String
+  defaultPower     Int               @default(100)
+  changePower      Int               @default(100)
   schedulerConfig  SchedulerConfig? // Quan hệ one-to-one với SchedulerConfig
   automationConfig AutomationConfig? // Quan hệ one-to-one với AutomationConfig
 }
