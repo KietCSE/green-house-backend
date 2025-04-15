@@ -19,8 +19,8 @@ export class ConfigUseCase {
 
     public async updateConfig(req: Request, res: Response) {
         const { subject } = req.params;
-        const { name, description } = req.body;
-        const updatedConfig = await this.configRepository.updateConfig(Number(subject), name, description);
+        const { name, description, changePower } = req.body;
+        const updatedConfig = await this.configRepository.updateConfig(Number(subject), name, description, changePower);
         return res.status(200).json({ status: true, message: "Config updated successfully", data: updatedConfig });
     }
 

@@ -409,6 +409,12 @@ paths:
                         deviceId:
                           type: string
                           example: "device123"
+                        changePower:
+                          type: number
+                          example: 50
+                        defaultPower:
+                          type: number
+                          example: 100
                         schedulerConfig:
                           type: object
                           nullable: true
@@ -517,6 +523,12 @@ paths:
                       deviceId:
                         type: string
                         example: "device123"
+                      changePower:
+                        type: number
+                        example: 50
+                      defaultPower:
+                        type: number
+                        example: 100
                       schedulerConfig:
                         type: object
                         nullable: true
@@ -615,6 +627,12 @@ paths:
                       deviceId:
                         type: string
                         example: "device123"
+                      changePower:
+                        type: number
+                        example: 50
+                      defaultPower:
+                        type: number
+                        example: 100
                       schedulerConfig:
                         type: object
                         nullable: true
@@ -722,6 +740,12 @@ paths:
                       deviceId:
                         type: string
                         example: "DEV-001"
+                      changePower:
+                        type: number
+                        example: 50
+                      defaultPower:
+                        type: number
+                        example: 100
         '400':
           description: Invalid request data
         '404':
