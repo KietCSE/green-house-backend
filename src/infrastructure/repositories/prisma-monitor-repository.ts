@@ -115,6 +115,9 @@ export class MonitorRepository implements IMonitorRepository {
             const feedIsCreated = await prisma.monitoringSubject.findFirst({ where: { feed, delete: false } })
             if (feedIsCreated) throw Error("This feed has already been existed")
 
+            const sameFeedName = await prisma.monitoringSubject.findFirst({ where: { name, delete: false } })
+            if (sameFeedName) throw Error("This feed name has already been existed")
+
             const isSaved = await prisma.monitoringSubject.create({
                 data: {
                     name,

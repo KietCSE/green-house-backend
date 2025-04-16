@@ -19,7 +19,7 @@ export class HistoryRepository implements IHistoryRepository {
         pageSize: number,
         startDate: Date | null,
         endDate: Date | null,
-        indexOfDevice: string | null,
+        deviceName: string | null,
         actionInfo: string | null
     ): Promise<{ data: any[]; total: number } | null> {
         try {
@@ -31,8 +31,13 @@ export class HistoryRepository implements IHistoryRepository {
                 if (endDate) where.date.lte = endDate
             }
 
-            if (indexOfDevice) {
-                where.deviceId = indexOfDevice
+            if (deviceName) {
+                where.device = {
+                    name: {
+                        contains: deviceName,
+                        mode: 'insensitive' // Không phân biệt hoa thường
+                    }
+                };
             }
 
             if (actionInfo) {
@@ -49,7 +54,8 @@ export class HistoryRepository implements IHistoryRepository {
                     select: {
                         info: true,
                         date: true,
-                        deviceId: true
+                        deviceId: true,
+                        device: { select: { name: true } }
                     },
                     orderBy: { date: 'desc' }
                 }),

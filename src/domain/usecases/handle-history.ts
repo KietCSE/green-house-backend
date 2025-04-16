@@ -9,7 +9,7 @@ export class HandleHistoryUseCase {
         pageSize: number,
         startDate: Date | null,
         endDate: Date | null,
-        IdOfDevice: string | null,
+        name: string | null,
         actionInfo: string | null
     ): Promise<any | null> {
         const data = await this.historyRepository.findAllHistory(
@@ -17,7 +17,7 @@ export class HandleHistoryUseCase {
             pageSize,
             startDate,
             endDate,
-            IdOfDevice,
+            name,
             actionInfo
         )
         return data

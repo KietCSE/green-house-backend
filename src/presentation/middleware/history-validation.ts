@@ -24,10 +24,10 @@ export const LoadHistoryDeviceValidation: ValidationChain[] = [
         .optional()
         .isISO8601()
         .withMessage("endDate must be a valid date in ISO 8601 format (e.g., YYYY-MM-DD or YYYY-MM-DDTHH:mm:ssZ)"),
-    query("deviceId")
+    query("deviceName")
         .optional()
         .isString()
-        .withMessage("deviceId must be a valid string"),
+        .withMessage("deviceName must be a valid string"),
     query("typeAction")
         .optional()
         .isIn(Object.values(DeviceHistoryInfo))
