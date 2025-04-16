@@ -48,6 +48,7 @@ export class ConfigSchedulerUseCase {
                     await this.configRepository.updateConfig(id, undefined, undefined, undefined, device.power);
                     await this.deviceRepository.updateDevice(configuration.deviceId.toString(), undefined, undefined, undefined, undefined, undefined, configuration.changePower);
                     await this.deviceRepository.turnDevice(configuration.deviceId.toString(), true);
+                    await this.deviceRepository.setScheduledStatus(configuration.deviceId.toString(), true);
                     
                     const notification = new NotificationSchedule(
                       device.name ?? "Không xác định",
@@ -64,7 +65,7 @@ export class ConfigSchedulerUseCase {
                     console.log(`Device ${configuration.deviceId} turned ON at ${start}`);
                 }
                   
-                if (isEndTime) {
+                if (isEndTime && device.isScheduled) {
                     // Tắt thiết bị
                     if (configuration.defaultPower === 0) {
                         await this.deviceRepository.turnDevice(configuration.deviceId.toString(), false);
