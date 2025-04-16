@@ -15,15 +15,13 @@ export class DeviceUsecase {
     }
 
     public async createDevice(req: Request, res: Response) {
-        const { id, name, feed, prefixMessage, description, power, type } = req.body
-        const deviceById = await this.deviceRepository.findDeviceBySubject(id)
-        if (deviceById) return res.status(409).json({ status: false, message: "Device's Id already exists" })
+        const { name, feed, prefixMessage, description, power, type } = req.body
 
         const deviceByName = await this.deviceRepository.findDeviceBySubject(name)
         if (deviceByName) return res.status(409).json({ status: false, message: "Device's name already exists" })
 
         // Tạo device khi không trùng lặp id và name
-        const newDevice = await this.deviceRepository.createDevice(id, name, feed, prefixMessage, description, power, type)
+        const newDevice = await this.deviceRepository.createDevice(name, feed, prefixMessage, description, power, type)
         return res.status(200).json({ status: true, message: "Device created successfully", data: newDevice })
     }
 
