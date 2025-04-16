@@ -59,97 +59,130 @@ paths:
     get:
       tags:
         - notification
-      summary: Poll for notifications
+      summary: Poll for all types of notifications
       description: >
-        Checks for notifications. Calls the Polling API when the user is active to retrieve notifications, with each polling request returning only one notification.
-        - If there is data: `status` = true and the information is returned in `data`.
-        - If there is no data: `status` = false and `data` is set to `null`.
+        Checks for notifications from multiple sources (general, auto-triggered, and scheduled).
+        Returns a list of notifications, each with a `type` field indicating its source (`Auto`, `Scheduler`, or `Data`).
+        - If there is data: `status` = true and the information is returned in `data` as an array.
+        - If there is no data: `status` = false and `data` is an empty array.
       responses:
         '200':
           description: Successful response
           content:
             application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Indicates if notifications were found
+                  data:
+                    type: array
+                    items:
+                      oneOf:
+                        - $ref: '#/components/schemas/AutoNotification'
+                        - $ref: '#/components/schemas/SchedulerNotification'
+                        - $ref: '#/components/schemas/DataNotification'
               examples:
                 SuccessExample:
                   value:
                     status: true
                     data:
-                      id: 22
-                      date: "2025-04-09T00:00:38.338Z"
-                      description: "test alert send mail"
-                      lowerbound: 0
-                      upperbound: 5
-                      unit: "%"
-                      value: 15
-                      name: "nhiet do"
+                      - id: 1
+                        date: "2025-04-16T13:55:35.536Z"
+                        description: "test alert send mail"
+                        lowerbound: 0
+                        upperbound: 5
+                        unit: "%"
+                        value: 10
+                        name: "do am cua dat"
+                        type: "Data"
+                      - deviceName: "Thermostat"
+                        deviceDescription: "Controls temperature"
+                        configDescription: "Turn on thermostat at 10:00"
+                        scheduleStart: "10:00"
+                        scheduleEnd: "12:00"
+                        repetition: "daily"
+                        type: "Scheduler"
+                      - id: 2
+                        date: "2025-04-16T14:00:00.000Z"
+                        description: "General alert"
+                        lowerbound: 10
+                        upperbound: 20
+                        unit: "°C"
+                        value: 25
+                        name: "nhiet do"
+                        type: "Auto"
                 FailureExample:
                   value:
                     status: false
-                    data: null
-  /notification/device/schedule/poll:
-    get:
-      tags:
-        - notification
-      summary: Poll for scheduled configuration notifications
-      description: >
-        Checks for scheduled configuration notifications. 
-        Each polling request returns at most one matching schedule (if any).
+                    data: []
+
+
+  # /notification/device/schedule/poll:
+  #   get:
+  #     tags:
+  #       - notification
+  #     summary: Poll for scheduled configuration notifications
+  #     description: >
+  #       Checks for scheduled configuration notifications. 
+  #       Each polling request returns at most one matching schedule (if any).
         
-        - If there is data: `status = true` and detailed information is returned in `data`.
-        - If there is no data: `status = false` and `data = null`.
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              examples:
-                SuccessExample:
-                  value:
-                    status: true
-                    data:
-                      deviceName: "Thermostat"
-                      deviceDescription: "Controls temperature"
-                      configDescription: "Turn on thermostat at 10:00"
-                      scheduleStart: "10:00"
-                      scheduleEnd: "12:00"
-                      repetition: "daily"
-                FailureExample:
-                  value:
-                    status: false
-                    data: null
+  #       - If there is data: `status = true` and detailed information is returned in `data`.
+  #       - If there is no data: `status = false` and `data = null`.
+  #     responses:
+  #       '200':
+  #         description: Successful response
+  #         content:
+  #           application/json:
+  #             examples:
+  #               SuccessExample:
+  #                 value:
+  #                   status: true
+  #                   data:
+  #                     deviceName: "Thermostat"
+  #                     deviceDescription: "Controls temperature"
+  #                     configDescription: "Turn on thermostat at 10:00"
+  #                     scheduleStart: "10:00"
+  #                     scheduleEnd: "12:00"
+  #                     repetition: "daily"
+  #               FailureExample:
+  #                 value:
+  #                   status: false
+  #                   data: null
 
-  /notification/device/auto/poll:
-    get:
-      tags:
-        - notification
-      summary: Poll for automatic configuration notifications
-      description: >
-        Checks for auto-triggered notifications based on sensor conditions.
-        Each polling request returns at most one matched auto-config event (if any).
+  # /notification/device/auto/poll:
+  #   get:
+  #     tags:
+  #       - notification
+  #     summary: Poll for automatic configuration notifications
+  #     description: >
+  #       Checks for auto-triggered notifications based on sensor conditions.
+  #       Each polling request returns at most one matched auto-config event (if any).
 
-        - If there is data: `status = true` and `data` contains notification detail.
-        - If there is no data: `status = false` and `data = null`.
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              examples:
-                SuccessExample:
-                  value:
-                    status: true
-                    data:
-                      deviceName: "Thermostat"
-                      deviceDescription: "Controls temperature"
-                      configDescription: "Turn on thermostat at 10:00"
-                      conditionDescription: "Device 001 exceeds threshold"
-                      conditionOperator: ">"
-                      conditionThreshold: "50"
-                      currentValue: 100
-                FailureExample:
-                  value:
-                    status: false
-                    data: null
+  #       - If there is data: `status = true` and `data` contains notification detail.
+  #       - If there is no data: `status = false` and `data = null`.
+  #     responses:
+  #       '200':
+  #         description: Successful response
+  #         content:
+  #           application/json:
+  #             examples:
+  #               SuccessExample:
+  #                 value:
+  #                   status: true
+  #                   data:
+  #                     deviceName: "Thermostat"
+  #                     deviceDescription: "Controls temperature"
+  #                     configDescription: "Turn on thermostat at 10:00"
+  #                     conditionDescription: "Device 001 exceeds threshold"
+  #                     conditionOperator: ">"
+  #                     conditionThreshold: "50"
+  #                     currentValue: 100
+  #               FailureExample:
+  #                 value:
+  #                   status: false
+  #                   data: null
 
   /notification/status/{id}:
     patch:
@@ -190,3 +223,125 @@ paths:
                   value:
                     status: false
                     message: "Failed to update notification status"
+  
+components:
+  schemas:
+    AutoNotification:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the notification
+        date:
+          type: string
+          format: date-time
+          description: Timestamp of the notification
+        description:
+          type: string
+          description: Description of the notification
+        lowerbound:
+          type: number
+          description: Lower bound of the monitored value
+        upperbound:
+          type: number
+          description: Upper bound of the monitored value
+        unit:
+          type: string
+          description: Unit of the monitored value
+        value:
+          type: number
+          description: Current value of the monitored parameter
+        name:
+          type: string
+          description: Name of the monitored parameter
+        type:
+          type: string
+          enum: ["Auto"]
+          description: Type of the notification
+      required:
+        - id
+        - date
+        - description
+        - lowerbound
+        - upperbound
+        - unit
+        - value
+        - name
+        - type
+
+    SchedulerNotification:
+      type: object
+      properties:
+        deviceName:
+          type: string
+          description: Name of the device
+        deviceDescription:
+          type: string
+          description: Description of the device
+        configDescription:
+          type: string
+          description: Description of the configuration
+        scheduleStart:
+          type: string
+          description: Start time of the schedule
+        scheduleEnd:
+          type: string
+          description: End time of the schedule
+        repetition:
+          type: string
+          description: Repetition pattern of the schedule
+        type:
+          type: string
+          enum: ["Scheduler"]
+          description: Type of the notification
+      required:
+        - deviceName
+        - deviceDescription
+        - configDescription
+        - scheduleStart
+        - scheduleEnd
+        - repetition
+        - type
+
+    DataNotification:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the notification
+        date:
+          type: string
+          format: date-time
+          description: Timestamp of the notification
+        description:
+          type: string
+          description: Description of the notification
+        lowerbound:
+          type: number
+          description: Lower bound of the monitored value
+        upperbound:
+          type: number
+          description: Upper bound of the monitored value
+        unit:
+          type: string
+          description: Unit of the monitored value
+        value:
+          type: number
+          description: Current value of the monitored parameter
+        name:
+          type: string
+          description: Name of the monitored parameter
+        type:
+          type: string
+          enum: ["Data"]
+          description: Type of the notification
+      required:
+        - id
+        - date
+        - description
+        - lowerbound
+        - upperbound
+        - unit
+        - value
+        - name
+        - type

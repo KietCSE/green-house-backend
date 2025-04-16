@@ -22,7 +22,7 @@ export class NotifyUseCase {
         return updated
     }
 
-    public pollingNotification(): any | null {
+    public pollingNotification(): any[] {
         let arrayData = []
 
         let cachedata = CacheNotification.getInstance().pop()
@@ -37,15 +37,15 @@ export class NotifyUseCase {
         return arrayData
     }
 
-    public pollingNotificationDevice(): NotificationDevice | null {
-        const data = CacheNotificationDevice.getInstance().pop()
-        return data
-    }
+    // public pollingNotificationDevice(): NotificationDevice | null {
+    //     const data = CacheNotificationDevice.getInstance().pop()
+    //     return data
+    // }
 
-    public pollingNotificationScheduler(): NotificationSchedule | null {
-        const data = CacheNotificationScheduler.getInstance().pop()
-        return data
-    }
+    // public pollingNotificationScheduler(): NotificationSchedule | null {
+    //     const data = CacheNotificationScheduler.getInstance().pop()
+    //     return data
+    // }
 }
 
 
