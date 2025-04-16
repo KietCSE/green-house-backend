@@ -1,6 +1,6 @@
 
 export interface IHistoryRepository {
-    createHistory(info: string, deviceId: string): Promise<boolean | null>
+    createHistory(info: string, deviceId: number): Promise<boolean | null>
     findAllHistory(
         page: number,
         pageSize: number,

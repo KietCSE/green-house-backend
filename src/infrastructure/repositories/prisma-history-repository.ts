@@ -4,7 +4,7 @@ import prisma from '../../config/prisma-config'
 import { DeviceHistoryInfo } from "@prisma/client";
 
 export class HistoryRepository implements IHistoryRepository {
-    public async createHistory(info: DeviceHistoryInfo, deviceId: string): Promise<boolean | null> {
+    public async createHistory(info: DeviceHistoryInfo, deviceId: number): Promise<boolean | null> {
         try {
             const newHistory = await prisma.deviceHistory.create({ data: { info, deviceId } })
             return true

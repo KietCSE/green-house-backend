@@ -30,20 +30,24 @@ export class ConfigSchedulerUseCase {
 
             for (const config of configs) {
                 const { id, start, end, configuration, repitation } = config;
-                if (!configuration.action) continue ;
+                if (!configuration.action) {
+                    continue;
+                }
                 if (!repitation || repitation.length === 0 || !repitation.includes(today)) {
                     continue;
                 }
                 const isStartTime = currentTime === start;
                 const isEndTime = currentTime === end;
                 
-                const device = await this.deviceRepository.findDeviceBySubject(configuration.deviceId);
-                if (device === null) continue;
+                const device = await this.deviceRepository.findDeviceBySubject(configuration.deviceId.toString());
+                if (device === null) {continue;}
+                console.log(device.id, isStartTime, isEndTime, device.status)
 
-                if (isStartTime && device.status === false) {
+                if (isStartTime) {
                     // Bật thiết bị
-                    await this.deviceRepository.updateDevice(configuration.deviceId, undefined, undefined, undefined, undefined, undefined, configuration.changePower);
-                    await this.deviceRepository.turnDevice(configuration.deviceId, true);
+                    await this.configRepository.updateConfig(id, undefined, undefined, undefined, device.power);
+                    await this.deviceRepository.updateDevice(configuration.deviceId.toString(), undefined, undefined, undefined, undefined, undefined, configuration.changePower);
+                    await this.deviceRepository.turnDevice(configuration.deviceId.toString(), true);
                     
                     const notification = new NotificationSchedule(
                       device.name ?? "Không xác định",
@@ -60,13 +64,13 @@ export class ConfigSchedulerUseCase {
                     console.log(`Device ${configuration.deviceId} turned ON at ${start}`);
                 }
                   
-                if (isEndTime && device.status === true) {
+                if (isEndTime) {
                     // Tắt thiết bị
                     if (configuration.defaultPower === 0) {
-                        await this.deviceRepository.turnDevice(configuration.deviceId, false);
+                        await this.deviceRepository.turnDevice(configuration.deviceId.toString(), false);
                     } else {
-                        await this.deviceRepository.updateDevice(configuration.deviceId, undefined, undefined, undefined, undefined, undefined, configuration.defaultPower);
-                        await this.deviceRepository.turnDevice(configuration.deviceId, true);
+                        await this.deviceRepository.updateDevice(configuration.deviceId.toString(), undefined, undefined, undefined, undefined, undefined, configuration.defaultPower);
+                        await this.deviceRepository.turnDevice(configuration.deviceId.toString(), true);
                     }
                     console.log(`Device ${configuration.deviceId} turned OFF at ${end}`);
                 }                  
