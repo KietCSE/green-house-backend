@@ -15,7 +15,7 @@ const configController = new ConfigController(configUsecase);
 
 const configSchedulerUseCase = new ConfigSchedulerUseCase(configRepository, deviceRepository, historyRepository, emailService)
 
-configSchedulerUseCase.startScheduler()
+// configSchedulerUseCase.startScheduler()
 
 export function createConfigController() {
     return configController;
