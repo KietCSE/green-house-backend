@@ -43,14 +43,16 @@ export class DeviceRepository implements IDeviceRepository {
 
     public async createDevice(name: string, feed: string,  prefixMessage: string, description: string, power: number, type: number): Promise<Device> {
         const status = false
+        const isScheduled = false
         if (type === 0) power = 100
-        const newDevice = await prisma.device.create({ data : {name, feed, prefixMessage, description, power, status, type} })
+        const newDevice = await prisma.device.create({ data : {name, feed, prefixMessage, description, power, status, type, isScheduled} })
         return newDevice
     }
 
     public async turnDeviceManual(subject: string, status: boolean): Promise<Device> {
         const turnedDevice = await this.turnDevice(subject, status)
         if (turnedDevice.status) await this.historyRepository.createHistory(DeviceHistoryInfo.Manual, turnedDevice.id)
+        await this.setScheduledStatus(subject, false)
         return turnedDevice
     }
 
@@ -86,7 +88,7 @@ export class DeviceRepository implements IDeviceRepository {
         }
 
         console.log("Device turn:", turnDevice.id, status)
-
+        await this.setScheduledStatus(subject, false)
         return turnDevice;
     }
 
@@ -105,6 +107,22 @@ export class DeviceRepository implements IDeviceRepository {
             return deletedDevice;
         } catch (error) {
             return null;
+        }
+    }
+
+    public async setScheduledStatus(id: string, status: boolean) {
+        try {
+            const setScheduledDevice = await prisma.device.update({
+                where: { 
+                    id: parseInt(id, 10)
+                },
+                data: {
+                    isScheduled: status
+                }
+            })
+            return setScheduledDevice;
+        } catch (error) {
+            throw new Error("Can not set scheduled");
         }
     }
 }
