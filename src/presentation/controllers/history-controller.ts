@@ -8,13 +8,13 @@ export class HistoryDeviceController {
 
     public async getAllHistoryDevice(req: Request, res: Response, next: NextFunction) {
         try {
-            const { page, pageSize, startDate, endDate, deviceId, typeAction } = req.query
+            const { page, pageSize, startDate, endDate, deviceName, typeAction } = req.query
 
             const pageNumber = page ? parseInt(page as string, 10) : 1
             const pageSizeNumber = pageSize ? parseInt(pageSize as string, 10) : 20
             const startDateObj = startDate ? new Date(startDate as string) : null
             const endDateObj = endDate ? new Date(endDate as string) : null
-            const IdOfDevice = deviceId ? String(deviceId) : null
+            const name = deviceName ? String(deviceName) : null
             const actionInfo = typeAction ? String(typeAction) : null
 
             let listMonitor = await this.handleHistoryUseCase.loadHistoryDevice(
@@ -22,7 +22,7 @@ export class HistoryDeviceController {
                 pageSizeNumber,
                 startDateObj,
                 endDateObj,
-                IdOfDevice,
+                name,
                 actionInfo
             )
 

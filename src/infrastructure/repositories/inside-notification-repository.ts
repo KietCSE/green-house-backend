@@ -1,6 +1,12 @@
 import { ICacheNotification } from './../../domain/repositories/cache-notification-repository'
 import { NotificationInfo } from '../../presentation/dtos/notification'
 
+enum NotificationType {
+    Auto = 'Auto',
+    Scheduler = 'Scheduler',
+    Data = 'Data'
+}
+
 // Queue to store notifications which will be sent to user 
 export class CacheNotification implements ICacheNotification {
 

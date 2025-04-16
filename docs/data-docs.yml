@@ -176,13 +176,13 @@ paths:
             type: string
             format: date-time
             example: "2025-04-10"
-        - name: deviceId
+        - name: deviceName
           in: query
-          description: Device ID to filter records (e.g., a unique string identifier for the device)
+          description: Device name to filter records (e.g., a unique string identifier for the device)
           required: false
           schema:
             type: string
-            example: "DEV-001"
+            example: "Fan"
         - name: typeAction
           in: query
           description: Type of action to filter records (must be one of Auto, Scheduler, Manual)

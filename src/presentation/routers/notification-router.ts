@@ -22,13 +22,13 @@ router.get('/poll', (req: Request, res: Response, next: NextFunction) => {
     notificationController.pollingNotification(req, res, next)
 })
 
-router.get('/device/auto/poll', (req: Request, res: Response, next: NextFunction) => {
-    notificationController.pollingNotificationDevice(req, res, next)
-})
+// router.get('/device/auto/poll', (req: Request, res: Response, next: NextFunction) => {
+//     notificationController.pollingNotificationDevice(req, res, next)
+// })
 
-router.get('/device/schedule/poll', (req: Request, res: Response, next: NextFunction) => {
-    notificationController.pollingNotificationSchedule(req, res, next)
-})
+// router.get('/device/schedule/poll', (req: Request, res: Response, next: NextFunction) => {
+//     notificationController.pollingNotificationSchedule(req, res, next)
+// })
 
 
 export default router

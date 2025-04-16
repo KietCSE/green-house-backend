@@ -6,7 +6,7 @@ export interface IHistoryRepository {
         pageSize: number,
         startDate: Date | null,
         endDate: Date | null,
-        indexOfDevice: string | null,
+        name: string | null,
         actionInfo: string | null
     ): Promise<{ data: any[]; total: number } | null>
 }

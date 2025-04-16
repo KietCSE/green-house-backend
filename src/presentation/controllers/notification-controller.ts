@@ -41,7 +41,7 @@ export class NotificationController {
     public async pollingNotification(req: Request, res: Response, next: NextFunction) {
         try {
             const data = this.notifyUseCase.pollingNotification()
-            if (data)
+            if (data.length > 0)
                 res.status(200).json({ status: true, data })
             else
                 res.status(200).json({ status: false, data })
@@ -51,30 +51,30 @@ export class NotificationController {
         }
     }
 
-    public async pollingNotificationDevice(req: Request, res: Response, next: NextFunction) {
-        try {
-            const data = this.notifyUseCase.pollingNotificationDevice()
-            if (data)
-                res.status(200).json({ status: true, data })
-            else
-                res.status(200).json({ status: false, data })
-        }
-        catch (error) {
-            next(error)
-        }
-    }
+    // public async pollingNotificationDevice(req: Request, res: Response, next: NextFunction) {
+    //     try {
+    //         const data = this.notifyUseCase.pollingNotificationDevice()
+    //         if (data)
+    //             res.status(200).json({ status: true, data })
+    //         else
+    //             res.status(200).json({ status: false, data })
+    //     }
+    //     catch (error) {
+    //         next(error)
+    //     }
+    // }
 
-    public async pollingNotificationSchedule(req: Request, res: Response, next: NextFunction) {
-        try {
-            const data = this.notifyUseCase.pollingNotificationScheduler()
-            if (data)
-                res.status(200).json({ status: true, data })
-            else
-                res.status(200).json({ status: false, data })
-        }
-        catch (error) {
-            next(error)
-        }
-    }
+    // public async pollingNotificationSchedule(req: Request, res: Response, next: NextFunction) {
+    //     try {
+    //         const data = this.notifyUseCase.pollingNotificationScheduler()
+    //         if (data)
+    //             res.status(200).json({ status: true, data })
+    //         else
+    //             res.status(200).json({ status: false, data })
+    //     }
+    //     catch (error) {
+    //         next(error)
+    //     }
+    // }
 
 }

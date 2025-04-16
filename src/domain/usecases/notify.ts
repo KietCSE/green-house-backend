@@ -22,20 +22,30 @@ export class NotifyUseCase {
         return updated
     }
 
-    public pollingNotification(): NotificationInfo | null {
-        const data = CacheNotification.getInstance().pop()
-        return data
+    public pollingNotification(): any[] {
+        let arrayData = []
+
+        let cachedata = CacheNotification.getInstance().pop()
+        if (cachedata) arrayData.push({ ...cachedata, type: "Data" })
+
+        const cachedevice = CacheNotificationDevice.getInstance().pop()
+        if (cachedevice) arrayData.push({ ...cachedevice, type: "Auto" })
+
+        const cachescheduler = CacheNotificationScheduler.getInstance().pop()
+        if (cachescheduler) arrayData.push({ ...cachescheduler, type: "Auto" })
+
+        return arrayData
     }
 
-    public pollingNotificationDevice(): NotificationDevice | null {
-        const data = CacheNotificationDevice.getInstance().pop()
-        return data
-    }
+    // public pollingNotificationDevice(): NotificationDevice | null {
+    //     const data = CacheNotificationDevice.getInstance().pop()
+    //     return data
+    // }
 
-    public pollingNotificationScheduler(): NotificationSchedule | null {
-        const data = CacheNotificationScheduler.getInstance().pop()
-        return data
-    }
+    // public pollingNotificationScheduler(): NotificationSchedule | null {
+    //     const data = CacheNotificationScheduler.getInstance().pop()
+    //     return data
+    // }
 }
 
 
