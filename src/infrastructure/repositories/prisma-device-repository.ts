@@ -10,12 +10,18 @@ export class DeviceRepository implements IDeviceRepository {
     private historyRepository = new HistoryRepository();
 
     public async findDeviceBySubject(subject: string): Promise<Device | null> {
+        const id = parseInt(subject, 10);
+            // Tạo mảng điều kiện tìm kiếm
+        const conditions = [];
+        if (!isNaN(id)) {
+            conditions.push({ id });
+        } else {
+            conditions.push({ name: subject });
+        }
+        
         const device = await prisma.device.findFirst({  // Có thể tìm theo Id và tên
             where: { 
-                OR: [
-                    { id: subject },   // Tìm theo ID
-                    { name: subject }  // Tìm theo tên
-                ]
+                OR: conditions
             },
             include: {
                 Configuration: false,
@@ -35,10 +41,10 @@ export class DeviceRepository implements IDeviceRepository {
         return devices;
     }
 
-    public async createDevice(id: string, name: string, feed: string,  prefixMessage: string, description: string, power: number, type: number): Promise<Device> {
+    public async createDevice(name: string, feed: string,  prefixMessage: string, description: string, power: number, type: number): Promise<Device> {
         const status = false
         if (type === 0) power = 100
-        const newDevice = await prisma.device.create({ data : {id, name, feed, prefixMessage, description, power, status, type} })
+        const newDevice = await prisma.device.create({ data : {name, feed, prefixMessage, description, power, status, type} })
         return newDevice
     }
 
@@ -52,7 +58,7 @@ export class DeviceRepository implements IDeviceRepository {
         const updateDevice = await prisma.device.findFirst({
             where: { 
                 OR: [
-                    { id: subject },  
+                    { id: parseInt(subject, 10) },  
                     { name: subject }
                 ]
             }
@@ -87,7 +93,7 @@ export class DeviceRepository implements IDeviceRepository {
     public async updateDevice(id: string, status?: boolean, name?: string, feed?: string, prefixMessage?: string, description?: string, power? :number, type? :number): Promise<Device> {
         if (type && type === 0) power = 100
         const updatedDevice = await prisma.device.update({
-            where: { id },
+            where: { id: parseInt(id, 10) },
             data: { name, status, feed, prefixMessage, description, power, type }
         });
         return updatedDevice;
@@ -95,7 +101,7 @@ export class DeviceRepository implements IDeviceRepository {
 
     public async deleteDevice(id: string): Promise<Device | null> {
         try {
-            const deletedDevice = await prisma.device.delete({ where: { id } });
+            const deletedDevice = await prisma.device.delete({ where: { id: parseInt(id, 10) } });
             return deletedDevice;
         } catch (error) {
             return null;

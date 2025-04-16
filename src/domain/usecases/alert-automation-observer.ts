@@ -56,7 +56,7 @@ export class AlertAutomationObserver implements IObserver {
 
                     if (!config.action) continue;
 
-                    const device = await this.deviceRepository.findDeviceBySubject(config.deviceId);
+                    const device = await this.deviceRepository.findDeviceBySubject(config.deviceId.toString());
                     if (!device) {
                         console.error(`Device not found for ID: ${config.deviceId}`);
                         return;
@@ -74,8 +74,8 @@ export class AlertAutomationObserver implements IObserver {
                     CacheNotificationDevice.getInstance().push(notification)
                     await this.mailService.SendEmailConfigToAllUser(notification);
                     await this.histotyRepository.createHistory(DeviceHistoryInfo.Auto, config.deviceId);
-                    await this.deviceRepository.updateDevice(config.deviceId, undefined, undefined, undefined, undefined, undefined, config.changePower);
-                    await this.deviceRepository.turnDevice(config.deviceId, true);
+                    await this.deviceRepository.updateDevice(config.deviceId.toString(), undefined, undefined, undefined, undefined, undefined, config.changePower);
+                    await this.deviceRepository.turnDevice(config.deviceId.toString(), true);
                 } else {
                     console.log(`Sensor ${sensor.name} is within normal range for condition: ${condition.condition} ${condition.threshold}`);
                 }

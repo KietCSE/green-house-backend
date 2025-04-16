@@ -27,7 +27,7 @@ export class ConfigRepository implements IConfigRepository {
     public async findAllConfigsBySubject(subject: string): Promise<Configuration[] | null> {
         const config = await prisma.configuration.findMany({
             where: {
-                deviceId: subject
+                deviceId: parseInt(subject, 10)
             },
             include: {
                 device: false,
@@ -53,18 +53,19 @@ export class ConfigRepository implements IConfigRepository {
         if (!device.status) defaultPower = 0;
 
         const newConfig = await prisma.configuration.create({
-            data: { name, description, action, deviceId, defaultPower, changePower}
+            data: { name, description, action, deviceId: parseInt(deviceId, 10), defaultPower, changePower}
         })
         return newConfig
     }
 
-    public async updateConfig(configId: number, name?: string, description?: string, changePower?: number): Promise<Configuration> {
+    public async updateConfig(configId: number, name?: string, description?: string, changePower?: number, defaultPower?: number): Promise<Configuration> {
         const updatedConfig = await prisma.configuration.update({
             where: { id: configId },
             data: {
                 name: name,
                 description: description,
-                changePower: changePower
+                changePower: changePower,
+                defaultPower
             }
         })
         return updatedConfig
