@@ -32,7 +32,7 @@ export class NotifyUseCase {
         if (cachedevice) arrayData.push({ ...cachedevice, type: "Auto" })
 
         const cachescheduler = CacheNotificationScheduler.getInstance().pop()
-        if (cachescheduler) arrayData.push({ ...cachescheduler, type: "Auto" })
+        if (cachescheduler) arrayData.push({ ...cachescheduler, type: "Scheduler" })
 
         return arrayData
     }
