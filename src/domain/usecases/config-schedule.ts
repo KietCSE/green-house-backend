@@ -19,7 +19,7 @@ export class ConfigSchedulerUseCase {
         console.log("Scheduler started...");
 
         // Chạy mỗi phút để kiểm tra lịch trình
-        schedule.scheduleJob("* * * * *", async () => {
+        schedule.scheduleJob("*/5 * * * * *", async () => {
             console.log("Checking scheduler configs...");
             const now = new Date();
             const currentTime = now.toTimeString().slice(0, 5); // Lấy HH:MM
@@ -30,7 +30,9 @@ export class ConfigSchedulerUseCase {
 
             for (const config of configs) {
                 const { id, start, end, configuration, repitation } = config;
-                if (!configuration.action) continue ;
+                if (!configuration.action) {
+                    continue;
+                }
                 if (!repitation || repitation.length === 0 || !repitation.includes(today)) {
                     continue;
                 }
@@ -38,7 +40,8 @@ export class ConfigSchedulerUseCase {
                 const isEndTime = currentTime === end;
                 
                 const device = await this.deviceRepository.findDeviceBySubject(configuration.deviceId);
-                if (device === null) continue;
+                if (device === null) {continue;}
+                console.log(device.id, isStartTime, isEndTime, device.status)
 
                 if (isStartTime && device.status === false) {
                     // Bật thiết bị
