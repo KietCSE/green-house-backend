@@ -32,8 +32,10 @@ export class MonitorController {
         try {
             const { alertDes, alertupperbound, alertlowerbound, status, email } = req.body
             const id: number = Number(req.params.id)
+            const intUpper = parseInt(alertupperbound, 10)
+            const intLower = parseInt(alertlowerbound, 10)
 
-            await this.alertUseCase.setAlertInformation(id, alertDes, alertupperbound, alertlowerbound, status, email)
+            await this.alertUseCase.setAlertInformation(id, alertDes, intUpper, intLower, status, email)
             return res.status(200).json({ status: true, message: "Set alert information successfully" })
         }
         catch (error) {
