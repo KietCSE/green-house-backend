@@ -4,8 +4,11 @@ import { NotificationRepository } from "../../infrastructure/repositories/prisma
 import { EmailService } from "../../infrastructure/services/gmail";
 import { IObserver } from "../repositories/observer";
 
-
 export class AlertDataObserver implements IObserver {
+    // Map to store the last email sent time for each feed:type combination
+    private lastEmailSent: Map<string, number> = new Map();
+    // 10-minute cooldown in milliseconds
+    private readonly EMAIL_COOLDOWN = 10 * 60 * 1000;
 
     constructor(
         private monitorRepository: MonitorRepository,
@@ -14,20 +17,27 @@ export class AlertDataObserver implements IObserver {
     ) { }
 
     public async execute(data: number, feed: string): Promise<void> {
-        const isAlert = await this.monitorRepository.checkMonitor(feed, data)
+        const { isAlert, type } = await this.monitorRepository.checkMonitor(feed, data);
 
-        if (isAlert === true) {
-
-            const alert = await this.notificationRepository.saveNotification(data, feed)
+        if (isAlert === true && type) {
+            const alert = await this.notificationRepository.saveNotification(data, feed);
 
             if (alert) {
-                CacheNotification.getInstance().push(alert)
-                this.mailService.SendEmailToAllUser(alert)
-            }
+                CacheNotification.getInstance().push(alert);
 
-            // gui thong bao den trang nguoi dung 
-            console.log(`Alert for ${feed} with ${data}`)
+                // Create a composite key for feed and type
+                const compositeKey = `${feed}:${type}`;
+                const lastSent = this.lastEmailSent.get(compositeKey);
+                const currentTime = Date.now();
+
+                // Only send email if no email was sent for this feed:type in the last 10 minutes
+                if (!lastSent || currentTime - lastSent >= this.EMAIL_COOLDOWN) {
+                    this.mailService.SendEmailToAllUser(alert);
+                    this.lastEmailSent.set(compositeKey, currentTime);
+                }
+
+                console.log(`Alert for ${feed} with ${data}${type ? ` (type: ${type})` : ''}`);
+            }
         }
     }
 }
-
