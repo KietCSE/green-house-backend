@@ -65,6 +65,7 @@ model Device {
   power         Float //0 .. 100
   status        Boolean //true is on, false is off
   type          Int             @default(0)
+  isScheduled   Boolean         @default(false)
   DeviceHistory DeviceHistory[]
   Configuration Configuration[]
 }

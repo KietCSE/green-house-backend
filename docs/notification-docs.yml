@@ -104,14 +104,13 @@ paths:
                         scheduleEnd: "12:00"
                         repetition: "daily"
                         type: "Scheduler"
-                      - id: 2
-                        date: "2025-04-16T14:00:00.000Z"
-                        description: "General alert"
-                        lowerbound: 10
-                        upperbound: 20
-                        unit: "°C"
-                        value: 25
-                        name: "nhiet do"
+                      - deviceName: "Thermostat"
+                        deviceDescription: "Controls temperature"
+                        configDescription: "Turn on thermostat at 10:00"
+                        conditionDescription: "Device 001 exceeds threshold"
+                        conditionOperator: ">"
+                        conditionThreshold: "50"
+                        currentValue: 100
                         type: "Auto"
                 FailureExample:
                   value:
