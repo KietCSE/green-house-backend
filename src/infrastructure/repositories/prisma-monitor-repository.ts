@@ -31,17 +31,27 @@ export class MonitorRepository implements IMonitorRepository {
         return stringName
     }
 
-    public async checkMonitor(feed: string, data: number): Promise<boolean> {
+    public async checkMonitor(feed: string, data: number): Promise<{ isAlert: boolean; type?: string }> {
         try {
             const monitor = await prisma.monitoringSubject.findFirst({ where: { feed, delete: false } })
+
             if (!monitor) {
-                return false
+                return { isAlert: false };
             }
-            if (monitor.warning === false) return false
-            if (monitor.alertupperbound && data > monitor.alertupperbound || monitor.alertlowerbound && data < monitor.alertlowerbound) {
-                return true
+
+            if (monitor.warning === false) {
+                return { isAlert: false };
             }
-            return false
+
+            if (monitor.alertupperbound && data > monitor.alertupperbound) {
+                return { isAlert: true, type: "upperbound" };
+            }
+
+            if (monitor.alertlowerbound && data < monitor.alertlowerbound) {
+                return { isAlert: true, type: "lowerbound" };
+            }
+
+            return { isAlert: false };
         }
         catch (error) {
             throw Error("Can not check monitor")
