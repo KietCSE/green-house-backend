@@ -178,7 +178,7 @@ paths:
       tags:
         - user
       security:
-        - bearerAuth: [] 
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -217,3 +217,9 @@ paths:
                   message:
                     type: string
                     example: Update notification of user to true
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

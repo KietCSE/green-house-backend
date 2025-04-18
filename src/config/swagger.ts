@@ -14,7 +14,9 @@ const swaggerOptions = {
         },
         servers: [
             {
-                url: `https://api-smartgarden.meowstation.me/api`, // URL của server
+                // url: `https://api-smartgarden.meowstation.me/api`, // URL của server
+                url: `http://localhost:3000/api`, // URL của server
+
             },
         ],
     },
