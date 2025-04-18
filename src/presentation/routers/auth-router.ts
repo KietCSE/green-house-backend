@@ -16,7 +16,7 @@ router.post("/register",
     validationAuth, validateRequest,
     (req: Request, res: Response, next: NextFunction) => { authenticationController.register(req, res, next) })
 
-router.patch('/notify',
+router.patch('/notification',
     turnOnOffNotification, validateRequest,
     verifyToken,
     (req: Request, res: Response, next: NextFunction): any => {
