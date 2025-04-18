@@ -44,6 +44,7 @@ paths:
                 SuccessExample:
                   value:
                     status: true
+                    totalOfRecord: 131
                     data:
                       - id: 22
                         date: "2025-04-09T00:00:38.338Z"
@@ -53,6 +54,7 @@ paths:
                         unit: "%"
                         value: 15
                         name: "nhiet do"
+                        read: false
 
 
   /notification/poll:
