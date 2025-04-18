@@ -8,7 +8,7 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction): an
     const token = req.headers['authorization']?.split(' ')[1];
 
     if (!token) {
-        return res.status(401).json({ message: 'Token is required' });
+        return res.status(401).json({ status: false, message: 'Token is required' });
     }
 
     try {
@@ -16,7 +16,7 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction): an
         req.userid = decoded.id;
         next();
     } catch (error) {
-        return res.status(403).json({ message: 'Token không hợp lệ hoặc đã hết hạn' });
+        return res.status(403).json({ status: false, message: 'Token is invalid or expired' });
     }
 };
 

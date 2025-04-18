@@ -27,7 +27,7 @@ router.patch('/notification',
 
 router.get('/info',
     verifyToken,
-    (req: Request, res: Response, next: NextFunction) => { }
+    (req: Request, res: Response, next: NextFunction) => { authenticationController.getUserInfo(req, res, next) }
 )
 
 export default router

@@ -217,6 +217,84 @@ paths:
                   message:
                     type: string
                     example: Update notification of user to true
+
+
+  /user/info:
+    get:
+      summary: Get user information
+      description: Retrieves the authenticated user's information using a JWT token, excluding sensitive fields like password.
+      tags:
+        - user
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successfully retrieved user information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      email:
+                        type: string
+                        format: email
+                        example: ptkiet170104@gmail.com
+                      name:
+                        type: string
+                        example: newuser
+                      receiveNotification:
+                        type: boolean
+                        example: false
+                    required:
+                      - id
+                      - email
+                      - name
+                      - receiveNotification
+                required:
+                  - status
+                  - data
+        '401':
+          description: Unauthorized - Token is required
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Token is required
+                required:
+                  - status
+                  - message
+        '403':
+          description: Unauthorized - Token is invalid or expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Token is invalid or expired
+                required:
+                  - status
+                  - message
+
 components:
   securitySchemes:
     bearerAuth:

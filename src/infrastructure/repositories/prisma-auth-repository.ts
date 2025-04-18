@@ -49,7 +49,13 @@ export class UserRepository implements IUserRepository {
     public async getUserInfo(userid: number): Promise<any> {
         try {
             const user = await prisma.user.findFirst({
-                where: { id: userid }
+                where: { id: userid },
+                select: {
+                    id: true,
+                    email: true,
+                    name: true,
+                    receiveNotification: true
+                }
             })
 
             if (user) return user
