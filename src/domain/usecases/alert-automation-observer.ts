@@ -10,6 +10,9 @@ import { CacheNotificationDevice } from "../../infrastructure/repositories/insid
 import { ConfigSchedulerUseCase } from "./config-schedule";
 
 export class AlertAutomationObserver implements IObserver {
+    private lastEmailSent: Map<number, number> = new Map();
+    // 10-minute cooldown in milliseconds
+    private readonly EMAIL_COOLDOWN = 10 * 60 * 1000;
 
     constructor(
         private histotyRepository: HistoryRepository,
@@ -59,8 +62,15 @@ export class AlertAutomationObserver implements IObserver {
                     const device = await this.deviceRepository.findDeviceBySubject(config.deviceId.toString());
                     if (!device) {
                         console.error(`Device not found for ID: ${config.deviceId}`);
-                        return;
+                        continue;
                     }
+
+                    const compositeKey = condition.id
+                    const lastSent = this.lastEmailSent.get(compositeKey);
+                    const currentTime = Date.now();
+                    if (lastSent && currentTime - lastSent < this.EMAIL_COOLDOWN) {continue}
+                    else { this.lastEmailSent.set(compositeKey, currentTime);}
+
                     const notification = new NotificationDevice(
                         device.name,
                         device.description,
