@@ -46,4 +46,18 @@ export class UserRepository implements IUserRepository {
         }
     }
 
+    public async getUserInfo(userid: number): Promise<any> {
+        try {
+            const user = await prisma.user.findFirst({
+                where: { id: userid }
+            })
+
+            if (user) return user
+            else return null
+        }
+        catch (error) {
+
+        }
+    }
+
 }

@@ -62,5 +62,10 @@ export class AuthenticationUseCase {
         const data = await this.authenticationRepository.turnOnOffNotification(value, userid)
         return data
     }
+
+    public async getUserInfo(userid: number): Promise<any> {
+        const data = await this.authenticationRepository.getUserInfo(userid)
+        return data
+    }
 }
 

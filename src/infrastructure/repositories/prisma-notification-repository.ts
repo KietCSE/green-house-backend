@@ -7,20 +7,34 @@ import { CacheNotification } from './inside-notification-repository'
 
 export class NotificationRepository implements INotificationRepository {
 
-    public async findAllNotification(page: number, pageSize: number): Promise<any | null> {
+    public async findAllNotification(
+        page: number,
+        pageSize: number
+    ): Promise<{ data: any[]; total: number } | null> {
         try {
-            const notifications = await prisma.notification.findMany({
-                select: {
-                    id: true,
-                    date: true,
-                    value: true,
-                    read: true,
-                    monitor: true
-                },
-                skip: (page - 1) * pageSize,
-                take: pageSize,
-                orderBy: { date: "desc" }
-            })
+            const [notifications, total] = await Promise.all([
+                prisma.notification.findMany({
+                    select: {
+                        id: true,
+                        date: true,
+                        value: true,
+                        read: true,
+                        monitor: {
+                            select: {
+                                name: true,
+                                alertDes: true,
+                                alertlowerbound: true,
+                                alertupperbound: true,
+                                unit: true
+                            }
+                        }
+                    },
+                    skip: (page - 1) * pageSize,
+                    take: pageSize,
+                    orderBy: { date: "desc" }
+                }),
+                prisma.notification.count()
+            ]);
 
             const list = notifications.map(e => {
                 return new NotificationInfo(
@@ -31,14 +45,14 @@ export class NotificationRepository implements INotificationRepository {
                     e.monitor.alertupperbound,
                     e.value,
                     e.date,
-                    e.monitor.unit
-                )
-            })
+                    e.monitor.unit,
+                    e.read
+                );
+            });
 
-            return list
-        }
-        catch (error) {
-            throw Error("Can not get all notifications")
+            return { data: list, total };
+        } catch (error) {
+            throw new Error("Can not get all notifications");
         }
     }
 
@@ -68,6 +82,7 @@ export class NotificationRepository implements INotificationRepository {
                 value,
                 data.date,
                 monitoringSubject.unit,
+                false
             )
         }
         catch (error) {

@@ -39,5 +39,19 @@ export class AuthenticationController {
         }
     }
 
+    public async getUserInfo(req: Request, res: Response, next: NextFunction) {
+        try {
+            const userid = Number(req.userid)
+            const userInfo = await this.authenticationUseCase.getUserInfo(userid)
+            if (userInfo) {
+                res.status(200).json({ status: true, data: userInfo })
+            }
+            else res.status(200).json({ status: false, data: null })
+        }
+        catch (error) {
+            next(error)
+        }
+    }
+
 }
 

@@ -12,7 +12,7 @@ export class NotificationController {
             const pageNumber = page ? parseInt(page as string, 10) : 1
 
             const notifications = await this.notifyUseCase.getAllNotification(pageNumber, pageSizeNumber)
-            res.status(200).json({ status: true, data: notifications })
+            return res.status(200).json({ status: true, totalOfRecord: notifications?.total, data: notifications?.data })
         } catch (error) {
             next(error)
         }

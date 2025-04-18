@@ -16,12 +16,18 @@ router.post("/register",
     validationAuth, validateRequest,
     (req: Request, res: Response, next: NextFunction) => { authenticationController.register(req, res, next) })
 
+
 router.patch('/notification',
     turnOnOffNotification, validateRequest,
     verifyToken,
     (req: Request, res: Response, next: NextFunction): any => {
         authenticationController.turnOnOffNotification(req, res, next)
     }
+)
+
+router.get('/info',
+    verifyToken,
+    (req: Request, res: Response, next: NextFunction) => { }
 )
 
 export default router

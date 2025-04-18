@@ -22,6 +22,7 @@ export class NotificationInfo {
     private value: number
     private unit: string
     private date: Date
+    private read: boolean
 
     constructor(
         id: number,
@@ -31,7 +32,8 @@ export class NotificationInfo {
         upperbound: number | null,
         value: number,
         date: Date,
-        unit: string
+        unit: string,
+        read: boolean
     ) {
         this.id = id
         this.date = date
@@ -41,6 +43,7 @@ export class NotificationInfo {
         this.unit = unit
         this.value = value
         this.name = name
+        this.read = read
     }
 
     public getName() { return this.name }
@@ -51,4 +54,5 @@ export class NotificationInfo {
     public getUnit() { return this.unit }
     public getDate() { return this.date }
     public getId() { return this.id }
+    public getRead() { return this.read }
 }

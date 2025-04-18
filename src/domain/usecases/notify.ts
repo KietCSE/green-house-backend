@@ -11,7 +11,7 @@ export class NotifyUseCase {
         private notificationRepository: INotificationRepository,
     ) { }
 
-    public async getAllNotification(page: number, pageSize: number): Promise<any[] | null> {
+    public async getAllNotification(page: number, pageSize: number): Promise<{ data: any[]; total: number } | null> {
         const notifications = await this.notificationRepository.findAllNotification(page, pageSize)
         return notifications
     }
