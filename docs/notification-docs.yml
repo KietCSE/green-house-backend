@@ -57,7 +57,7 @@ paths:
                         read: false
 
 
-  /notification/poll:
+  /notification/poll/{userId}:
     get:
       tags:
         - notification
@@ -67,6 +67,13 @@ paths:
         Returns a list of notifications, each with a `type` field indicating its source (`Auto`, `Scheduler`, or `Data`).
         - If there is data: `status` = true and the information is returned in `data` as an array.
         - If there is no data: `status` = false and `data` is an empty array.
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: ID of the user to poll notifications for
+          schema:
+            type: string
       responses:
         '200':
           description: Successful response

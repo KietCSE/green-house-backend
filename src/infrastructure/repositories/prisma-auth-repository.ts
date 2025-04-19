@@ -65,5 +65,18 @@ export class UserRepository implements IUserRepository {
 
         }
     }
+    public async getAllUserId(): Promise<number[]> {
+        try {
+            const allUserId = await prisma.user.findMany({
+                select: {
+                    id: true,
+                }
+            })
 
+            return allUserId.map(user => user.id)
+        }
+        catch (error) {
+            throw new Error('Failed to fetch user IDs from database')
+        }
+    }
 }
