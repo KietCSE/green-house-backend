@@ -22,16 +22,16 @@ export class NotifyUseCase {
         return updated
     }
 
-    public pollingNotification(): any[] {
+    public pollingNotification(userId: number): any[] {
         let arrayData = []
 
-        let cachedata = CacheNotification.getInstance().pop()
+        let cachedata = CacheNotification.getInstance().pop(userId)
         if (cachedata) arrayData.push({ ...cachedata, type: "Data" })
 
-        const cachedevice = CacheNotificationDevice.getInstance().pop()
+        const cachedevice = CacheNotificationDevice.getInstance().pop(userId)
         if (cachedevice) arrayData.push({ ...cachedevice, type: "Auto" })
 
-        const cachescheduler = CacheNotificationScheduler.getInstance().pop()
+        const cachescheduler = CacheNotificationScheduler.getInstance().pop(userId)
         if (cachescheduler) arrayData.push({ ...cachescheduler, type: "Scheduler" })
 
         return arrayData

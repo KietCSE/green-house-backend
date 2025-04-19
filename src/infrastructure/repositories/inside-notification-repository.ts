@@ -1,5 +1,6 @@
 import { ICacheNotification } from './../../domain/repositories/cache-notification-repository'
 import { NotificationInfo } from '../../presentation/dtos/notification'
+import { UserRepository } from './prisma-auth-repository'
 
 enum NotificationType {
     Auto = 'Auto',
@@ -10,7 +11,8 @@ enum NotificationType {
 // Queue to store notifications which will be sent to user 
 export class CacheNotification implements ICacheNotification {
 
-    private data: NotificationInfo[] = []
+    private data: Map<number,NotificationInfo[]> = new Map()
+    private userRepository = new UserRepository()
     private static instance: CacheNotification
     constructor() { }
 
@@ -19,16 +21,29 @@ export class CacheNotification implements ICacheNotification {
         return CacheNotification.instance
     }
 
-    public pop(): NotificationInfo | null {
-        if (this.data.length === 0) return null
-        const notification = this.data[0]
-        this.data = this.data.slice(1)
-        console.log(this.data)
+    public pop(userId: number): NotificationInfo | null {
+        const userQueue = this.data.get(userId)
+        if (!userQueue || userQueue.length === 0) return null
+        const notification = userQueue.shift()!
+        if (userQueue.length === 0) {
+            this.data.delete(userId)
+        } else {
+            this.data.set(userId, userQueue)
+        }
+
+        console.log(`After pop for ${userId}:`, this.data)
         return notification
     }
 
-    public push(obj: NotificationInfo) {
-        this.data.push(obj)
-        console.log(this.data)
+    public async push(obj: NotificationInfo) {
+        const allUserId = await this.userRepository.getAllUserId()
+        for (const userId of allUserId) {
+            if (!this.data.has(userId)) {
+                this.data.set(userId, [])
+            }
+        
+            this.data.get(userId)!.push(obj) // ! -> never null
+            console.log(`After push for ${userId}:`, this.data)
+        }
     }
 }

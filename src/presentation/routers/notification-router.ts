@@ -18,7 +18,7 @@ router.patch('/status/:id',
     (req: Request, res: Response, next: NextFunction) => { notificationController.updateStatusNotification(req, res, next) })
 
 
-router.get('/poll', (req: Request, res: Response, next: NextFunction) => {
+router.get('/poll/:userId', (req: Request, res: Response, next: NextFunction) => {
     notificationController.pollingNotification(req, res, next)
 })
 

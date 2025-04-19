@@ -40,7 +40,8 @@ export class NotificationController {
 
     public async pollingNotification(req: Request, res: Response, next: NextFunction) {
         try {
-            const data = this.notifyUseCase.pollingNotification()
+            const userId = parseInt(req.params.userId) 
+            const data = this.notifyUseCase.pollingNotification(userId)
             if (data.length > 0)
                 res.status(200).json({ status: true, data })
             else
