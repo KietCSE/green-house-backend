@@ -25,5 +25,4 @@ export default class ResponseEnity {
             return new ResponseEnity(this.status, this.data, this.message)
         }
     }
-
 }

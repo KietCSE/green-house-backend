@@ -24,7 +24,7 @@ export class AuthenticationUseCase {
                 const token = jwt.sign(
                     { id: user.id, username: user.name, email: user.email },
                     config.JWT_SECRET || 'nothing',
-                    { expiresIn: '1h' },
+                    { expiresIn: '1y' },
                 )
 
                 const response = new ResponseEnity.Builder()
