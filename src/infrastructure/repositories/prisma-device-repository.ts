@@ -45,6 +45,7 @@ export class DeviceRepository implements IDeviceRepository {
         const status = false
         const isScheduled = false
         if (type === 0) power = 100
+        if (type === 1) power = 0
         const newDevice = await prisma.device.create({ data : {name, feed, prefixMessage, description, power, status, type, isScheduled} })
         return newDevice
     }
