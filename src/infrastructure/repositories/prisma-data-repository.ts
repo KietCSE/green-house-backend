@@ -33,76 +33,54 @@ export class DataRepository implements IDataRepository {
         startDate?: Date,
         endDate?: Date
     ): Promise<{ data: any[]; total: number }> {
+        // Kiểm tra monitoringSubject
         const monitoringSubject = await prisma.monitoringSubject.findFirst({
             where: { id: monitoringSubjectId, delete: false }
         });
+
         if (!monitoringSubject) {
             throw new Error("Monitoring subject doesn't exist");
         }
 
         try {
-            let data;
-            let total;
 
-            if (!endDate || !startDate) {
-                // Truy vấn dữ liệu phân trang khi không có startDate/endDate
-                data = await prisma.data.findMany({
-                    where: {
-                        monitoringSubjectId: monitoringSubjectId
-                    },
-                    select: {
-                        value: true,
-                        date: true
-                    },
-                    skip: (page - 1) * pageSize,
-                    take: pageSize,
-                    orderBy: { date: "desc" }
-                });
+            const where: any = {
+                monitoringSubjectId
+            };
 
-                // Đếm tổng số bản ghi
-                total = await prisma.data.count({
-                    where: {
-                        monitoringSubjectId: monitoringSubjectId
-                    }
-                });
-            } else {
-                // Truy vấn dữ liệu phân trang khi có startDate/endDate
-                data = await prisma.data.findMany({
-                    where: {
-                        date: {
-                            gte: startDate,
-                            lte: endDate
-                        },
-                        monitoringSubjectId: monitoringSubjectId
-                    },
-                    select: {
-                        value: true,
-                        date: true
-                    },
-                    skip: (page - 1) * pageSize,
-                    take: pageSize,
-                    orderBy: { date: "desc" }
-                });
+            if (startDate) {
+                // Đặt startDate về đầu ngày (00:00:00.000)
+                const adjustedStartDate = new Date(startDate);
+                adjustedStartDate.setHours(0, 0, 0, 0);
 
-                // Đếm tổng số bản ghi
-                total = await prisma.data.count({
-                    where: {
-                        date: {
-                            gte: startDate,
-                            lte: endDate
-                        },
-                        monitoringSubjectId: monitoringSubjectId
-                    }
-                });
+                if (!endDate) endDate = new Date()
+                // Đặt endDate về cuối ngày (23:59:59.999)
+                const adjustedEndDate = new Date(endDate);
+                adjustedEndDate.setHours(23, 59, 59, 999);
+
+                where.date = {
+                    gte: adjustedStartDate,
+                    lte: adjustedEndDate
+                };
             }
 
-            // Trả về object chứa dữ liệu và tổng số bản ghi
-            return {
-                data,
-                total
-            };
+            const [data, total] = await Promise.all([
+                prisma.data.findMany({
+                    where,
+                    select: {
+                        value: true,
+                        date: true
+                    },
+                    skip: (page - 1) * pageSize,
+                    take: pageSize,
+                    orderBy: { date: 'desc' }
+                }),
+                prisma.data.count({ where })
+            ]);
+
+            return { data, total };
         } catch (error) {
-            console.log(error);
+            console.error('Error in findDataByDateAndSubject:', error);
             throw new Error("Can not load data by date");
         }
     }

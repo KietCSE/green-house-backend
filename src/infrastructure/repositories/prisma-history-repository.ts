@@ -27,8 +27,16 @@ export class HistoryRepository implements IHistoryRepository {
 
             if (startDate || endDate) {
                 where.date = {}
-                if (startDate) where.date.gte = startDate
-                if (endDate) where.date.lte = endDate
+                if (startDate) {
+                    // Đặt startDate về đầu ngày (00:00:00.000)
+                    where.date.gte = new Date(startDate.setHours(0, 0, 0, 0));
+                }
+                if (endDate) {
+                    // Đặt endDate về cuối ngày (23:59:59.999)
+                    const adjustedEndDate = new Date(endDate);
+                    adjustedEndDate.setHours(23, 59, 59, 999);
+                    where.date.lte = adjustedEndDate;
+                }
             }
 
             if (deviceName) {
