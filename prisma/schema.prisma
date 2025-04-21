@@ -80,7 +80,7 @@ model DeviceHistory {
   id       Int               @id @default(autoincrement())
   info     DeviceHistoryInfo //Auto or Scheduler?
   date     DateTime          @default(now())
-  device   Device            @relation(fields: [deviceId], references: [id])
+  device   Device            @relation(fields: [deviceId], references: [id],  onDelete: Cascade)
   deviceId Int
 }
 
